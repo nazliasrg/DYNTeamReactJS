@@ -1,17 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import Sidebar from '../../component/Sidebar/Sidebar';
+import Sidebar from '../../../component/Sidebar/Sidebar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
 import $ from 'jquery';
 
 class Home extends Component{
 
-    // handleDataTable = () =>{
-    //     $('#dataTable').DataTable();
-    // }
-
     handleSidebar = () =>{
         $('#sidebar').toggleClass('active');
+    }
+
+    componentDidMount= () =>{
+
     }
 
     render(){
