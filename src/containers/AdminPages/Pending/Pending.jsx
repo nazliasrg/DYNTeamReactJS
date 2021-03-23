@@ -2,14 +2,39 @@ import React, { Component, Fragment } from 'react';
 import Sidebar from '../../../component/Admin/Sidebar/Sidebar';
 import './Pending.css';
 import $ from 'jquery';
+import axios from 'axios';
 
 class Pending extends Component{
     
+    constructor() {
+        super();
+        this.state = {
+            data: [],
+            search: ""
+        };
+    }
+
     handleSidebar = () =>{
         $('#sidebar').toggleClass('active');
     }
 
+    componentDidMount= () =>{
+        this.getPending();
+    }
+
+    getPending = () => {
+        axios.get('json/activity.json')
+        .then(res => {
+            this.setState({
+                data: res.data
+            })
+            console.log(this.state.data);
+        })
+    }
+
     render(){
+        const { data, search } = this.state;
+
         return(
             <Fragment>
                 <div className="wrapper">
@@ -17,7 +42,7 @@ class Pending extends Component{
                     <div id="content">
                         <nav className="navbar navbar-expand-lg navbar-light bg-light">
                             <div className="container-fluid">
-                                <button type="button" id="sidebarCollapse" className="btn btn-info" onClick={this.handleSidebar}>
+                                <button type="button" id="sidebarCollapse" className="btn btn-light" onClick={this.handleSidebar}>
                                     <span className="cursor">&#9776;</span>
                                 </button>
                                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -60,6 +85,26 @@ class Pending extends Component{
                                             </tr>
                                         </tfoot>
                                         <tbody id="bodyTable-waiting">
+                                        {
+                                            data.map((val)=>{
+                                                if((val.confirm) === 0){
+                                                    return(
+                                                        <tr>
+                                                            <td>{val.no}</td>
+                                                            <td>{val.id_activity}</td>
+                                                            <td>{val.title_book}</td>
+                                                            <td>{val.user}</td>
+                                                            <td>{val.start_date}</td>
+                                                            <td>{val.return_date}</td>
+                                                            <td className="text-center">
+                                                                <a href="#" className="badge badge-success"><i class="fas fa-check"></i></a>
+                                                                <a href="#" className="badge badge-danger"><i class="fas fa-times"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
+                                            })
+                                        }
                                         </tbody>
                                     </table>
                                 </div>

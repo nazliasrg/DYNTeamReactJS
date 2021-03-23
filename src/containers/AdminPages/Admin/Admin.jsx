@@ -17,7 +17,7 @@ class Admin extends Component{
                     <div id="content">
                         <nav className="navbar navbar-expand-lg navbar-light bg-light">
                             <div className="container-fluid">
-                                <button type="button" id="sidebarCollapse" className="btn btn-info" onClick={this.handleSidebar}>
+                                <button type="button" id="sidebarCollapse" className="btn btn-light" onClick={this.handleSidebar}>
                                     <span className="cursor">&#9776;</span>
                                 </button>
                                 <div className="collapse navbar-collapse" id="navbarSupportedContent">

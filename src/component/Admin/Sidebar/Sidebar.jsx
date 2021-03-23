@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import logo from '../../../containers/assets/logo.png';
+import logo from '../../../assets/logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Sidebar.css';
 import { SidebarData } from './SidebarData';

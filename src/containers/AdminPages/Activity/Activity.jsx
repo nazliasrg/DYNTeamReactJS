@@ -2,14 +2,39 @@ import React, { Component, Fragment } from 'react';
 import Sidebar from '../../../component/Admin/Sidebar/Sidebar';
 import './Activity.css';
 import $ from 'jquery';
+import axios from 'axios';
 
 class Activity extends Component{
+
+    constructor() {
+        super();
+        this.state = {
+            data: [],
+            search: ""
+        };
+    }
 
     handleSidebar = () =>{
         $('#sidebar').toggleClass('active');
     }
 
+    componentDidMount= () =>{
+        this.getActivities();
+    }
+
+    getActivities = () => {
+        axios.get('json/activity.json')
+        .then(res => {
+            this.setState({
+                data: res.data
+            })
+            console.log(this.state.data);
+        })
+    }
+
     render(){
+        const { data, search } = this.state;
+
         return(
             <Fragment>
                 <div className="wrapper">
@@ -17,7 +42,7 @@ class Activity extends Component{
                     <div id="content">
                         <nav className="navbar navbar-expand-lg navbar-light bg-light">
                             <div className="container-fluid">
-                                <button type="button" id="sidebarCollapse" className="btn btn-info" onClick={this.handleSidebar}>
+                                <button type="button" id="sidebarCollapse" className="btn btn-light" onClick={this.handleSidebar}>
                                     <span className="cursor">&#9776;</span>
                                 </button>
                                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -52,8 +77,8 @@ class Activity extends Component{
                                         <tfoot>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Title&nbsp;Activity</th>
-                                                <th>Book</th>
+                                                <th>ID&nbsp;Activity</th>
+                                                <th>Title&nbsp;Book</th>
                                                 <th>User</th>
                                                 <th>Start&nbsp;Date</th>
                                                 <th>Return&nbsp;Date</th>
@@ -62,6 +87,30 @@ class Activity extends Component{
                                             </tr>
                                         </tfoot>
                                         <tbody id="bodyTable-activity">
+                                        {
+                                            data.map((val) =>{
+                                                if((val.confirm) === 1){
+                                                    return (
+                                                        <tr>
+                                                            <td>{val.no}</td>
+                                                            <td>{val.id_activity}</td>
+                                                            <td>{val.title_book}</td>
+                                                            <td>{val.user}</td>
+                                                            <td>{val.start_date}</td>
+                                                            <td>{val.return_date}</td>
+                                                            <td className="text-center">
+                                                                <a href="#" type="button" className="badge badge-danger">Rp&nbsp;{val.fine*800}</a>
+                                                                <label className="text-xs text-muted">{val.status}</label>
+                                                            </td>
+                                                            <td className="text-center">
+                                                                <a href="#" className="badge badge-success text-uppercase"><i class="fas fa-plus-circle"></i>&nbsp;Extend</a><br />
+                                                                <a href="#" className="badge badge-danger text-uppercase"><i class="fas fa-undo"></i>&nbsp;Return</a>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
+                                            })
+                                        }
                                         </tbody>
                                     </table>
                                 </div>

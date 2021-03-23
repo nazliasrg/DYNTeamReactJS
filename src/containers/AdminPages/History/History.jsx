@@ -2,14 +2,38 @@ import React, { Component, Fragment } from 'react';
 import Sidebar from '../../../component/Admin/Sidebar/Sidebar';
 import './History.css';
 import $ from 'jquery';
+import axios from 'axios';
 
 class History extends Component{
+
+    constructor() {
+        super();
+        this.state = {
+            data: [],
+            search: ""
+        };
+    }
 
     handleSidebar = () =>{
         $('#sidebar').toggleClass('active');
     }
 
+    componentDidMount= () =>{
+        this.getHistory();
+    }
+
+    getHistory = () => {
+        axios.get('json/activity.json')
+        .then(res => {
+            this.setState({
+                data: res.data
+            })
+            console.log(this.state.data);
+        })
+    }
+
     render(){
+        const { data, search } = this.state;
         return(
             <Fragment>
                 <div className="wrapper">
@@ -17,7 +41,7 @@ class History extends Component{
                     <div id="content">
                         <nav className="navbar navbar-expand-lg navbar-light bg-light">
                             <div className="container-fluid">
-                                <button type="button" id="sidebarCollapse" className="btn btn-info" onClick={this.handleSidebar}>
+                                <button type="button" id="sidebarCollapse" className="btn btn-light" onClick={this.handleSidebar}>
                                     <span className="cursor">&#9776;</span>
                                 </button>
                                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -61,7 +85,26 @@ class History extends Component{
                                                 <th className="text-center">Status</th>
                                             </tr>
                                         </tfoot>
-                                        <tbody id="bodyTable-history"></tbody>
+                                        <tbody id="bodyTable-history">
+                                        {
+                                            data.map((val)=>{
+                                                return(
+                                                    <tr>
+                                                        <td>{val.no}</td>
+                                                        <td>{val.id_activity}</td>
+                                                        <td>{val.title_book}</td>
+                                                        <td>{val.user}</td>
+                                                        <td>{val.start_date}</td>
+                                                        <td>{val.return_date}</td>
+                                                        <td className="text-center">Rp&nbsp;{val.fine * 800}</td>
+                                                        <td className="text-center">
+                                                            <a href="#" className="badge badge-primary">{val.status}</a>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })
+                                        }
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>

@@ -1,0 +1,29 @@
+[
+    {
+        "no" : 1,
+        "id_user" : "U001",
+        "name" : "Daniel Paskalis",
+        "email" : "daniel@gmail.com",
+        "phone_number" : "+6281256746632",
+        "member" : "Silver",
+        "status" : "Active"
+    },
+    {
+        "no" : 2,
+        "id_user" : "U002",
+        "name" : "Yona Astika",
+        "email" : "yona@gmail.com",
+        "phone_number" : "+62898765721",
+        "member" : "Gold",
+        "status" : "Active"
+    },
+    {
+        "no" : 3,
+        "id_user" : "U003",
+        "name" : "Nazli Alvira Siregar",
+        "email" : "nazli@gmail.com",
+        "phone_number" : "+62890876677",
+        "member" : "Silver",
+        "status" : "Deactive"
+    }
+]
