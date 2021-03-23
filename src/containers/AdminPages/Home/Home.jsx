@@ -3,18 +3,39 @@ import Sidebar from '../../../component/Admin/Sidebar/Sidebar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
 import $ from 'jquery';
+import axios from 'axios';
 
 class Home extends Component{
+
+    constructor() {
+        super();
+        this.state = {
+            data: [],
+            search: ""
+        };
+    }
 
     handleSidebar = () =>{
         $('#sidebar').toggleClass('active');
     }
 
     componentDidMount= () =>{
+        this.getBooks();
+    }
 
+    getBooks = () => {
+        axios.get('json/book.json')
+        .then(res => {
+            this.setState({
+                data: res.data
+            })
+            console.log(this.state.data);
+        })
     }
 
     render(){
+        const { data, search } = this.state;
+
         return(
             <Fragment>
                 <div className="wrapper">
@@ -55,7 +76,6 @@ class Home extends Component{
                                                 <th>Author</th>
                                                 <th>Publisher</th>
                                                 <th>Year</th>
-                                                <th>Synopsis</th>
                                                 <th className="text-center">Stock</th>
                                                 <th className="text-center">Action</th>
                                             </tr>
@@ -70,12 +90,33 @@ class Home extends Component{
                                                 <th>Author</th>
                                                 <th>Publisher</th>
                                                 <th>Year</th>
-                                                <th>Synopsis</th>
                                                 <th className="text-center">Stock</th>
                                                 <th className="text-center">Action</th>
                                             </tr>
                                         </tfoot>
-                                        <tbody id="body-table"></tbody>
+                                        <tbody id="body-table">
+                                            {
+                                                data.map((val) =>{
+                                                    return (
+                                                        <tr>
+                                                            <td>{val.no}</td>
+                                                            <td>{val.id_book}</td>
+                                                            <td><img src={`../img/book/${val.id_book}.jpg`} className="img-thumbnail imgCover"/></td>
+                                                            <td>{val.category}</td>
+                                                            <td>{val.title}</td>
+                                                            <td>{val.author}</td>
+                                                            <td>{val.publisher}</td>
+                                                            <td>{val.year}</td>
+                                                            <td>{val.stock}</td>
+                                                            <td className="text-center">
+                                                                <a><img src={`../img/edit.png`} alt="" style={{width: '25px'}}/></a>
+                                                                <a><img src={`../img/delete.png`} alt="" style={{width: '25px'}}/></a>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })
+                                            }
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>

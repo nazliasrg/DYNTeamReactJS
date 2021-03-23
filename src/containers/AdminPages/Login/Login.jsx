@@ -1,9 +1,8 @@
 import React, { Fragment, Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
-import logo from '../../assets/logo.png';
+import logo from '../../../assets/logo.png';
 import { withRouter } from 'react-router-dom';
-import Sidebar from '../../../component/Admin/Sidebar/Sidebar';
 
 class Login extends Component {
 
