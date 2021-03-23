@@ -13,7 +13,7 @@ const App = () => {
     return (
         <Router>
             <Switch>
-                <Route path="/admin" exact component={Login}/>
+                <Route path="/login-admin" exact component={Login}/>
                 <Route path="/home" component={Home}/>
                 <Route path="/users" component={Users}/>
                 <Route path="/pending" component={Pending}/>

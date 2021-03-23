@@ -1,5 +1,5 @@
 .logo{
-    width: 50px;
+    width: 30px;
     height: auto;
 }
 
@@ -20,7 +20,7 @@
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: rgb(62, 161, 228);
+    background: rgb(7, 120, 196);
     color: #fff;
     transition: all 0.3s;
 }
@@ -31,7 +31,7 @@
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: rgb(62, 161, 228);
+    background: #f0f0f0;
 }
 
 #sidebar ul.components {
