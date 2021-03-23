@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import Sidebar from '../../../component/Sidebar/Sidebar';
+import Sidebar from '../../../component/Admin/Sidebar/Sidebar';
 import './Users.css';
 import $ from 'jquery';
 
