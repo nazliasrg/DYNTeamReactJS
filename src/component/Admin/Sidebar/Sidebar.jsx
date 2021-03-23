@@ -12,12 +12,14 @@ class Sidebar extends Component{
             <Fragment>
                 <nav id="sidebar">
                     <div className="sidebar-header">
-                        <img className="logo" src={logo} alt=""/>
+                        <div className="row justify-content-center">
+                            <img className="logo" src={logo} alt=""/>
+                        </div>
                     </div>
 
                     {SidebarData.map((item, index) => {
-                return <SubMenu item={item} key={index} />;
-                })}
+                        return <SubMenu item={item} key={index} />;
+                    })}
                 </nav>
             </Fragment>
         )

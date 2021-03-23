@@ -4,6 +4,7 @@ import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
 import * as FiIcons from 'react-icons/fi';
 import * as VscIcons from 'react-icons/vsc';
+import * as RiIcons from 'react-icons/ri';
 
 export const SidebarData = [
     {
@@ -21,7 +22,7 @@ export const SidebarData = [
         ]
     },
     {
-        title: 'Users',
+        title: 'Role',
         path: '#',
         icon: <BsIcons.BsFillPersonFill />,
         iconClosed: <AiIcons.AiFillCaretDown />,
@@ -30,7 +31,12 @@ export const SidebarData = [
             {
                 title: 'Manage Users',
                 path: '/users',
-                icon: <BsIcons.BsFillPersonFill />
+                icon: <FaIcons.FaUserFriends />
+            },
+            {
+                title: 'Manage Admin',
+                path: '/admin',
+                icon: <RiIcons.RiAdminFill />
             }
         ]
     },
@@ -60,7 +66,7 @@ export const SidebarData = [
     },
     {
         title: 'Logout',
-        path: '/admin',
+        path: '/login-admin',
         icon: <FiIcons.FiLogOut />,
         iconClosed: <AiIcons.AiFillCaretDown />,
         iconOpened: <AiIcons.AiFillCaretUp />,

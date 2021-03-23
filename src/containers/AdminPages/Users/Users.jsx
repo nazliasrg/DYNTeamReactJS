@@ -35,7 +35,7 @@ class Users extends Component{
                                 <h6 className="m-0 font-weight-bold text-dark">Manage Users</h6>
                             </div>
                             <div className="card-body">
-                                <a href="addUser.html" className="btn btn-primary float-end mb-2">Add Data</a>
+                                <a href="#" className="btn btn-dark float-end mb-3">Add Data</a>
                                 <div className="table-responsive">
                                     <table className="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
