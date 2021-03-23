@@ -1,0 +1,47 @@
+@font-face {
+    font-family: 'NunitoSans';
+    src: local('NunitoSans'), url(../../fonts/NunitoSans.ttf) format('ttf');
+}
+
+.card-login{
+    width: 70%;
+    height: auto;
+    position : absolute;
+    top : 20%;
+    left : 15%;
+}
+
+.container-login{
+    margin-bottom: 20px;
+}
+
+.logo{
+    width: 10%;
+    height: 10%;
+}
+
+.judul-login-admin{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.btn-login{
+    width: 100%;
+    background-color: rgb(243, 225, 166);
+}
+
+@media screen and (max-width: 768px){
+    .card-login{
+        font-size: 11px;
+    }
+
+    .judul-login-admin{
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .btn-login{
+        width: 100%;
+        font-size: 12px;
+    }
+}
