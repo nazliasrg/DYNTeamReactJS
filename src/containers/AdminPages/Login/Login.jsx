@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
-import logo from '../assets/logo.png';
+import logo from '../../assets/logo.png';
 import { withRouter } from 'react-router-dom';
 
 class Login extends Component {
@@ -11,10 +11,6 @@ class Login extends Component {
         this.state = {
             username: ''
         };
-    }
-
-    redirectToHome = () => {
-        
     }
 
     handleUsernameChange = (event) =>{
@@ -35,10 +31,10 @@ class Login extends Component {
                             <div className="row">
                                 <div className="col-md-3"></div>
                                 <div className="col-md-6 my-5">
-                                    <form onSubmit={this.handleOnSubmit}>
+                                    <form>
                                         <div className="row container-login justify-content-center">
-                                            <img className="logo mx-2" src={logo} alt=""/>
-                                            <p for="login" className="judul-login-admin text-center">Login Admin</p>
+                                            <img className="logoLogin mx-2" src={logo} alt=""/>
+                                            <p className="judul-login-admin text-center">Login Admin</p>
                                         </div>
                                         <div className="card">
                                             <div className="card-body">

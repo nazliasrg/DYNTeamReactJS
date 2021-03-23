@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'NunitoSans';
-    src: local('NunitoSans'), url(../../fonts/NunitoSans.ttf) format('ttf');
+    src: local('NunitoSans'), url(../../../fonts/NunitoSans.ttf) format('ttf');
 }
 
 .card-login{
@@ -15,9 +15,9 @@
     margin-bottom: 20px;
 }
 
-.logo{
-    width: 10%;
-    height: 10%;
+.logoLogin{
+    width: 5%;
+    height: 5%;
 }
 
 .judul-login-admin{

@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
-import Login from '../containers/Login/Login';
+import Login from '../containers/AdminPages/Login/Login';
 import './App.css';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import Home from '../containers/Home/Home';
-import Users from '../containers/Users/Users';
-import Pending from '../containers/Pending/Pending';
-import Activity from '../containers/Activity/Activity';
-import History from '../containers/History/History';
-import Admin from '../containers/Admin/Admin';
+import Home from '../containers/AdminPages/Home/Home';
+import Users from '../containers/AdminPages/Users/Users';
+import Pending from '../containers/AdminPages/Pending/Pending';
+import Activity from '../containers/AdminPages/Activity/Activity';
+import History from '../containers/AdminPages/History/History';
+import Admin from '../containers/AdminPages/Admin/Admin';
 
 const App = () => {
     return (

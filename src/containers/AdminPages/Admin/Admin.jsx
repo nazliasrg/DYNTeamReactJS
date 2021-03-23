@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import Sidebar from '../../component/Sidebar/Sidebar';
-import './History.css';
+import Sidebar from '../../../component/Sidebar/Sidebar';
+import './Admin.css';
 import $ from 'jquery';
 
-class History extends Component{
+class Admin extends Component{
 
     handleSidebar = () =>{
         $('#sidebar').toggleClass('active');
@@ -32,36 +32,49 @@ class History extends Component{
 
                         <div className="card shadow mb-4">
                             <div className="card-header py-3">
-                                <h6 className="m-0 font-weight-bold text-dark">History</h6>
+                                <h6 className="m-0 font-weight-bold text-dark">Manage Role</h6>
                             </div>
                             <div className="card-body">
                                 <div className="table-responsive">
-                                    <table className="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <table className="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>ID&nbsp;Activity</th>
-                                                <th>ID&nbsp;Book</th>
-                                                <th>User</th>
-                                                <th>Start&nbsp;Date</th>
-                                                <th>Return&nbsp;Date</th>
-                                                <th className="text-center">Fine</th>
-                                                <th className="text-center">Status</th>
+                                                <th>ID&nbsp;Role</th>
+                                                <th>Username</th>
+                                                <th>Level</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>ID&nbsp;Activity</th>
-                                                <th>Book</th>
-                                                <th>User</th>
-                                                <th>Start&nbsp;Date</th>
-                                                <th>Return&nbsp;Date</th>
-                                                <th className="text-center">Fine</th>
-                                                <th className="text-center">Status</th>
+                                                <th>ID&nbsp;Role</th>
+                                                <th>Username</th>
+                                                <th>Level</th>
+                                                <th>Status</th>
                                             </tr>
                                         </tfoot>
-                                        <tbody id="bodyTable-history"></tbody>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>01</td>
+                                                <td>Admin</td>
+                                                <td>Administrator</td>
+                                                <td>
+                                                    <a href="#" type="button" className="badge badge-primary">ACTIVE</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>02</td>
+                                                <td>Officer</td>
+                                                <td>Officer</td>
+                                                <td>
+                                                    <a href="#" type="button" className="badge badge-primary">ACTIVE</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -73,4 +86,4 @@ class History extends Component{
     }
 }
 
-export default History;
+export default Admin;

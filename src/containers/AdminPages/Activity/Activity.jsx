@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import Sidebar from '../../component/Sidebar/Sidebar';
-import './Users.css';
+import Sidebar from '../../../component/Sidebar/Sidebar';
+import './Activity.css';
 import $ from 'jquery';
 
-class Users extends Component{
-    
+class Activity extends Component{
+
     handleSidebar = () =>{
         $('#sidebar').toggleClass('active');
     }
@@ -32,37 +32,36 @@ class Users extends Component{
 
                         <div className="card shadow mb-4">
                             <div className="card-header py-3">
-                                <h6 className="m-0 font-weight-bold text-dark">Manage Users</h6>
+                                <h6 className="m-0 font-weight-bold text-dark">Manage Activities</h6>
                             </div>
                             <div className="card-body">
-                                <a href="addUser.html" className="btn btn-primary float-end mb-2">Add Data</a>
                                 <div className="table-responsive">
-                                    <table className="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+                                    <table className="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>ID&nbsp;User</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Phone&nbsp;Number</th>
-                                                <th>Member</th>
-                                                <th className="text-center">Status</th>
+                                                <th>ID&nbsp;Activity</th>
+                                                <th>Title&nbsp;Book</th>
+                                                <th>User</th>
+                                                <th>Start&nbsp;Date</th>
+                                                <th>Return&nbsp;Date</th>
+                                                <th className="text-center">Fine</th>
                                                 <th className="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>ID&nbsp;User</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Phone&nbsp;Number</th>
-                                                <th>Member</th>
-                                                <th className="text-center">Status</th>
+                                                <th>Title&nbsp;Activity</th>
+                                                <th>Book</th>
+                                                <th>User</th>
+                                                <th>Start&nbsp;Date</th>
+                                                <th>Return&nbsp;Date</th>
+                                                <th className="text-center">Fine</th>
                                                 <th className="text-center">Action</th>
                                             </tr>
                                         </tfoot>
-                                        <tbody id="bodyTable-user">
+                                        <tbody id="bodyTable-activity">
                                         </tbody>
                                     </table>
                                 </div>
@@ -75,4 +74,4 @@ class Users extends Component{
     }
 }
 
-export default Users;
+export default Activity;
