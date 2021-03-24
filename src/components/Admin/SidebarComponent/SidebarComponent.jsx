@@ -5,15 +5,15 @@ import './Sidebar.css';
 import { SidebarData } from './SidebarData';
 import SubMenu from './SubMenu';
 
-class Sidebar extends Component{
+class SidebarComponent extends Component {
 
-    render(){
-        return(
+    render() {
+        return (
             <Fragment>
                 <nav id="sidebar">
                     <div className="sidebar-header">
                         <div className="row justify-content-center">
-                            <img className="logo" src={logo} alt=""/>
+                            <img className="logo" src={logo} alt="" />
                         </div>
                     </div>
 
@@ -26,4 +26,4 @@ class Sidebar extends Component{
     }
 }
 
-export default Sidebar;
+export default SidebarComponent;

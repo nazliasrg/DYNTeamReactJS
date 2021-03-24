@@ -1,0 +1,16 @@
+[
+    {
+        "no": 1,
+        "id_role": "A001",
+        "username": "administrator",
+        "level": "Administrator",
+        "status": 1
+    },
+    {
+        "no": 2,
+        "id_role": "A002",
+        "username": "officer",
+        "level": "Officer",
+        "status": 0
+    }
+]
