@@ -1,0 +1,10 @@
+.containeruser{
+    height : 650px ;
+    display: flex;
+    justify-content: center;
+}
+
+
+.col-regist{
+    margin-top: 10px;
+}

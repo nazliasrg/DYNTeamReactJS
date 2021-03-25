@@ -14,13 +14,20 @@ import CreateUser from '../containers/AdminPages/Users/CreateUser';
 import EditUser from '../containers/AdminPages/Users/EditUser';
 import AddBook from '../containers/AdminPages/Home/AddBook';
 import EditBook from '../containers/AdminPages/Home/EditBook';
+import Loginuser from '../containers/UserPages/Loginuser/Loginuser';
+import Registrasi from '../containers/UserPages/Registrasi/Registrasi';
+import Profileuser from '../containers/UserPages/Profile/Profileuser';
 
 const App = () => {
     return (
         <Router>
             <Switch>
+                <Route path="/" exact component={Loginuser} />
+                <Route path="/Registrasi" exact component={Registrasi} />
+                <Route path="/Profileuser" exact component={Profileuser} />
+
                 <Route path="/login-admin" exact component={Login} />
-                <Route path="/home" component={Home} />
+                <Route path="/home-admin" component={Home} />
                 <Route path="/users" component={Users} />
                 <Route path="/pending" component={Pending} />
                 <Route path="/activity" component={Activity} />
