@@ -1,12 +1,3 @@
-header{
-    background-color: whitesmoke;
-    margin-bottom: 20px;
-}
-
-a{
-    text-decoration: none;
-}
-
 .nav-container{
     background-color: whitesmoke;
     padding: 8px 20px;
@@ -21,7 +12,6 @@ a{
     z-index: 3;
 }
 
-
 .overlayNav {
     height: 100%;
     width: 0;
@@ -33,4 +23,61 @@ a{
     background-color: whitesmoke;
     overflow-x: hidden;
     transition: 0.5s;
+}
+
+.overlayNav-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.overlayNav a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 30px;
+    font-family: 'Nunito Sans';
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.overlayNav a:hover, .overlayNav a:focus {
+    color: #2e2d2d;
+}
+
+.overlayNav .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 40px;
+}
+
+.cursor{
+    font-size:25px;
+    cursor:pointer; 
+    float:right; 
+    margin-right: 1%;
+    order:3;
+    color: black;
+}
+
+.logo1{
+    order:1;
+}
+
+.logo1 .logo{
+    width: 30px;
+    height: auto;
+    margin-top: -5%;
+}
+
+.akun{
+    order:2;
+}
+
+.akun .btnLogin{
+    width: 100%;
+    height: auto;
 }

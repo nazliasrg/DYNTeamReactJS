@@ -1,0 +1,62 @@
+.location{
+    margin-top: 100px;
+}
+.container1{
+    background-color: #f0f0f0;
+    margin: 40px 0px;
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+}
+
+.gray2{
+    flex:1;
+    padding: 160px 50px 20px 20px;
+}
+
+.pageTitle{
+    text-align: center;
+    font-size: 24px;
+    font-family: 'Nunito Sans';
+    font-weight: bold;
+}
+
+.alamat{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 24px;
+}
+
+.story{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+}
+
+.maps{
+    z-index: 2;
+}
+
+.textprofile{
+    font-size: 15px;
+}
+.cardprofile{
+    font-size: 12px;
+    padding: 3px;
+    margin-bottom: 5px;
+    background-color: rgba(165, 111, 111, 0.589);}
+    
+.container-topup {
+    margin-bottom: 5px;
+}
+
+.card-login{
+    background-color: rgba(79, 134, 160, 0.5);
+    align-items: center;
+    align-self: center;
+
+}
+.card-body-login{
+    padding: 10px;
+    align-items: center;
+}
