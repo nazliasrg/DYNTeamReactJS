@@ -4,7 +4,7 @@ import SidebarComponent from '../../../components/Admin/SidebarComponent/Sidebar
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import TableAdmin from '../../../components/Admin/TableComponent/TableAdmin';
 import { connect } from 'react-redux';
-import getAdminList from '../../../actions/AdminAction';
+import { getAdminList } from '../../../actions/AdminAction';
 
 
 class Admin extends Component {

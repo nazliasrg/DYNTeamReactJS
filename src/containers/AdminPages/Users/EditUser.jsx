@@ -2,10 +2,9 @@ import React, { Component, Fragment } from 'react'
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent'
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
 import { connect } from 'react-redux'
-import FormCreateUser from '../../../components/Admin/FormComponent/FormCreateUser'
 import { Container } from 'reactstrap'
 import { getUsersDetail } from '../../../actions/UsersAction';
-
+import FormEditUser from '../../../components/Admin/FormComponent/FormEditUser'
 
 class EditUser extends Component {
     componentDidMount() {
@@ -23,7 +22,7 @@ class EditUser extends Component {
                         <div className="card shadow mb-4">
                             <Container>
                                 <h6 className='mt-4'>Edit User</h6>
-                                <FormCreateUser />
+                                <FormEditUser />
                             </Container>
                         </div>
 

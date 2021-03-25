@@ -1,9 +1,18 @@
 import React, { Component, Fragment } from 'react'
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent'
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
-import BackComponent from '../../../components/Admin/Button/BackComponent'
+import { Container } from 'reactstrap'
+import { connect } from 'react-redux'
+import { getAdminDetail } from '../../../actions/AdminAction'
+import FormEditAdmin from '../../../components/Admin/FormComponent/FormEditAdmin'
 
-export default class EditAdmin extends Component {
+class EditAdmin extends Component {
+
+    componentDidMount() {
+        this.props.dispatch(getAdminDetail(this.props.match.params.no))
+        console.log(getAdminDetail(this.props.match.params.no))
+    }
+
     render() {
         return (
             <Fragment>
@@ -11,9 +20,11 @@ export default class EditAdmin extends Component {
                     <SidebarComponent />
                     <div id="content">
                         <NavbarComponent />
-                        <BackComponent />
                         <div className="card shadow mb-4">
-                            <h1>Edit Admin</h1>
+                            <Container>
+                                <h6 className='mt-4'>Edit Admin</h6>
+                                <FormEditAdmin />
+                            </Container>
                         </div>
 
                     </div>
@@ -22,3 +33,5 @@ export default class EditAdmin extends Component {
         )
     }
 }
+
+export default connect()(EditAdmin)

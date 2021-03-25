@@ -5,7 +5,7 @@ import './Home.css';
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import TableBooks from '../../../components/Admin/TableComponent/TableBooks';
 import { connect } from 'react-redux';
-import getBooksList from '../../../actions/BooksAction';
+import { getBooksList } from '../../../actions/BooksAction';
 
 class Home extends Component {
 

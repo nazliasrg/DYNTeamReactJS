@@ -58,7 +58,7 @@ export const getUsersDetail = (no) => {
 
 export const postUserCreate = (data) => {
     return dispatch => {
-        axios.post('./user.json', data)
+        axios.post('json/user.json', data)
             .then(function (res) {
                 console.log(res);
                 dispatch({
