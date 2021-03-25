@@ -10,6 +10,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
 
+
 const { SearchBar } = Search;
 
 const handleClick = (no) => {
@@ -142,7 +143,7 @@ const TableBooks = (props) => {
                                 </Col>
                                 <Col>
                                     <div className="float-right">
-                                        <Link to={'/create-book'}>
+                                        <Link to={'/add-book'}>
                                             <Button color='dark' className="mr-2">
                                                 <FontAwesomeIcon icon={faPlusCircle} />
                                                 Add Book

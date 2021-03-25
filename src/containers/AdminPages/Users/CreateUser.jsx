@@ -14,7 +14,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-
 class CreateUser extends Component {
 
     handleSubmit = (data) => {

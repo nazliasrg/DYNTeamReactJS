@@ -1,9 +1,29 @@
 import React, { Component, Fragment } from 'react'
+import { Container } from 'reactstrap'
+import FormCreateBook from '../../../components/Admin/FormComponent/FormCreateBook'
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent'
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
+import { connect } from 'react-redux'
+import swal from 'sweetalert'
+import { postBookCreate } from '../../../actions/BooksAction'
 
-export default class AddBook extends Component {
+const mapStateToProps = (state) => {
+    return {
+        getResponDataBook: state.books.getResponDataBook,
+        errorResponDataBook: state.books.errorResponDataBook
+    }
+}
+
+class AddBook extends Component {
+    handleSubmit = (data) => {
+        this.props.dispatch(postBookCreate(data))
+    }
     render() {
+
+        if (this.props.getResponDataAdmin) {
+            swal("Book Added!", this.props.getResponDataBook.name, "success")
+        }
+
         return (
             <Fragment>
                 <div className="wrapper">
@@ -12,7 +32,10 @@ export default class AddBook extends Component {
                         <NavbarComponent />
 
                         <div className="card shadow mb-4">
-                            <h1>Add Book</h1>
+                            <Container>
+                                <h6 className='mt-3'>Add Book</h6>
+                                <FormCreateBook onSubmit={(data) => this.handleSubmit(data)} />
+                            </Container>
                         </div>
 
                     </div>
@@ -21,3 +44,5 @@ export default class AddBook extends Component {
         )
     }
 }
+
+export default connect(mapStateToProps, null)(AddBook)

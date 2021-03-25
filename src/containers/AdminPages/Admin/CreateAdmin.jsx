@@ -1,20 +1,43 @@
 import React, { Component, Fragment } from 'react'
-import BackComponent from '../../../components/Admin/Button/BackComponent'
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent'
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
+import { connect } from 'react-redux'
+import swal from 'sweetalert'
+import { postAdminCreate } from '../../../actions/AdminAction'
+import { Container } from 'reactstrap'
+import FormCreateAdmin from '../../../components/Admin/FormComponent/FormCreateAdmin'
 
-export default class CreateAdmin extends Component {
+const mapStateToProps = (state) => {
+    return {
+        getResponDataAdmin: state.adminRole.getResponDataAdmin,
+        errorResponDataAdmin: state.adminRole.errorResponDataAdmin
+    }
+}
+
+class CreateAdmin extends Component {
+
+    handleSubmit = (data) => {
+        this.props.dispatch(postAdminCreate(data))
+    }
+
     render() {
+
+        if (this.props.getResponDataAdmin) {
+            swal("Admin Created!", this.props.getResponDataAdmin.name, "success")
+        }
+
         return (
             <Fragment>
                 <div className="wrapper">
                     <SidebarComponent />
                     <div id="content">
                         <NavbarComponent />
-                        <BackComponent />
 
                         <div className="card shadow mb-4">
-                            <h1>Create Admin</h1>
+                            <Container>
+                                <h6 className='mt-4'>Create Admin</h6>
+                                <FormCreateAdmin onSubmit={(data) => this.handleSubmit(data)} />
+                            </Container>
                         </div>
 
                     </div>
@@ -23,3 +46,5 @@ export default class CreateAdmin extends Component {
         )
     }
 }
+
+export default connect(mapStateToProps, null)(CreateAdmin)
