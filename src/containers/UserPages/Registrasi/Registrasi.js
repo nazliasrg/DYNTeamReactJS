@@ -75,6 +75,7 @@ class Registrasi extends Component {
         if(this.validate()){
             console.warn(this.state);
             this.setState(defaultState);
+            this.props.history.push('/Loginuser')
         }
     }
     render() {

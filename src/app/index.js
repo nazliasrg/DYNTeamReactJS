@@ -17,14 +17,16 @@ import EditBook from '../containers/AdminPages/Home/EditBook';
 import Loginuser from '../containers/UserPages/Loginuser/Loginuser';
 import Registrasi from '../containers/UserPages/Registrasi/Registrasi';
 import Profileuser from '../containers/UserPages/Profile/Profileuser';
+import Location from '../containers/UserPages/Location/Location';
 
 const App = () => {
     return (
         <Router>
             <Switch>
-                <Route path="/" exact component={Loginuser} />
+                <Route path="/Loginuser" exact component={Loginuser} />
                 <Route path="/Registrasi" exact component={Registrasi} />
                 <Route path="/Profileuser" exact component={Profileuser} />
+                <Route path="/Location" exact component={Location} />
 
                 <Route path="/login-admin" exact component={Login} />
                 <Route path="/home-admin" component={Home} />
