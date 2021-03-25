@@ -18,15 +18,18 @@ import Loginuser from '../containers/UserPages/Loginuser/Loginuser';
 import Registrasi from '../containers/UserPages/Registrasi/Registrasi';
 import Profileuser from '../containers/UserPages/Profile/Profileuser';
 import Location from '../containers/UserPages/Location/Location';
+import HomeUser from '../containers/UserPages/HomeUser/HomeUser';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
     return (
         <Router>
             <Switch>
                 <Route path="/" exact component={Loginuser} />
+                <Route path="/home" exact component={HomeUser} />
                 <Route path="/Registrasi" exact component={Registrasi} />
                 <Route path="/Profileuser" exact component={Profileuser} />
-                <Route path="/Location" exact component={Location} />
+                <Route path="/location" exact component={Location} />
 
                 <Route path="/login-admin" exact component={Login} />
                 <Route path="/home-admin" component={Home} />
@@ -47,6 +50,7 @@ const App = () => {
                 {/* books table */}
                 <Route path="/add-book" component={AddBook} />
                 <Route path="/edit-book/:no" component={EditBook} />
+
 
             </Switch>
         </Router>
