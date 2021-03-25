@@ -1,0 +1,19 @@
+body{
+    background-color: rgb(226, 221, 231);
+}
+
+.container {
+    margin-top: 50px;
+}
+
+.card{
+    background-color: rgb(241, 241, 241);
+}
+
+.coverBook{
+    width: 100%;
+}
+
+.container-topup {
+    margin-bottom: 5px;
+}
