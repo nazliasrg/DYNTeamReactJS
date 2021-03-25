@@ -7,7 +7,6 @@ import AdminValidation from '../../../validations/Admin/AdminValidation'
 const mapStateToProps = (state) => {
     return {
         initialValues: {
-            no: state.adminRole.getAdminDetail.no,
             id_role: state.adminRole.getAdminDetail.id_role,
             username: state.adminRole.getAdminDetail.username,
             level: state.adminRole.getAdminDetail.level,
@@ -53,16 +52,6 @@ class FormCreateAdmin extends Component {
         return (
             <form onSubmit={this.props.handleSubmit}>
                 <FormGroup row>
-                    <Col md={6}>
-                        <FormGroup>
-                            <Field
-                                type='text'
-                                name='no'
-                                component={renderField}
-                                label='No :'
-                            />
-                        </FormGroup>
-                    </Col>
 
                     <Col md={6}>
                         <FormGroup>

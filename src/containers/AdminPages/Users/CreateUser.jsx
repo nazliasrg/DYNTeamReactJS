@@ -21,8 +21,17 @@ class CreateUser extends Component {
     }
 
     render() {
-        if (this.props.getResponDataUser) {
-            swal("User Created!", this.props.getResponDataUser.name, "success")
+        if (this.props.getResponDataUser || this.props.errorResponDataUser) {
+            if (this.props.errorResponDataUser) {
+                swal("Failed!", this.props.errorResponDataUser, "error")
+            }
+            else {
+                swal("User Created!", this.props.getResponDataUser.id_user, "success")
+                    .then((value) => {
+                        const { history } = this.props;
+                        history.push('/users');
+                    });
+            }
         }
 
         return (

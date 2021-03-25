@@ -6,7 +6,7 @@ export const POST_ADMIN_CREATE = "POST_ADMIN_CREATE";
 
 export const getAdminList = () => {
     return dispatch => {
-        axios.get('json/admin.json')
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/admin')
             .then(function (res) {
                 console.log(res);
                 dispatch({
@@ -30,9 +30,9 @@ export const getAdminList = () => {
     }
 };
 
-export const getAdminDetail = (no) => {
+export const getAdminDetail = (id) => {
     return dispatch => {
-        axios.get('json/admin.json/' + no)
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/admin/' + id)
             .then(function (res) {
                 console.log(res);
                 dispatch({
@@ -58,7 +58,7 @@ export const getAdminDetail = (no) => {
 
 export const postAdminCreate = (data) => {
     return dispatch => {
-        axios.post('json/admin.json', data)
+        axios.post('https://605c7cdc6d85de00170da562.mockapi.io/admin', data)
             .then(function (res) {
                 console.log(res);
                 dispatch({
@@ -79,5 +79,25 @@ export const postAdminCreate = (data) => {
                     }
                 })
             })
+    }
+};
+
+export const deleteDataAdmin = () => {
+    return (dispatch) => {
+        dispatch({
+            type: GET_ADMIN_DETAIL,
+            payload: {
+                data: false,
+                errorMessage: false
+            }
+        })
+
+        dispatch({
+            type: POST_ADMIN_CREATE,
+            payload: {
+                data: false,
+                errorMessage: false
+            }
+        })
     }
 };

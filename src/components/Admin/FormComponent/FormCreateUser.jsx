@@ -7,7 +7,6 @@ import UserValidation from '../../../validations/Admin/UserValidation'
 const mapStateToProps = (state) => {
     return {
         initialValues: {
-            no: state.users.getUserDetail.no,
             id_user: state.users.getUserDetail.id_user,
             name: state.users.getUserDetail.name,
             email: state.users.getUserDetail.email,
@@ -55,16 +54,6 @@ class FormCreateUser extends Component {
         return (
             <form onSubmit={this.props.handleSubmit}>
                 <FormGroup row>
-                    <Col md={6}>
-                        <FormGroup>
-                            <Field
-                                type='text'
-                                name='no'
-                                component={renderField}
-                                label='No :'
-                            />
-                        </FormGroup>
-                    </Col>
 
                     <Col md={6}>
                         <FormGroup>

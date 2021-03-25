@@ -34,7 +34,7 @@ const handleClick = (no) => {
 }
 
 const columns = [{
-    dataField: 'no',
+    dataField: 'id',
     text: 'No',
     sort: true,
     headerStyle: () => {
@@ -97,12 +97,12 @@ const columns = [{
     formatter: (rowContent, row) => {
         return (
             <Row className='justify-content-center'>
-                <Link to={'edit-book/' + row.no}>
+                <Link to={'edit-book/' + row.id}>
                     <Button color='warning' className="mr-2">
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                 </Link>
-                <Button color='danger' className="mr-2" onClick={() => handleClick(row.no)}>
+                <Button color='danger' className="mr-2" onClick={() => handleClick(row.id)}>
                     <FontAwesomeIcon icon={faTrash} />
                 </Button>
             </Row>
@@ -111,7 +111,7 @@ const columns = [{
 }];
 
 const defaultSorted = [{
-    dataField: 'no',
+    dataField: 'id',
     order: 'asc'
 }];
 
@@ -128,7 +128,7 @@ const TableBooks = (props) => {
         <>
             {props.getBooksList ? <ToolkitProvider
                 bootstrap4
-                keyField='no'
+                keyField='id'
                 data={props.getBooksList}
                 columns={columns}
                 defaultSorted={defaultSorted}
@@ -153,9 +153,10 @@ const TableBooks = (props) => {
                                 </Col>
                             </Row>
 
-                            <div className="float-center">
+                            <div className="justify-content-center">
                                 <BootstrapTable
                                     {...props.baseProps}
+
                                     pagination={paginationFactory()}
                                 />
                             </div>

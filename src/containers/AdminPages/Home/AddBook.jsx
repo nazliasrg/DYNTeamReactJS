@@ -20,8 +20,17 @@ class AddBook extends Component {
     }
     render() {
 
-        if (this.props.getResponDataAdmin) {
-            swal("Book Added!", this.props.getResponDataBook.name, "success")
+        if (this.props.getResponDataBook || this.props.errorResponDataBook) {
+            if (this.props.errorResponDataBook) {
+                swal("Failed!", this.props.errorResponDataBook, "error")
+            }
+            else {
+                swal("Book Added!", this.props.getResponDataBook.title, "success")
+                    .then((value) => {
+                        const { history } = this.props;
+                        history.push('/home-admin');
+                    });
+            }
         }
 
         return (

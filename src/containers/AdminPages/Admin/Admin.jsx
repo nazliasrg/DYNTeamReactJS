@@ -4,13 +4,14 @@ import SidebarComponent from '../../../components/Admin/SidebarComponent/Sidebar
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import TableAdmin from '../../../components/Admin/TableComponent/TableAdmin';
 import { connect } from 'react-redux';
-import { getAdminList } from '../../../actions/AdminAction';
+import { deleteDataAdmin, getAdminList } from '../../../actions/AdminAction';
 
 
 class Admin extends Component {
 
     componentDidMount() {
         this.props.dispatch(getAdminList());
+        this.props.dispatch(deleteDataAdmin());
     }
 
     render() {
