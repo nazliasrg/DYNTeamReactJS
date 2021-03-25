@@ -5,6 +5,7 @@ import logo from '../../../assets/Logouser.png';
 import { Link, withRouter } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import ReactSession from 'react-client-session';
 
 const defaultState = {
     username:null,
@@ -54,6 +55,8 @@ class Loginuser extends Component {
         if(this.validate()){
             console.warn(this.state);
             this.setState(defaultState);
+            this.props.history.push('/Home')
+
         }
     }
     render() {

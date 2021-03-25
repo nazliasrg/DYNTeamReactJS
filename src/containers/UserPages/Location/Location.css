@@ -1,0 +1,43 @@
+/* location style */
+
+
+
+#locationpage{
+    margin-top: 50px;
+    align-self: center;
+}
+
+.pageTitle{
+    font-size: 24px;
+    font-family: 'Nunito Sans';
+    font-weight: bold;
+}
+
+.container1{
+    background-color: #f0f0f0;
+    margin: 40px 0px;
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+}
+
+.gray2{
+    flex:1;
+    padding: 160px 50px 20px 20px;
+}
+
+.alamat{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 24px;
+}
+
+.story{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+}
+
+.maps{
+    z-index: 2;
+}
