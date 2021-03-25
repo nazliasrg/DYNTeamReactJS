@@ -3,7 +3,7 @@ import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarCom
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
 import { connect } from 'react-redux'
 import swal from 'sweetalert'
-import { postAdminCreate } from '../../../actions/AdminAction'
+import { deleteDataAdmin, postAdminCreate } from '../../../actions/AdminAction'
 import { Container } from 'reactstrap'
 import FormCreateAdmin from '../../../components/Admin/FormComponent/FormCreateAdmin'
 
@@ -16,14 +16,27 @@ const mapStateToProps = (state) => {
 
 class CreateAdmin extends Component {
 
+    componentDidMount() {
+        this.props.dispatch(deleteDataAdmin());
+    }
+
     handleSubmit = (data) => {
         this.props.dispatch(postAdminCreate(data))
     }
 
     render() {
 
-        if (this.props.getResponDataAdmin) {
-            swal("Admin Created!", this.props.getResponDataAdmin.name, "success")
+        if (this.props.getResponDataAdmin || this.props.errorResponDataAdmin) {
+            if (this.props.errorResponDataAdmin) {
+                swal("Failed!", this.props.errorResponDataAdmin, "error")
+            }
+            else {
+                swal("Admin Created!", this.props.getResponDataAdmin.id_role, "success")
+                    .then((value) => {
+                        const { history } = this.props;
+                        history.push('/admin-role');
+                    });
+            }
         }
 
         return (

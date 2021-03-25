@@ -6,7 +6,7 @@ export const POST_BOOK_CREATE = "POST_BOOK_CREATE";
 
 export const getBooksList = () => {
     return dispatch => {
-        axios.get('json/book.json')
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/book')
             .then(function (res) {
                 console.log(res);
                 dispatch({
@@ -30,9 +30,9 @@ export const getBooksList = () => {
     }
 };
 
-export const getBookDetail = (no) => {
+export const getBookDetail = (id) => {
     return dispatch => {
-        axios.get('json/book.json/' + no)
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/book/' + id)
             .then(function (res) {
                 console.log(res);
                 dispatch({
@@ -58,7 +58,7 @@ export const getBookDetail = (no) => {
 
 export const postBookCreate = (data) => {
     return dispatch => {
-        axios.post('json/book.json', data)
+        axios.post('https://605c7cdc6d85de00170da562.mockapi.io/book', data)
             .then(function (res) {
                 console.log(res);
                 dispatch({

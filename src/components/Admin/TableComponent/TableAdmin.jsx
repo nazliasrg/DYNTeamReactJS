@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 const { SearchBar } = Search;
 
 const columns = [{
-    dataField: 'no',
+    dataField: 'id',
     text: 'No',
     sort: true,
     headerStyle: () => {
@@ -69,7 +69,7 @@ const columns = [{
     formatter: (rowContent, row) => {
         return (
             <Row className='justify-content-center'>
-                <Link to={'edit-admin/' + row.no}>
+                <Link to={'edit-admin/' + row.id}>
                     <Button color='warning' className="mr-2">
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
@@ -80,7 +80,7 @@ const columns = [{
 }];
 
 const defaultSorted = [{
-    dataField: 'no',
+    dataField: 'id',
     order: 'asc'
 }];
 
@@ -97,7 +97,7 @@ const TableAdmin = (props) => {
         <>
             {props.getAdminList ? <ToolkitProvider
                 bootstrap4
-                keyField='no'
+                keyField='id'
                 data={props.getAdminList}
                 columns={columns}
                 defaultSorted={defaultSorted}

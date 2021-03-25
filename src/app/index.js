@@ -32,7 +32,7 @@ const App = () => {
                 <Route path="/pending" component={Pending} />
                 <Route path="/activity" component={Activity} />
                 <Route path="/history" component={History} />
-                <Route path="/admin" component={Admin} />
+                <Route path="/admin-role" component={Admin} />
 
                 {/* admin table */}
                 <Route path="/create-admin" component={CreateAdmin} />

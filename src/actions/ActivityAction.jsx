@@ -4,7 +4,7 @@ export const GET_ACTIVITY_LIST = "GET_ACTIVITY_LIST";
 
 const getActivityList = () => {
     return dispatch => {
-        axios.get('json/activity.json')
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/activity')
             .then(function (res) {
                 console.log(res);
                 dispatch({

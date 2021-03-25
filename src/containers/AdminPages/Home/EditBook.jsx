@@ -3,24 +3,23 @@ import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarCom
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
 import { connect } from 'react-redux'
 import swal from 'sweetalert'
-import { postBookCreate } from '../../../actions/BooksAction'
+import { getBookDetail } from '../../../actions/BooksAction'
 import { Container } from 'reactstrap'
 import FormEditBook from '../../../components/Admin/FormComponent/FormEditBook'
 
-const mapStateToProps = (state) => {
-    return {
-        getResponDataBook: state.books.getResponDataBook,
-        errorResponDataBook: state.books.errorResponDataBook
-    }
-}
-
 class EditBook extends Component {
-    handleSubmit = (data) => {
-        this.props.dispatch(postBookCreate(data))
+    componentDidMount() {
+        this.props.dispatch(getBookDetail(this.props.match.params.no))
+        console.log(getBookDetail("id: " + this.props.match.params.no))
     }
+
     render() {
-        if (this.props.getResponDataAdmin) {
-            swal("Book Updated!", this.props.getResponDataBook.name, "success")
+        if (this.props.getResponDataBook) {
+            swal("Book Updated!", this.props.getResponDataBook.title, "success")
+                .then((value) => {
+                    const { history } = this.props;
+                    history.push('/home-admin');
+                });
         }
         return (
             <Fragment>
@@ -43,4 +42,4 @@ class EditBook extends Component {
     }
 }
 
-export default connect(mapStateToProps, null)(EditBook)
+export default connect()(EditBook)

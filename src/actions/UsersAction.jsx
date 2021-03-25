@@ -6,7 +6,7 @@ export const POST_USER_CREATE = "POST_USER_CREATE";
 
 export const getUsersList = () => {
     return dispatch => {
-        axios.get('json/user.json')
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/user')
             .then(function (res) {
                 console.log(res);
                 dispatch({
@@ -30,9 +30,9 @@ export const getUsersList = () => {
     }
 };
 
-export const getUsersDetail = (no) => {
+export const getUsersDetail = (id) => {
     return dispatch => {
-        axios.get('json/user.json/' + no)
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/user/' + id)
             .then(function (res) {
                 console.log(res);
                 dispatch({
@@ -58,7 +58,7 @@ export const getUsersDetail = (no) => {
 
 export const postUserCreate = (data) => {
     return dispatch => {
-        axios.post('json/user.json', data)
+        axios.post('https://605c7cdc6d85de00170da562.mockapi.io/user', data)
             .then(function (res) {
                 console.log(res);
                 dispatch({

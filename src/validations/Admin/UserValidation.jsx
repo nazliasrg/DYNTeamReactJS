@@ -1,10 +1,6 @@
 const UserValidation = (values) => {
     const errors = {};
 
-    if (!values.no || values.no === "") {
-        errors.no = "No cannot be empty!";
-    }
-
     if (!values.id_user || values.id_user === "") {
         errors.id_user = "ID User cannot be empty!";
     }

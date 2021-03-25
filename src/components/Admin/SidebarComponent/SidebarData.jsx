@@ -15,7 +15,7 @@ export const SidebarData = [
         subNav: [
             {
                 title: 'Manage Books',
-                path: '/home',
+                path: '/home-admin',
                 icon: <AiIcons.AiFillBook />
             }
         ]
@@ -34,7 +34,7 @@ export const SidebarData = [
             },
             {
                 title: 'Manage Admin',
-                path: '/admin',
+                path: '/admin-role',
                 icon: <RiIcons.RiAdminFill />
             }
         ]

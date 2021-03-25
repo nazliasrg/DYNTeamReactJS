@@ -7,7 +7,6 @@ import BookValidation from '../../../validations/Admin/BookValidation'
 const mapStateToProps = (state) => {
     return {
         initialValues: {
-            no: state.books.getBookDetail.no,
             id_book: state.books.getBookDetail.id_book,
             cover: state.books.getBookDetail.cover,
             category: state.books.getBookDetail.category,
@@ -57,16 +56,6 @@ class FormEditBook extends Component {
         return (
             <form onSubmit={this.props.handleSubmit}>
                 <FormGroup row>
-                    <Col md={6}>
-                        <FormGroup>
-                            <Field
-                                type='text'
-                                name='no'
-                                component={renderField}
-                                label='No :'
-                            />
-                        </FormGroup>
-                    </Col>
 
                     <Col md={6}>
                         <FormGroup>

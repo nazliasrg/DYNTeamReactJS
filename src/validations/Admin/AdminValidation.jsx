@@ -1,10 +1,6 @@
 const AdminValidation = (values) => {
     const errors = {};
 
-    if (!values.no || values.no === "") {
-        errors.no = "No cannot be empty!";
-    }
-
     if (!values.id_role || values.id_role === "") {
         errors.id_role = "ID Role cannot be empty!";
     }

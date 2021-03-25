@@ -1,10 +1,6 @@
 const BookValidation = (values) => {
     const errors = {};
 
-    if (!values.no || values.no === "") {
-        errors.no = "No cannot be empty!";
-    }
-
     if (!values.id_book || values.id_book === "") {
         errors.id_book = "ID Book cannot be empty!";
     }

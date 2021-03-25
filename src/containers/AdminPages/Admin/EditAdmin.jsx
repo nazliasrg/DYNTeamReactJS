@@ -5,6 +5,7 @@ import { Container } from 'reactstrap'
 import { connect } from 'react-redux'
 import { getAdminDetail } from '../../../actions/AdminAction'
 import FormEditAdmin from '../../../components/Admin/FormComponent/FormEditAdmin'
+import swal from 'sweetalert'
 
 class EditAdmin extends Component {
 
@@ -14,6 +15,13 @@ class EditAdmin extends Component {
     }
 
     render() {
+        if (this.props.getResponDataAdmin) {
+            swal("Admin Updated!", this.props.getResponDataAdmin.id_role, "success")
+                .then((value) => {
+                    const { history } = this.props;
+                    history.push('/admin-role');
+                });
+        }
         return (
             <Fragment>
                 <div className="wrapper">

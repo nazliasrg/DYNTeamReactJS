@@ -29,8 +29,8 @@ const handleClickExtend = (no) => {
         });
 }
 
-const handleClickReturn = (no) => {
-    console.log('data ke: ' + no)
+const handleClickReturn = (id) => {
+    console.log('data ke: ' + id)
     swal({
         title: "Are you sure to return activity?",
         icon: "warning",
@@ -49,7 +49,7 @@ const handleClickReturn = (no) => {
 }
 
 const columns = [{
-    dataField: 'no',
+    dataField: 'id',
     text: 'No',
     sort: true,
     headerStyle: () => {
@@ -125,13 +125,13 @@ const columns = [{
         return (
             <Row className='justify-content-center'>
                 <Link to={'#'}>
-                    <Badge color='success' className="mr-2" onClick={() => handleClickExtend(row.no)}>
+                    <Badge color='success' className="mr-2" onClick={() => handleClickExtend(row.id)}>
                         Extend
                     </Badge>
                 </Link>
 
                 <Link to={'#'}>
-                    <Badge color='danger' className="mr-2" onClick={() => handleClickReturn(row.no)}>
+                    <Badge color='danger' className="mr-2" onClick={() => handleClickReturn(row.id)}>
                         Return
                     </Badge>
                 </Link>
@@ -142,7 +142,7 @@ const columns = [{
 }];
 
 const defaultSorted = [{
-    dataField: 'no',
+    dataField: 'id',
     order: 'asc'
 }];
 
@@ -159,7 +159,7 @@ const TableActivity = (props) => {
         <>
             {props.getActivityList ? <ToolkitProvider
                 bootstrap4
-                keyField='no'
+                keyField='id'
                 data={props.getActivityList}
                 columns={columns}
                 defaultSorted={defaultSorted}
