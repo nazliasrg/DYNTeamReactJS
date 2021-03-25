@@ -23,7 +23,7 @@ const App = () => {
     return (
         <Router>
             <Switch>
-                <Route path="/Loginuser" exact component={Loginuser} />
+                <Route path="/" exact component={Loginuser} />
                 <Route path="/Registrasi" exact component={Registrasi} />
                 <Route path="/Profileuser" exact component={Profileuser} />
                 <Route path="/Location" exact component={Location} />

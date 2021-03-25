@@ -1,13 +1,11 @@
-body{
-    background-color: rgb(226, 221, 231);
-}
+
 
 .container {
     margin-top: 50px;
 }
 
 .card{
-    background-color: rgb(241, 241, 241);
+    background-color: white;
 }
 
 .coverBook{
