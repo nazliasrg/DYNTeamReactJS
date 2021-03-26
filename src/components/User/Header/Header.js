@@ -47,7 +47,7 @@ class Header extends Component {
                         <Link to={'#'} className="closebtn" onClick={this.handleCloseNav}>&times;</Link>
                         <div className="overlayNav-content">
                             <Link to={'/home'} onClick={this.handleCloseNav}>Home</Link>
-                            <Link to={'/genre'}>Catalogue</Link>
+                            <Link to={'/Genre'}>Catalogue</Link>
                             <Link to={'/location'}>Location</Link>
                             <Link to={'/Profileuser'} id="profileLogin">Profile</Link>
                             <Link to={'/'}>Logout</Link>
