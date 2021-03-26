@@ -1,15 +1,34 @@
 import React, { Component } from 'react'
 import { Card, Container, Row } from 'react-bootstrap'
 import './Recommended.css'
-import book1 from '../../../assets/book/B001.jpg'
-import book2 from '../../../assets/book/B002.jpg'
-import book3 from '../../../assets/book/B003.jpg'
-import book4 from '../../../assets/book/B004.jpg'
-import book5 from '../../../assets/book/B005.jpg'
-import book7 from '../../../assets/book/B007.jpg'
+import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 export default class Recommended extends Component {
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        };
+    }
+
+    componentDidMount = () => {
+        this.getBooks()
+    }
+
+    getBooks = () => {
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/book')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
+    }
+
     render() {
+        const { data } = this.state;
+
         const titleStyle = {
             fontSize: "14px",
             fontWeight: "bold",
@@ -23,8 +42,24 @@ export default class Recommended extends Component {
                     </Row>
                     <div className="d-flex flex-wrap mt-4">
                         <div className="row justify-content-center" id="recommended">
+                            {
+                                data.filter(val => (val.id > 27))
+                                    .map(filteredVal => {
+                                        return (
+                                            <Card className="cardRecomm mx-2">
+                                                <Link to={`/detail-book/${filteredVal.id}`}>
+                                                    <Card.Img variant="top" src={`../img/book/${filteredVal.id_book}.jpg`} />
+                                                    <Card.Body style={{ textAlign: "center" }}>
+                                                        <Card.Title style={titleStyle}>{filteredVal.title}</Card.Title>
+                                                        <small className="text-muted">{filteredVal.author}</small>
+                                                    </Card.Body>
+                                                </Link>
+                                            </Card>
+                                        )
+                                    })
+                            }
 
-                            <Card className="cardRecomm mx-2">
+                            {/* <Card className="cardRecomm mx-2">
                                 <Card.Img variant="top" src={book1} />
                                 <Card.Body style={{ textAlign: "center" }}>
                                     <Card.Title style={titleStyle}>Jalan Panjang untuk Pulang</Card.Title>
@@ -65,7 +100,7 @@ export default class Recommended extends Component {
                                     <Card.Title style={titleStyle}>Detektif Conan 96</Card.Title>
                                     <small className="text-muted">Aoyama Gosho</small>
                                 </Card.Body>
-                            </Card>
+                            </Card> */}
 
                         </div>
                     </div>

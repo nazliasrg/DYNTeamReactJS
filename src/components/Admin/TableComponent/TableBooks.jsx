@@ -13,8 +13,8 @@ import swal from 'sweetalert';
 
 const { SearchBar } = Search;
 
-const handleClick = (no) => {
-    console.log('data ke: ' + no)
+const handleClick = (id) => {
+    console.log('data ke: ' + id)
     swal({
         title: "Are you sure?",
         text: "Once deleted, you will not be able to recover data!",
@@ -121,7 +121,6 @@ const mapStateToProps = (state) => {
         errorBooks: state.books.errorBooks
     }
 }
-
 
 const TableBooks = (props) => {
     return (

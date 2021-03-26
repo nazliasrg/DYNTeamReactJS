@@ -21,6 +21,7 @@ import Location from '../containers/UserPages/Location/Location';
 import HomeUser from '../containers/UserPages/HomeUser/HomeUser';
 import Genre from '../containers/UserPages/Genre/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import DetailBook from '../containers/UserPages/DetailBook/DetailBook';
 
 const App = () => {
     return (
@@ -32,6 +33,7 @@ const App = () => {
                 <Route path="/Profileuser" exact component={Profileuser} />
                 <Route path="/location" exact component={Location} />
                 <Route path="/Genre" exact component={Genre} />
+                <Route path="/detail-book/:bookId" exact component={DetailBook} />
 
                 <Route path="/login-admin" exact component={Login} />
                 <Route path="/home-admin" component={Home} />
