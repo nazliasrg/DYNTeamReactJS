@@ -4,15 +4,33 @@ import { Row, Col } from 'reactstrap'
 import OwlCarousel from 'react-owl-carousel'
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
-import book1 from '../../../assets/book/B001.jpg'
-import book2 from '../../../assets/book/B002.jpg'
-import book3 from '../../../assets/book/B003.jpg'
-import book4 from '../../../assets/book/B004.jpg'
-import book5 from '../../../assets/book/B005.jpg'
-import book7 from '../../../assets/book/B007.jpg'
+import axios from 'axios'
+import HomeCard from './HomeCard';
 
 export default class Popular extends Component {
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        };
+    }
+
+    componentDidMount = () => {
+        this.getBooks()
+    }
+
+    getBooks = () => {
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/book')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
+    }
+
     render() {
+        const { data } = this.state;
         const titleStyle = {
             fontSize: "14px",
             fontWeight: "bold",
@@ -30,116 +48,11 @@ export default class Popular extends Component {
                     </Row>
                     <Row className="mt-4 justify-content-center">
                         <Col md={12}>
+
                             <OwlCarousel items={6} className='owl-theme' loop margin={5} nav>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book1} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Jalan Panjang untuk Pulang</Card.Title>
-                                            <small className="text-muted">Agustinus Wibowo</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book2} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>This Is How They Tell Me the World Ends: The Cyberweapons Arms Race</Card.Title>
-                                            <small className="text-muted">Nicole Perlroth</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book3} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Pulang Pergi</Card.Title>
-                                            <small className="text-muted">Tere Liye</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book3} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Pulang Pergi</Card.Title>
-                                            <small className="text-muted">Tere Liye</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book3} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Pulang Pergi</Card.Title>
-                                            <small className="text-muted">Tere Liye</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book3} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Pulang Pergi</Card.Title>
-                                            <small className="text-muted">Tere Liye</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book1} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Jalan Panjang untuk Pulang</Card.Title>
-                                            <small className="text-muted">Agustinus Wibowo</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book2} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>This Is How They Tell Me the World Ends: The Cyberweapons Arms Race</Card.Title>
-                                            <small className="text-muted">Nicole Perlroth</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book3} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Pulang Pergi</Card.Title>
-                                            <small className="text-muted">Tere Liye</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book3} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Pulang Pergi</Card.Title>
-                                            <small className="text-muted">Tere Liye</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book3} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Pulang Pergi</Card.Title>
-                                            <small className="text-muted">Tere Liye</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                                <div class='item'>
-                                    <Card style={cardStyle}>
-                                        <Card.Img variant="top" src={book3} />
-                                        <Card.Body style={{ textAlign: "center" }}>
-                                            <Card.Title style={titleStyle}>Pulang Pergi</Card.Title>
-                                            <small className="text-muted">Tere Liye</small>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
+                                <HomeCard />
                             </OwlCarousel>
+
                         </Col>
                     </Row>
                 </Container>
