@@ -19,6 +19,7 @@ import Registrasi from '../containers/UserPages/Registrasi/Registrasi';
 import Profileuser from '../containers/UserPages/Profile/Profileuser';
 import Location from '../containers/UserPages/Location/Location';
 import HomeUser from '../containers/UserPages/HomeUser/HomeUser';
+import Genre from '../containers/UserPages/Genre/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
                 <Route path="/Registrasi" exact component={Registrasi} />
                 <Route path="/Profileuser" exact component={Profileuser} />
                 <Route path="/location" exact component={Location} />
+                <Route path="/Genre" exact component={Genre} />
 
                 <Route path="/login-admin" exact component={Login} />
                 <Route path="/home-admin" component={Home} />

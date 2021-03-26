@@ -1,0 +1,38 @@
+.container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.genre-pic{
+    height: 140px;
+    object-fit: contain;
+}
+
+.title{
+    text-align: center;
+}
+
+.card{
+    width: 159px;
+    height: 235px;
+    border: none;
+}
+
+.card:hover{
+    transform: scale(1.05);
+}
+
+.card-body{
+    text-align: center;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover{
+    color: rgb(58, 58, 58)
+}
