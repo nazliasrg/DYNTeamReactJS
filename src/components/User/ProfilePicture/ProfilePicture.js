@@ -1,14 +1,29 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom';
 import logo from '../../../assets/Logouser.png';
+import {ReactSession} from 'react-client-session';
+
+
+ReactSession.setStoreType("localStorage");
 
 class ProfilePicture extends Component {
 
+    constructor(){
+
+        super();
+        this.state = {dataUser:''}
+    }
+
+    componentDidMount() {
+        this.setState({
+            dataUser:(ReactSession.get("username"))
+        });
+
+     }
+
     render() {
+        
         return (
             <Fragment>
                 <div className="card">
@@ -18,7 +33,7 @@ class ProfilePicture extends Component {
                                                 height: 200,
                                             }} />
                                             <div className="mt-3">
-                                                <h4>Hello, Bernadetha</h4>
+                                                <h4>Hello, {this.state.dataUser}</h4>
                                                 <h6>Member DYNTeam</h6>
                                                 <p class="text-muted font-size-sm">Semarang, Indonesia</p>
                                             </div>

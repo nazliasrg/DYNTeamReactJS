@@ -5,7 +5,9 @@ import logo from '../../../assets/Logouser.png';
 import { Link, withRouter } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import ReactSession from 'react-client-session';
+import {ReactSession} from 'react-client-session';
+
+ReactSession.setStoreType("localStorage");
 
 const defaultState = {
     username:null,
@@ -55,7 +57,10 @@ class Loginuser extends Component {
         if(this.validate()){
             console.warn(this.state);
             this.setState(defaultState);
+            ReactSession.set("username", this.state.username);//untuk menyimpat sessionnya yg dikasih nama username
+            console.log(ReactSession.get("username"));
             this.props.history.push('/Home')
+
 
         }
     }
