@@ -1,4 +1,4 @@
-.container{
+.containerGenre{
     position: absolute;
     top: 50%;
     left: 50%;
@@ -14,17 +14,17 @@
     text-align: center;
 }
 
-.card{
+.cardGenre{
     width: 159px;
     height: 235px;
     border: none;
 }
 
-.card:hover{
+.cardGenre:hover{
     transform: scale(1.05);
 }
 
-.card-body{
+.card-body-genre{
     text-align: center;
 }
 
