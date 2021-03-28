@@ -17,7 +17,7 @@ export default class LocationUser extends Component {
                             <br />
                                 <div className="alamat">
                                     Jl. Medan Merdeka Sel. No.11, Gambir, Kecamatan Gambir, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10110
-                            </div>
+                                </div>
                             </div>
 
                             <div className="story">
