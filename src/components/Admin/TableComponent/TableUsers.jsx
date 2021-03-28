@@ -14,8 +14,8 @@ import swal from 'sweetalert';
 
 const { SearchBar } = Search;
 
-const handleClick = (no) => {
-    console.log('data ke: ' + no)
+const handleClick = (id) => {
+    console.log('data ke: ' + id)
     swal({
         title: "Are you sure?",
         text: "Once deleted, you will not be able to recover data!",
@@ -35,11 +35,11 @@ const handleClick = (no) => {
 }
 
 const columns = [{
-    dataField: 'no',
+    dataField: 'id',
     text: 'No',
     sort: true,
     headerStyle: () => {
-        return { width: '6%' }
+        return { width: '7%' }
     }
 }, {
     dataField: 'id_user',
@@ -100,12 +100,12 @@ const columns = [{
     formatter: (rowContent, row) => {
         return (
             <Row className='justify-content-center'>
-                <Link to={'edit-user/' + row.no}>
-                    <Button color='warning' className="mr-2">
+                <Link to={'edit-user/' + row.id}>
+                    <Button color='warning' className="mr-2 btn-crud">
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                 </Link>
-                <Button color='danger' className="mr-2" onClick={() => handleClick(row.no)}>
+                <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.id)}>
                     <FontAwesomeIcon icon={faTrash} />
                 </Button>
             </Row>
@@ -114,7 +114,7 @@ const columns = [{
 }];
 
 const defaultSorted = [{
-    dataField: 'no',
+    dataField: 'id',
     order: 'asc'
 }];
 
@@ -131,7 +131,7 @@ const TableUsers = (props) => {
         <>
             {props.getUsersList ? <ToolkitProvider
                 bootstrap4
-                keyField='no'
+                keyField='id'
                 data={props.getUsersList}
                 columns={columns}
                 defaultSorted={defaultSorted}

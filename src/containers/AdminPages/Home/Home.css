@@ -58,3 +58,29 @@ a:focus {
     width: 100px;
     height: auto;
 }
+
+@media screen and (max-width:768px){
+    h6 {
+        font-size: 8px;
+    }
+    *{
+        font-size: 5px;
+    }
+    .img-book{
+        width: 20px !important;
+        height: auto;
+    }
+    .btn-crud{
+        width: 10px;
+        height: auto;
+        text-align: center;
+    }
+    svg{
+        width: 10px !important;
+        height: auto;
+        text-align: center;
+    }
+    input{
+        font-size: 8px;
+    }
+}
