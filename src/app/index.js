@@ -49,7 +49,7 @@ const App = () => {
 
                 {/* users table */}
                 <Route path="/create-user" component={CreateUser} />
-                <Route path="/edit-user/:no" component={EditUser} />
+                <Route path="/edit-user/:id" component={EditUser} />
 
                 {/* books table */}
                 <Route path="/add-book" component={AddBook} />

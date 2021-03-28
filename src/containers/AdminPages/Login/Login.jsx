@@ -31,7 +31,7 @@ class Login extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-md-3"></div>
-                            <div className="col-md-6 my-5">
+                            <div className="col-md-6 mb-5">
                                 <form>
                                     <div className="row container-login justify-content-center">
                                         <img className="logoLogin mx-2" src={logo} alt="" />

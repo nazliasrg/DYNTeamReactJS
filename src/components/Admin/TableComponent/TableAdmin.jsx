@@ -16,7 +16,7 @@ const columns = [{
     text: 'No',
     sort: true,
     headerStyle: () => {
-        return { width: '6%' }
+        return { width: '7%' }
     }
 }, {
     dataField: 'id_role',

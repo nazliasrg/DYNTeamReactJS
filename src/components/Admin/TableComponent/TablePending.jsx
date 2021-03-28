@@ -12,8 +12,8 @@ import swal from 'sweetalert';
 
 const { SearchBar } = Search;
 
-const handleClickAccept = (no) => {
-    console.log('data ke: ' + no)
+const handleClickAccept = (id) => {
+    console.log('data ke: ' + id)
     swal({
         title: "Are you sure to accept request?",
         icon: "warning",
@@ -31,8 +31,8 @@ const handleClickAccept = (no) => {
         });
 }
 
-const handleClickDecline = (no) => {
-    console.log('data ke: ' + no)
+const handleClickDecline = (id) => {
+    console.log('data ke: ' + id)
     swal({
         title: "Are you sure to decline request?",
         icon: "warning",
@@ -51,11 +51,11 @@ const handleClickDecline = (no) => {
 }
 
 const columns = [{
-    dataField: 'no',
+    dataField: 'id',
     text: 'No',
     sort: true,
     headerStyle: () => {
-        return { width: '6%' }
+        return { width: '7%' }
     }
 }, {
     dataField: 'id_activity',
@@ -89,13 +89,13 @@ const columns = [{
         return (
             <Row className='justify-content-center'>
                 <Link to={'#'}>
-                    <Button color='success' className="mr-2" onClick={() => handleClickAccept(row.no)}>
+                    <Button color='success' className="mr-2 btn-crud" onClick={() => handleClickAccept(row.id)}>
                         <FontAwesomeIcon icon={faCheck} />
                     </Button>
                 </Link>
 
                 <Link to={'#'}>
-                    <Button color='danger' className="mr-2" onClick={() => handleClickDecline(row.no)}>
+                    <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClickDecline(row.id)}>
                         <FontAwesomeIcon icon={faTimes} />
                     </Button>
                 </Link>
@@ -106,7 +106,7 @@ const columns = [{
 }];
 
 const defaultSorted = [{
-    dataField: 'no',
+    dataField: 'id',
     order: 'asc'
 }];
 
@@ -123,7 +123,7 @@ const TablePending = (props) => {
         <>
             {props.getActivityList ? <ToolkitProvider
                 bootstrap4
-                keyField='no'
+                keyField='id'
                 data={props.getActivityList}
                 columns={columns}
                 defaultSorted={defaultSorted}

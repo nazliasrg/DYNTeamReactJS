@@ -38,7 +38,7 @@ const columns = [{
     text: 'No',
     sort: true,
     headerStyle: () => {
-        return { width: '6%' }
+        return { width: '7%' }
     }
 }, {
     dataField: 'id_book',
@@ -54,7 +54,7 @@ const columns = [{
     formatter: (cell, row) => {
         return (
             <Row className='justify-content-center'>
-                <img src={`../img/book/${row.id_book}.jpg`} className="img-thumbnail" style={{ width: '60px' }} alt="" />
+                <img src={`../img/book/${row.id_book}.jpg`} className="img-thumbnail img-book" style={{ width: '60px' }} alt="" />
             </Row>
         )
     }
@@ -98,11 +98,11 @@ const columns = [{
         return (
             <Row className='justify-content-center'>
                 <Link to={'edit-book/' + row.id}>
-                    <Button color='warning' className="mr-2">
+                    <Button color='warning' className="mr-2 btn-crud">
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                 </Link>
-                <Button color='danger' className="mr-2" onClick={() => handleClick(row.id)}>
+                <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.id)}>
                     <FontAwesomeIcon icon={faTrash} />
                 </Button>
             </Row>
@@ -152,7 +152,7 @@ const TableBooks = (props) => {
                                 </Col>
                             </Row>
 
-                            <div className="justify-content-center">
+                            <div className="justify-content-center tableAdmin">
                                 <BootstrapTable
                                     {...props.baseProps}
 

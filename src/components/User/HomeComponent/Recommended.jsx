@@ -43,14 +43,14 @@ export default class Recommended extends Component {
                     <div className="d-flex flex-wrap mt-4">
                         <div className="row justify-content-center" id="recommended">
                             {
-                                data.filter(val => (val.id > 27))
+                                data.filter(val => (val.id > 28))
                                     .map(filteredVal => {
                                         return (
                                             <Card className="cardRecomm mx-2">
                                                 <Link to={`/detail-book/${filteredVal.id}`}>
                                                     <Card.Img variant="top" src={`../img/book/${filteredVal.id_book}.jpg`} />
                                                     <Card.Body style={{ textAlign: "center" }}>
-                                                        <Card.Title style={titleStyle}>{filteredVal.title}</Card.Title>
+                                                        <Card.Title className="cardTitle" style={titleStyle}>{filteredVal.title}</Card.Title>
                                                         <small className="text-muted">{filteredVal.author}</small>
                                                     </Card.Body>
                                                 </Link>

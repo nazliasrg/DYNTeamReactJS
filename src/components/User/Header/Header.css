@@ -81,3 +81,43 @@
     width: 100%;
     height: auto;
 }
+
+@media screen and (max-width:768px){
+    .nav-container{
+        width: 100%;
+        padding : 0px;
+    }
+
+    .btnLogin{
+        font-size: 10px;
+    }
+    .logo1 .logo{
+        width: 20px;
+        margin: 10px;
+    }
+    .cursor{
+        font-size:20px;
+        margin:10px;
+    }
+
+    .akun .btnLogin{
+        width: 20px;
+        height: auto;
+    }
+
+    .overlayNav-content a{
+        font-size: 12px;
+    }
+
+    .overlayNav .closebtn {
+        position: absolute;
+        top: 50px;
+        right: 45px;
+        font-size: 25px;
+    }
+
+    .input-keyword{
+        font-size: 8px;
+    }
+
+}

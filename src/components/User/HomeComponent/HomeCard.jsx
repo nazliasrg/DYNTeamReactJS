@@ -47,7 +47,7 @@ class HomeCard extends Component {
                                 <Card style={cardStyle}>
                                     <Card.Img variant="top" src={`../img/book/${val.id_book}.jpg`} />
                                     <Card.Body style={{ textAlign: "center" }}>
-                                        <Card.Title style={titleStyle}>{val.title}</Card.Title>
+                                        <Card.Title className="cardTitle" style={titleStyle}>{val.title}</Card.Title>
                                         <small className="text-muted">{val.author}</small>
                                     </Card.Body>
                                 </Card>

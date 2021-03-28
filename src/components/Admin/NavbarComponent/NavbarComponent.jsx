@@ -14,7 +14,7 @@ const NavbarComponent = () => {
                 <button
                     type="button"
                     id="sidebarCollapse"
-                    className="btn btn-light"
+                    className="btn"
                     onClick={handleSidebar}
                 >
                     <span className="cursor">&#9776;</span>

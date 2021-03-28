@@ -9,12 +9,12 @@ import { connect } from 'react-redux';
 const { SearchBar } = Search;
 
 const columns = [{
-    dataField: 'no',
+    dataField: 'id',
     text: 'No',
     sort: true,
     headerStyle: () => {
         return {
-            width: '6%'
+            width: '7%'
         }
     }
 }, {
@@ -105,7 +105,7 @@ const columns = [{
 ];
 
 const defaultSorted = [{
-    dataField: 'no',
+    dataField: 'id',
     order: 'asc'
 }];
 
@@ -122,7 +122,7 @@ const TableHistory = (props) => {
         <>
             {props.getActivityList ? <ToolkitProvider
                 bootstrap4
-                keyField='no'
+                keyField='id'
                 data={props.getActivityList}
                 columns={columns}
                 defaultSorted={defaultSorted}
