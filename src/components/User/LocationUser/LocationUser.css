@@ -36,3 +36,25 @@
 .maps{
     z-index: 2;
 }
+
+
+@media screen and (max-width: 768px){
+
+    .container1{
+        width: auto;
+    }
+
+    .gray2{
+        flex:1;
+        padding: 0px;
+    }
+
+    .alamat{
+        font-size: 8px;
+    }
+
+    .story iframe{
+        width: 100%;
+        height: auto;
+    }
+}
