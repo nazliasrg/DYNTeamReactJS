@@ -22,6 +22,15 @@ import HomeUser from '../containers/UserPages/HomeUser/HomeUser';
 import Genre from '../containers/UserPages/Genre/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DetailBook from '../containers/UserPages/DetailBook/DetailBook';
+import Author from '../containers/AdminPages/Home/Author/Author';
+import Category from '../containers/AdminPages/Home/Category/Category';
+import Publisher from '../containers/AdminPages/Home/Publisher/Publisher';
+import EditAuthor from '../containers/AdminPages/Home/Author/EditAuthor';
+import EditCategory from '../containers/AdminPages/Home/Category/EditCategory';
+import EditPublisher from '../containers/AdminPages/Home/Publisher/EditPublisher';
+import AddAuthor from '../containers/AdminPages/Home/Author/AddAuthor';
+import AddCategory from '../containers/AdminPages/Home/Category/AddCategory';
+import AddPublisher from '../containers/AdminPages/Home/Publisher/AddPublisher';
 
 const App = () => {
     return (
@@ -54,6 +63,15 @@ const App = () => {
                 {/* books table */}
                 <Route path="/add-book" component={AddBook} />
                 <Route path="/edit-book/:no" component={EditBook} />
+                <Route path="/book-author" component={Author} />
+                <Route path="/book-category" component={Category} />
+                <Route path="/book-publisher" component={Publisher} />
+                <Route path="/edit-author/:authorId" component={EditAuthor} />
+                <Route path="/add-author" component={AddAuthor} />
+                <Route path="/edit-category/:categoryId" component={EditCategory} />
+                <Route path="/add-category" component={AddCategory} />
+                <Route path="/edit-publisher/:publisherId" component={EditPublisher} />
+                <Route path="/add-publisher" component={AddPublisher} />
 
 
             </Switch>
