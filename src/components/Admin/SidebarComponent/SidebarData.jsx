@@ -7,16 +7,31 @@ import * as RiIcons from 'react-icons/ri';
 
 export const SidebarData = [
     {
-        title: 'Books',
+        title: 'Manage Books',
         path: '#',
         icon: <AiIcons.AiFillAccountBook />,
         iconClosed: <AiIcons.AiFillCaretDown />,
         iconOpened: <AiIcons.AiFillCaretUp />,
         subNav: [
             {
-                title: 'Manage Books',
+                title: 'Books',
                 path: '/home-admin',
                 icon: <AiIcons.AiFillBook />
+            },
+            {
+                title: 'Author',
+                path: '/book-author',
+                icon: <FaIcons.FaUserAlt />
+            },
+            {
+                title: 'Category',
+                path: '/book-category',
+                icon: <AiIcons.AiFillCodepenCircle />
+            },
+            {
+                title: 'Publisher',
+                path: '/book-publisher',
+                icon: <FaIcons.FaBox />
             }
         ]
     },
