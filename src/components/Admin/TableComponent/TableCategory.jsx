@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -8,7 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
-import axios from 'axios';
+import axios from 'axios'
+import { Modal } from 'react-bootstrap'
 
 const { SearchBar } = Search;
 
@@ -147,6 +148,34 @@ const defaultSorted = [{
 }];
 
 const TableCategory = (props) => {
+
+    const [show, setShow] = useState(false);
+
+    const handleShow = () => setShow(true);
+
+    const closeModal = () => setShow(false);
+
+    const [categoryName, setCategoryName] = useState("");
+
+    const onSubmit = () => {
+
+        const category = {
+            categoryName: categoryName
+        }
+
+        axios.post("http://localhost:7070/api/dynteam/book/category/insert", category)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const categoryChange = (event) => {
+        setCategoryName(event.target.value)
+    }
+
     const { data } = props;
     return (
         <>
@@ -167,12 +196,29 @@ const TableCategory = (props) => {
                                 </Col>
                                 <Col>
                                     <div className="float-right">
-                                        <Link to={'/add-category'}>
-                                            <Button color='dark' className="mr-2">
-                                                <FontAwesomeIcon icon={faPlusCircle} />
+                                        <Button color='dark' className="mr-2" onClick={handleShow}>
+                                            <FontAwesomeIcon icon={faPlusCircle} />
                                                 Add Category
                                         </Button>
-                                        </Link>
+
+                                        <Modal show={show}>
+                                            <Modal.Header closeButton onClick={closeModal}>
+                                                <Modal.Title>Add Category</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                                <>
+                                                    <form onSubmit={onSubmit}>
+                                                        <div className="form-group">
+                                                            <label htmlFor="categoryName">Category Name</label>
+                                                            <input className="form-control" id="categoryName" value={categoryName} onChange={categoryChange} />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <button className="form-control btn btn-primary" type="submit">Add</button>
+                                                        </div>
+                                                    </form>
+                                                </>
+                                            </Modal.Body>
+                                        </Modal>
                                     </div>
                                 </Col>
                             </Row>
