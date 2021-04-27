@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -9,9 +9,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import axios from 'axios';
-import { useHistory } from "react-router";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Modal } from 'react-bootstrap';
+
 
 const { SearchBar } = Search;
+
+
 
 const handleClickActive = (id) => {
     console.log('data ke: ' + id)
@@ -147,8 +151,13 @@ const defaultSorted = [{
     order: 'asc'
 }];
 
-
 const TableAuthor = (props) => {
+    const [show, setShow] = useState(false);
+
+    const handleShow = () => setShow(true);
+
+    const closeModal = () => setShow(false);
+
     const { data } = props;
     return (
         <>
@@ -169,12 +178,24 @@ const TableAuthor = (props) => {
                                 </Col>
                                 <Col>
                                     <div className="float-right">
-                                        <Link to={'/add-author'}>
-                                            <Button color='dark' className="mr-2">
-                                                <FontAwesomeIcon icon={faPlusCircle} />
+                                        {/* <Link to={'/add-author'}> */}
+                                        <Button color='dark' className="mr-2" onClick={handleShow}>
+                                            <FontAwesomeIcon icon={faPlusCircle} />
                                                 Add Author
                                         </Button>
-                                        </Link>
+                                        {/* </Link> */}
+
+                                        <Modal show={show}>
+                                            <Modal.Header closeButton onClick={closeModal}>
+                                                <Modal.Title>Add Author</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                                <></>
+                                            </Modal.Body>
+                                            <Modal.Footer>
+                                                <Button variant="secondary" onClick={closeModal}>Close Modal</Button>
+                                            </Modal.Footer>
+                                        </Modal>
                                     </div>
                                 </Col>
                             </Row>
