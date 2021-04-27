@@ -3,6 +3,7 @@ import NavbarComponent from '../../../../components/Admin/NavbarComponent/Navbar
 import SidebarComponent from '../../../../components/Admin/SidebarComponent/SidebarComponent'
 import { connect } from 'react-redux'
 import { Container } from 'reactstrap'
+import FormCreateCategory from '../../../../components/Admin/FormComponent/FormCreateCategory'
 
 class EditCategory extends Component {
     constructor() {
@@ -43,6 +44,7 @@ class EditCategory extends Component {
                         <div className="card shadow mb-4">
                             <Container>
                                 <h6 className='mt-3'>Edit Category {categoryId}</h6>
+                                <FormCreateCategory />
                             </Container>
                         </div>
 

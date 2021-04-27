@@ -4,13 +4,30 @@ import SidebarComponent from '../../../../components/Admin/SidebarComponent/Side
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavbarComponent from '../../../../components/Admin/NavbarComponent/NavbarComponent'
 import { connect } from 'react-redux'
-import { getBooksList } from '../../../../actions/BooksAction';
 import TablePublisher from '../../../../components/Admin/TableComponent/TablePublisher';
+import axios from 'axios'
 
 
 class Publisher extends Component {
-    componentDidMount() {
-        this.props.dispatch(getBooksList());
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        };
+    }
+
+    componentDidMount = () => {
+        this.getPublishers()
+    }
+
+    getPublishers = () => {
+        axios.get('http://localhost:7070/api/dynteam/book/publisher/publishers')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
     }
 
     render() {
@@ -27,7 +44,7 @@ class Publisher extends Component {
                                 </div>
                             </div>
                             <div className="card-body">
-                                <TablePublisher />
+                                <TablePublisher data={this.state.data} />
                             </div>
                         </div>
 

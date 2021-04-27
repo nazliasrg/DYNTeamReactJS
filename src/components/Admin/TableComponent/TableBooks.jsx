@@ -1,4 +1,4 @@
-import { faEdit, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faEdit, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Row, Col, Spinner } from 'reactstrap';
@@ -96,16 +96,30 @@ const columns = [{
     },
     formatter: (rowContent, row) => {
         return (
-            <Row className='justify-content-center'>
-                <Link to={'edit-book/' + row.id}>
-                    <Button color='warning' className="mr-2 btn-crud">
-                        <FontAwesomeIcon icon={faEdit} />
+            <>
+                <Row className='justify-content-center'>
+                    <Link to={'edit-book/' + row.id}>
+                        <Button color='warning' className="mr-2 btn-crud">
+                            <FontAwesomeIcon icon={faEdit} />
+                        </Button>
+                    </Link>
+                    <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.id)}>
+                        <FontAwesomeIcon icon={faTrash} />
                     </Button>
-                </Link>
-                <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.id)}>
-                    <FontAwesomeIcon icon={faTrash} />
-                </Button>
-            </Row>
+                </Row>
+                <Row className='justify-content-center mt-2'>
+                    <Link to={'add-stock/' + row.id}>
+                        <Button color='warning' className="mr-2 btn-crud">
+                            <FontAwesomeIcon icon={faPlus} />
+                        </Button>
+                    </Link>
+                    <Link to={'discrepancy/' + row.id}>
+                        <Button color='warning' className="mr-2 btn-crud">
+                            <FontAwesomeIcon icon={faMinus} />
+                        </Button>
+                    </Link>
+                </Row>
+            </>
         )
     }
 }];

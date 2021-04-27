@@ -5,9 +5,30 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavbarComponent from '../../../../components/Admin/NavbarComponent/NavbarComponent'
 import { connect } from 'react-redux'
 import TableAuthor from '../../../../components/Admin/TableComponent/TableAuthor';
+import axios from 'axios'
 
 class Author extends Component {
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        };
+    }
 
+    componentDidMount = () => {
+        this.getAuthors()
+    }
+
+    getAuthors = () => {
+        axios.get('http://localhost:7070/api/dynteam/book/author/authors')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+
+                console.log(this.state.data);
+            })
+    }
     render() {
         return (
             <Fragment>
@@ -22,7 +43,7 @@ class Author extends Component {
                                 </div>
                             </div>
                             <div className="card-body">
-                                <TableAuthor />
+                                <TableAuthor data={this.state.data} />
                             </div>
                         </div>
 

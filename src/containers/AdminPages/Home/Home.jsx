@@ -6,11 +6,30 @@ import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarCom
 import TableBooks from '../../../components/Admin/TableComponent/TableBooks';
 import { connect } from 'react-redux';
 import { getBooksList } from '../../../actions/BooksAction';
+import axios from 'axios'
 
 class Home extends Component {
 
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        };
+    }
+
     componentDidMount() {
         this.props.dispatch(getBooksList());
+        this.getBooks()
+    }
+
+    getBooks = () => {
+        axios.get('http://localhost:7070/api/dynteam/book/books')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
     }
 
     render() {

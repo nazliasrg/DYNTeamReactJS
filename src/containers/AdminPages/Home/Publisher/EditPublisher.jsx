@@ -3,6 +3,7 @@ import NavbarComponent from '../../../../components/Admin/NavbarComponent/Navbar
 import SidebarComponent from '../../../../components/Admin/SidebarComponent/SidebarComponent'
 import { connect } from 'react-redux'
 import { Container } from 'reactstrap'
+import FormCreatePublisher from '../../../../components/Admin/FormComponent/FormCreatePublisher'
 
 class EditPublisher extends Component {
     constructor() {
@@ -43,6 +44,7 @@ class EditPublisher extends Component {
                         <div className="card shadow mb-4">
                             <Container>
                                 <h6 className='mt-3'>Edit Publisher {publisherId}</h6>
+                                <FormCreatePublisher />
                             </Container>
                         </div>
 

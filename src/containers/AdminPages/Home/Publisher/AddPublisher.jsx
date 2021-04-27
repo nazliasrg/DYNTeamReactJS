@@ -3,6 +3,7 @@ import NavbarComponent from '../../../../components/Admin/NavbarComponent/Navbar
 import SidebarComponent from '../../../../components/Admin/SidebarComponent/SidebarComponent'
 import { connect } from 'react-redux'
 import { Container } from 'reactstrap'
+import FormCreatePublisher from '../../../../components/Admin/FormComponent/FormCreatePublisher'
 
 class AddPublisher extends Component {
 
@@ -17,7 +18,7 @@ class AddPublisher extends Component {
                         <div className="card shadow">
                             <Container>
                                 <h6>Add Publisher</h6>
-
+                                <FormCreatePublisher />
                             </Container>
                         </div>
 

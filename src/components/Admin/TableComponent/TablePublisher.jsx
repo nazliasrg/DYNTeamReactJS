@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { Button, Row, Col } from 'reactstrap';
+import { Badge, Button, Row, Col } from 'reactstrap';
 import { faEdit, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -31,8 +31,8 @@ const handleClick = (id) => {
         });
 }
 const products = [
-    { publisherId: 1, publisherCode: "PU1", publisherName: "Amazon" },
-    { publisherId: 2, publisherCode: "PU2", publisherName: "Gramedia" }
+    { publisherId: 1, publisherCode: "PU1", publisherName: "Amazon", publisherStatus: 0 },
+    { publisherId: 2, publisherCode: "PU2", publisherName: "Gramedia", publisherStatus: 1 }
 ];
 
 const columns = [{
@@ -50,6 +50,34 @@ const columns = [{
     dataField: 'publisherName',
     text: 'Publisher Name',
     sort: true
+}, {
+    dataField: 'link',
+    text: 'Status',
+    headerStyle: () => {
+        return {
+            textAlign: 'center'
+        }
+    },
+    formatter: (rowContent, row) => {
+        if (row.publisherStatus === 1) {
+            return (
+                <Row className='justify-content-center'>
+                    <Badge color='primary' className="mr-2">
+                        Active
+                    </Badge>
+                </Row>
+            )
+        }
+        else {
+            return (
+                <Row className='justify-content-center'>
+                    <Badge color='danger' className="mr-2">
+                        Inactive
+                    </Badge>
+                </Row>
+            )
+        }
+    }
 }, {
     dataField: 'link',
     text: 'Action',
@@ -78,12 +106,13 @@ const defaultSorted = [{
 }];
 
 const TablePublisher = (props) => {
+    const { data } = props;
     return (
         <>
             <ToolkitProvider
                 bootstrap4
                 keyField="id"
-                data={products}
+                data={data}
                 columns={columns}
                 defaultSorted={defaultSorted}
                 search
