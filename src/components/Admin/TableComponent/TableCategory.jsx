@@ -8,32 +8,75 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
+import axios from 'axios';
 
 const { SearchBar } = Search;
 
-const handleClick = (id) => {
+const handleClickActive = (id) => {
     console.log('data ke: ' + id)
     swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover data!",
+        title: "Are you sure to inactive this category?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            inactivedCategory(id);
+            if (willDelete) {
+                swal("Data category has been inactived!", {
+                    icon: "success",
+                }).then((OK) => {
+                    window.location.reload(false);
+                })
+
+            } else {
+                swal("Data category is safe!");
+            }
+        });
+}
+
+const inactivedCategory = (id) => {
+    axios.delete("http://localhost:7070/api/dynteam/book/category/delete/" + id)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
+
+const handleClickInactive = (id) => {
+    console.log('data ke: ' + id)
+    swal({
+        title: "Are you sure to active this category?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     })
         .then((willDelete) => {
             if (willDelete) {
-                swal("Data category has been deleted!", {
+                activedCategory(id);
+                swal("Data category has been actived!", {
                     icon: "success",
-                });
+                }).then((OK) => {
+                    window.location.reload(false);
+                })
+
             } else {
                 swal("Data category is safe!");
             }
         });
 }
-const products = [
-    { categoryId: 1, categoryCode: "CA1", categoryName: "Novel", categoryStatus: 1 },
-    { categoryId: 2, categoryCode: "CA2", categoryName: "Computer & Technology", categoryStatus: 0 }
-];
+
+const activedCategory = (id) => {
+    axios.put("http://localhost:7070/api/dynteam/book/category/actived/" + id)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
 const columns = [{
     dataField: 'categoryId',
@@ -63,18 +106,18 @@ const columns = [{
         if (row.categoryStatus === 1) {
             return (
                 <Row className='justify-content-center'>
-                    <Badge color='primary' className="mr-2">
+                    <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.categoryId)}>
                         Active
-                    </Badge>
+                    </Button>
                 </Row>
             )
         }
         else {
             return (
                 <Row className='justify-content-center'>
-                    <Badge color='danger' className="mr-2">
+                    <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.categoryId)}>
                         Inactive
-                    </Badge>
+                    </Button>
                 </Row>
             )
         }
@@ -93,9 +136,6 @@ const columns = [{
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                 </Link>
-                <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.categoryId)}>
-                    <FontAwesomeIcon icon={faTrash} />
-                </Button>
             </Row>
         )
     }
