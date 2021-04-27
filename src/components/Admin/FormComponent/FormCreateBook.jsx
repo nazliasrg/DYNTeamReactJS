@@ -3,6 +3,7 @@ import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import { Col, FormGroup, Row, Input, Label, Button } from 'reactstrap'
 import BookValidation from '../../../validations/Admin/BookValidation'
+import { Form } from 'react-bootstrap'
 
 const mapStateToProps = (state) => {
     return {
@@ -69,14 +70,11 @@ class FormCreateBook extends Component {
                     </Col>
 
                     <Col md={6}>
-                        <FormGroup>
-                            <Field
-                                type='text'
-                                name='cover'
-                                component={renderField}
-                                label='Cover :'
-                            />
-                        </FormGroup>
+                        <Form>
+                            <Form.Group>
+                                <Form.File id="cover" label="Cover : " />
+                            </Form.Group>
+                        </Form>
                     </Col>
 
                     <Col md={6}>

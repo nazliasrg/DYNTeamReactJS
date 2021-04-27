@@ -3,8 +3,13 @@ import NavbarComponent from '../../../../components/Admin/NavbarComponent/Navbar
 import SidebarComponent from '../../../../components/Admin/SidebarComponent/SidebarComponent'
 import { connect } from 'react-redux'
 import { Container } from 'reactstrap'
+import FormCreateAuthor from '../../../../components/Admin/FormComponent/FormCreateAuthor'
 
 class AddAuthor extends Component {
+
+    handleSubmit = (data) => {
+
+    }
 
     render() {
         return (
@@ -17,7 +22,7 @@ class AddAuthor extends Component {
                         <div className="card shadow">
                             <Container>
                                 <h6>Add Author</h6>
-
+                                <FormCreateAuthor onSubmit={(data) => this.handleSubmit(data)} />
                             </Container>
                         </div>
 

@@ -27,11 +27,13 @@ class AddBook extends Component {
             else {
                 swal("Book Added!", this.props.getResponDataBook.title, "success")
                     .then((value) => {
+
                         const { history } = this.props;
                         history.push('/home-admin');
                     });
             }
         }
+
 
         return (
             <Fragment>
