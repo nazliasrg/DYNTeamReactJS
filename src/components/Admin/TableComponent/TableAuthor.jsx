@@ -2,20 +2,17 @@ import React, { useState } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { Badge, Button, Row, Col } from 'reactstrap';
-import { faEdit, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Button, Row, Col } from 'reactstrap';
+import { faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Modal } from 'react-bootstrap';
-
+import { Modal } from 'react-bootstrap'
 
 const { SearchBar } = Search;
-
-
 
 const handleClickActive = (id) => {
     console.log('data ke: ' + id)
@@ -158,6 +155,27 @@ const TableAuthor = (props) => {
 
     const closeModal = () => setShow(false);
 
+    const [authorName, setAuthorName] = useState("");
+
+    const onSubmit = () => {
+
+        const author = {
+            authorName: authorName
+        }
+
+        axios.post("http://localhost:7070/api/dynteam/book/author/insert", author)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const authorChange = (event) => {
+        setAuthorName(event.target.value)
+    }
+
     const { data } = props;
     return (
         <>
@@ -178,23 +196,28 @@ const TableAuthor = (props) => {
                                 </Col>
                                 <Col>
                                     <div className="float-right">
-                                        {/* <Link to={'/add-author'}> */}
                                         <Button color='dark' className="mr-2" onClick={handleShow}>
                                             <FontAwesomeIcon icon={faPlusCircle} />
                                                 Add Author
                                         </Button>
-                                        {/* </Link> */}
 
                                         <Modal show={show}>
                                             <Modal.Header closeButton onClick={closeModal}>
                                                 <Modal.Title>Add Author</Modal.Title>
                                             </Modal.Header>
                                             <Modal.Body>
-                                                <></>
+                                                <>
+                                                    <form onSubmit={onSubmit}>
+                                                        <div className="form-group">
+                                                            <label htmlFor="authorName">Author Name</label>
+                                                            <input className="form-control" id="authorName" value={authorName} onChange={authorChange} />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <button className="form-control btn btn-primary" type="submit">Add</button>
+                                                        </div>
+                                                    </form>
+                                                </>
                                             </Modal.Body>
-                                            <Modal.Footer>
-                                                <Button variant="secondary" onClick={closeModal}>Close Modal</Button>
-                                            </Modal.Footer>
                                         </Modal>
                                     </div>
                                 </Col>

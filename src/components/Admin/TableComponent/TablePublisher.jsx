@@ -1,14 +1,15 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Badge, Button, Row, Col } from 'reactstrap';
-import { faEdit, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import axios from 'axios';
+import { Modal } from 'react-bootstrap'
 
 const { SearchBar } = Search;
 
@@ -78,7 +79,6 @@ const activedCategory = (id) => {
         });
 }
 
-
 const columns = [{
     dataField: 'publisherId',
     text: 'No',
@@ -147,6 +147,33 @@ const defaultSorted = [{
 }];
 
 const TablePublisher = (props) => {
+    const [show, setShow] = useState(false);
+
+    const handleShow = () => setShow(true);
+
+    const closeModal = () => setShow(false);
+
+    const [publisherName, setPublisherName] = useState("");
+
+    const onSubmit = () => {
+
+        const publisher = {
+            publisherName: publisherName
+        }
+
+        axios.post("http://localhost:7070/api/dynteam/book/publisher/insert", publisher)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const publisherChange = (event) => {
+        setPublisherName(event.target.value)
+    }
+
     const { data } = props;
     return (
         <>
@@ -167,12 +194,27 @@ const TablePublisher = (props) => {
                                 </Col>
                                 <Col>
                                     <div className="float-right">
-                                        <Link to={'/add-publisher'}>
-                                            <Button color='dark' className="mr-2">
-                                                <FontAwesomeIcon icon={faPlusCircle} />
-                                                Add Publisher
-                                        </Button>
-                                        </Link>
+                                        <Button color='dark' className="mr-2" onClick={handleShow}>
+                                            <FontAwesomeIcon icon={faPlusCircle} />Add Publisher</Button>
+
+                                        <Modal show={show}>
+                                            <Modal.Header closeButton onClick={closeModal}>
+                                                <Modal.Title>Add Publisher</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                                <>
+                                                    <form onSubmit={onSubmit}>
+                                                        <div className="form-group">
+                                                            <label htmlFor="publisherName">Publisher Name</label>
+                                                            <input className="form-control" id="publisherName" value={publisherName} onChange={publisherChange} />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <button className="form-control btn btn-primary" type="submit">Add</button>
+                                                        </div>
+                                                    </form>
+                                                </>
+                                            </Modal.Body>
+                                        </Modal>
                                     </div>
                                 </Col>
                             </Row>
