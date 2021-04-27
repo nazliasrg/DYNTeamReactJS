@@ -8,32 +8,76 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
+import axios from 'axios';
 
 const { SearchBar } = Search;
 
-const handleClick = (id) => {
+const handleClickActive = (id) => {
     console.log('data ke: ' + id)
     swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover data!",
+        title: "Are you sure to inactive this publisher?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     })
         .then((willDelete) => {
             if (willDelete) {
-                swal("Data publisher has been deleted!", {
+                inactivedPublisher(id);
+                swal("Data publisher has been inactived!", {
                     icon: "success",
-                });
+                }).then((OK) => {
+                    window.location.reload(false);
+                })
+
             } else {
                 swal("Data publisher is safe!");
             }
         });
 }
-const products = [
-    { publisherId: 1, publisherCode: "PU1", publisherName: "Amazon", publisherStatus: 0 },
-    { publisherId: 2, publisherCode: "PU2", publisherName: "Gramedia", publisherStatus: 1 }
-];
+
+const inactivedPublisher = (id) => {
+    axios.delete("http://localhost:7070/api/dynteam/book/publisher/delete/" + id)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
+
+const handleClickInactive = (id) => {
+    console.log('data ke: ' + id)
+    swal({
+        title: "Are you sure to active this publisher?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            activedCategory(id);
+            if (willDelete) {
+                swal("Data publisher has been actived!", {
+                    icon: "success",
+                }).then((OK) => {
+                    window.location.reload(false);
+                })
+
+            } else {
+                swal("Data publisher is safe!");
+            }
+        });
+}
+
+const activedCategory = (id) => {
+    axios.put("http://localhost:7070/api/dynteam/book/publisher/actived/" + id)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
+
 
 const columns = [{
     dataField: 'publisherId',
@@ -62,18 +106,18 @@ const columns = [{
         if (row.publisherStatus === 1) {
             return (
                 <Row className='justify-content-center'>
-                    <Badge color='primary' className="mr-2">
+                    <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.publisherId)}>
                         Active
-                    </Badge>
+                    </Button>
                 </Row>
             )
         }
         else {
             return (
                 <Row className='justify-content-center'>
-                    <Badge color='danger' className="mr-2">
+                    <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.publisherId)}>
                         Inactive
-                    </Badge>
+                    </Button>
                 </Row>
             )
         }
@@ -92,9 +136,6 @@ const columns = [{
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                 </Link>
-                <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.publisherId)}>
-                    <FontAwesomeIcon icon={faTrash} />
-                </Button>
             </Row>
         )
     }
