@@ -4,14 +4,30 @@ import SidebarComponent from '../../../components/Admin/SidebarComponent/Sidebar
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import TableAdmin from '../../../components/Admin/TableComponent/TableAdmin';
 import { connect } from 'react-redux';
-import { deleteDataAdmin, getAdminList } from '../../../actions/AdminAction';
-
+import axios from 'axios';
 
 class Admin extends Component {
 
+    constructor() {
+        super();
+        this.state = {
+            data: [{}]
+        };
+    }
+
     componentDidMount() {
-        this.props.dispatch(getAdminList());
-        this.props.dispatch(deleteDataAdmin());
+        this.getAdmins()
+    }
+
+    getAdmins = () => {
+        axios.get('http://localhost:7070/api/dynteam/auth/admins')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+
+                console.log(this.state.data);
+            })
     }
 
     render() {
@@ -27,7 +43,7 @@ class Admin extends Component {
                                 <h6 className="m-0 font-weight-bold text-dark">Manage Role</h6>
                             </div>
                             <div className="card-body">
-                                <TableAdmin />
+                                <TableAdmin data={this.state.data} />
                             </div>
                         </div>
                     </div>
