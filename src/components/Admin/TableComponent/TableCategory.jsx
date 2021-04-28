@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { Badge, Button, Row, Col } from 'reactstrap';
-import { faEdit, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Button, Row, Col } from 'reactstrap';
+import { faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import axios from 'axios'
 import { Modal } from 'react-bootstrap'
@@ -79,69 +78,6 @@ const activedCategory = (id) => {
         });
 }
 
-const columns = [{
-    dataField: 'categoryId',
-    text: 'No',
-    sort: true,
-    headerStyle: () => {
-        return { width: '7%' }
-    }
-}, {
-    dataField: 'categoryCode',
-    text: 'Category Code',
-    sort: true
-}, {
-    dataField: 'categoryName',
-    text: 'Category Name',
-    sort: true
-},
-{
-    dataField: 'link',
-    text: 'Status',
-    headerStyle: () => {
-        return {
-            textAlign: 'center'
-        }
-    },
-    formatter: (rowContent, row) => {
-        if (row.categoryStatus === 1) {
-            return (
-                <Row className='justify-content-center'>
-                    <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.categoryId)}>
-                        Active
-                    </Button>
-                </Row>
-            )
-        }
-        else {
-            return (
-                <Row className='justify-content-center'>
-                    <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.categoryId)}>
-                        Inactive
-                    </Button>
-                </Row>
-            )
-        }
-    }
-}, {
-    dataField: 'link',
-    text: 'Action',
-    headerStyle: () => {
-        return { textAlign: 'center' }
-    },
-    formatter: (rowContent, row) => {
-        return (
-            <Row className='justify-content-center'>
-                <Link to={'edit-category/' + row.categoryId}>
-                    <Button color='warning' className="mr-2 btn-crud">
-                        <FontAwesomeIcon icon={faEdit} />
-                    </Button>
-                </Link>
-            </Row>
-        )
-    }
-}];
-
 const defaultSorted = [{
     dataField: 'id',
     order: 'asc'
@@ -150,12 +86,33 @@ const defaultSorted = [{
 const TableCategory = (props) => {
 
     const [show, setShow] = useState(false);
+    const [eshow, setEshow] = useState(false);
+
+    const getIdCategory = (id) => {
+        axios.get('http://localhost:7070/api/dynteam/book/category/' + id)
+            .then(function (response) {
+                console.log(response);
+                setId(response.data.categoryId)
+                setCategoryName(response.data.categoryName)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        handleEshow();
+    }
 
     const handleShow = () => setShow(true);
 
+    const handleEshow = () => setEshow(true);
+
     const closeModal = () => setShow(false);
 
+    const closeEmodal = () => setEshow(false);
+
     const [categoryName, setCategoryName] = useState("");
+
+    const [id, setId] = useState(0);
 
     const onSubmit = () => {
 
@@ -172,11 +129,91 @@ const TableCategory = (props) => {
             });
     }
 
+    const onSubmitE = () => {
+
+        const category = {
+            categoryName: categoryName
+        }
+
+        console.log(id);
+        console.log(category);
+
+        axios.put("http://localhost:7070/api/dynteam/book/category/update/" + id, category)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     const categoryChange = (event) => {
         setCategoryName(event.target.value)
     }
 
     const { data } = props;
+
+    const columns = [{
+        dataField: 'categoryId',
+        text: 'No',
+        sort: true,
+        headerStyle: () => {
+            return { width: '7%' }
+        }
+    }, {
+        dataField: 'categoryCode',
+        text: 'Category Code',
+        sort: true
+    }, {
+        dataField: 'categoryName',
+        text: 'Category Name',
+        sort: true
+    },
+    {
+        dataField: 'link',
+        text: 'Status',
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            if (row.categoryStatus === 1) {
+                return (
+                    <Row className='justify-content-center'>
+                        <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.categoryId)}>
+                            Active
+                        </Button>
+                    </Row>
+                )
+            }
+            else {
+                return (
+                    <Row className='justify-content-center'>
+                        <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.categoryId)}>
+                            Inactive
+                        </Button>
+                    </Row>
+                )
+            }
+        }
+    }, {
+        dataField: 'link',
+        text: 'Action',
+        headerStyle: () => {
+            return { textAlign: 'center' }
+        },
+        formatter: (rowContent, row) => {
+            return (
+                <Row className='justify-content-center'>
+                    <Button color='warning' className="mr-2 btn-crud" onClick={() => getIdCategory(row.categoryId)}>
+                        <FontAwesomeIcon icon={faEdit} />
+                    </Button>
+                </Row>
+            )
+        }
+    }];
+
     return (
         <>
             <ToolkitProvider
@@ -201,6 +238,7 @@ const TableCategory = (props) => {
                                                 Add Category
                                         </Button>
 
+                                        {/* modal add */}
                                         <Modal show={show}>
                                             <Modal.Header closeButton onClick={closeModal}>
                                                 <Modal.Title>Add Category</Modal.Title>
@@ -214,6 +252,26 @@ const TableCategory = (props) => {
                                                         </div>
                                                         <div className="form-group">
                                                             <button className="form-control btn btn-primary" type="submit">Add</button>
+                                                        </div>
+                                                    </form>
+                                                </>
+                                            </Modal.Body>
+                                        </Modal>
+
+                                        {/* modal edit */}
+                                        <Modal show={eshow}>
+                                            <Modal.Header closeButton onClick={closeEmodal}>
+                                                <Modal.Title>Edit Category</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                                <>
+                                                    <form onSubmit={onSubmitE}>
+                                                        <div className="form-group">
+                                                            <label htmlFor="categoryName">Category Name</label>
+                                                            <input className="form-control" id="categoryName" value={categoryName} onChange={categoryChange} />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <button className="form-control btn btn-primary" type="submit">Edit</button>
                                                         </div>
                                                     </form>
                                                 </>
