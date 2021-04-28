@@ -79,68 +79,6 @@ const activedCategory = (id) => {
         });
 }
 
-const columns = [{
-    dataField: 'publisherId',
-    text: 'No',
-    sort: true,
-    headerStyle: () => {
-        return { width: '7%' }
-    }
-}, {
-    dataField: 'publisherCode',
-    text: 'Publisher Code',
-    sort: true
-}, {
-    dataField: 'publisherName',
-    text: 'Publisher Name',
-    sort: true
-}, {
-    dataField: 'link',
-    text: 'Status',
-    headerStyle: () => {
-        return {
-            textAlign: 'center'
-        }
-    },
-    formatter: (rowContent, row) => {
-        if (row.publisherStatus === 1) {
-            return (
-                <Row className='justify-content-center'>
-                    <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.publisherId)}>
-                        Active
-                    </Button>
-                </Row>
-            )
-        }
-        else {
-            return (
-                <Row className='justify-content-center'>
-                    <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.publisherId)}>
-                        Inactive
-                    </Button>
-                </Row>
-            )
-        }
-    }
-}, {
-    dataField: 'link',
-    text: 'Action',
-    headerStyle: () => {
-        return { textAlign: 'center' }
-    },
-    formatter: (rowContent, row) => {
-        return (
-            <Row className='justify-content-center'>
-                <Link to={'edit-publisher/' + row.publisherId}>
-                    <Button color='warning' className="mr-2 btn-crud">
-                        <FontAwesomeIcon icon={faEdit} />
-                    </Button>
-                </Link>
-            </Row>
-        )
-    }
-}];
-
 const defaultSorted = [{
     dataField: 'id',
     order: 'asc'
@@ -149,11 +87,34 @@ const defaultSorted = [{
 const TablePublisher = (props) => {
     const [show, setShow] = useState(false);
 
+    const [eshow, setEshow] = useState(false);
+
+    const getIdPublisher = (id) => {
+        axios.get('http://localhost:7070/api/dynteam/book/publisher/' + id)
+            .then(function (response) {
+                console.log(response);
+                setId(response.data.publisherId)
+                setPublisherName(response.data.publisherName)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        handleEshow();
+    }
+
     const handleShow = () => setShow(true);
+
+    const handleEshow = () => setEshow(true);
 
     const closeModal = () => setShow(false);
 
+    const closeEmodal = () => setEshow(false);
+
     const [publisherName, setPublisherName] = useState("");
+
+    const [id, setId] = useState(0);
+
 
     const onSubmit = () => {
 
@@ -170,11 +131,90 @@ const TablePublisher = (props) => {
             });
     }
 
+    const onSubmitE = () => {
+
+        const publisher = {
+            publisherName: publisherName
+        }
+
+        console.log(id);
+        console.log(publisher);
+
+        axios.put("http://localhost:7070/api/dynteam/book/publisher/update/" + id, publisher)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     const publisherChange = (event) => {
         setPublisherName(event.target.value)
     }
 
     const { data } = props;
+
+    const columns = [{
+        dataField: 'publisherId',
+        text: 'No',
+        sort: true,
+        headerStyle: () => {
+            return { width: '7%' }
+        }
+    }, {
+        dataField: 'publisherCode',
+        text: 'Publisher Code',
+        sort: true
+    }, {
+        dataField: 'publisherName',
+        text: 'Publisher Name',
+        sort: true
+    }, {
+        dataField: 'link',
+        text: 'Status',
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            if (row.publisherStatus === 1) {
+                return (
+                    <Row className='justify-content-center'>
+                        <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.publisherId)}>
+                            Active
+                        </Button>
+                    </Row>
+                )
+            }
+            else {
+                return (
+                    <Row className='justify-content-center'>
+                        <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.publisherId)}>
+                            Inactive
+                        </Button>
+                    </Row>
+                )
+            }
+        }
+    }, {
+        dataField: 'link',
+        text: 'Action',
+        headerStyle: () => {
+            return { textAlign: 'center' }
+        },
+        formatter: (rowContent, row) => {
+            return (
+                <Row className='justify-content-center'>
+                    <Button color='warning' className="mr-2 btn-crud" onClick={() => getIdPublisher(row.publisherId)}>
+                        <FontAwesomeIcon icon={faEdit} />
+                    </Button>
+                </Row>
+            )
+        }
+    }];
+
     return (
         <>
             <ToolkitProvider
@@ -197,6 +237,7 @@ const TablePublisher = (props) => {
                                         <Button color='dark' className="mr-2" onClick={handleShow}>
                                             <FontAwesomeIcon icon={faPlusCircle} />Add Publisher</Button>
 
+                                        {/* modal add */}
                                         <Modal show={show}>
                                             <Modal.Header closeButton onClick={closeModal}>
                                                 <Modal.Title>Add Publisher</Modal.Title>
@@ -210,6 +251,26 @@ const TablePublisher = (props) => {
                                                         </div>
                                                         <div className="form-group">
                                                             <button className="form-control btn btn-primary" type="submit">Add</button>
+                                                        </div>
+                                                    </form>
+                                                </>
+                                            </Modal.Body>
+                                        </Modal>
+
+                                        {/* modal edit */}
+                                        <Modal show={eshow}>
+                                            <Modal.Header closeButton onClick={closeEmodal}>
+                                                <Modal.Title>Edit Publisher</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                                <>
+                                                    <form onSubmit={onSubmitE}>
+                                                        <div className="form-group">
+                                                            <label htmlFor="publisherName">Publisher Name</label>
+                                                            <input className="form-control" id="publisherName" value={publisherName} onChange={publisherChange} />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <button className="form-control btn btn-primary" type="submit">Edit</button>
                                                         </div>
                                                     </form>
                                                 </>
