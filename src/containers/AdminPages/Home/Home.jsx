@@ -5,7 +5,6 @@ import './Home.css';
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import TableBooks from '../../../components/Admin/TableComponent/TableBooks';
 import { connect } from 'react-redux';
-import { getBooksList } from '../../../actions/BooksAction';
 import axios from 'axios'
 
 class Home extends Component {
@@ -18,7 +17,6 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(getBooksList());
         this.getBooks()
     }
 
@@ -47,7 +45,7 @@ class Home extends Component {
                                 </div>
                             </div>
                             <div className="card-body">
-                                <TableBooks />
+                                <TableBooks data={this.state.data} />
                             </div>
                         </div>
 

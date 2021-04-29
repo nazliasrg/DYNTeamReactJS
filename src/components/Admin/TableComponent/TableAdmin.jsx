@@ -164,7 +164,7 @@ const TableAdmin = (props) => {
         text: 'Username',
         sort: true
     }, {
-        dataField: 'roles().get(0)',
+        dataField: 'roles[0].roleName',
         text: 'Role',
         sort: true
     }, {
