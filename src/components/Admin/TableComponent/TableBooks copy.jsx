@@ -10,6 +10,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
 
+
 const { SearchBar } = Search;
 
 const handleClick = (id) => {
@@ -32,20 +33,31 @@ const handleClick = (id) => {
         });
 }
 
+
+
+const defaultSorted = [{
+    dataField: 'id',
+    order: 'asc'
+}];
+
+const mapStateToProps = (state) => {
+    return {
+        getBooksList: state.books.getBooksList,
+        errorBooks: state.books.errorBooks
+    }
+}
+
 const TableBooks = (props) => {
-
-    const { data } = props;
-
     const columns = [{
-        dataField: 'bookId',
+        dataField: 'id',
         text: 'No',
         sort: true,
         headerStyle: () => {
             return { width: '7%' }
         }
     }, {
-        dataField: 'bookCode',
-        text: 'Book Code',
+        dataField: 'id_book',
+        text: 'ID Book',
         sort: true
     }, {
         dataField: 'cover',
@@ -57,12 +69,12 @@ const TableBooks = (props) => {
         formatter: (cell, row) => {
             return (
                 <Row className='justify-content-center'>
-                    <img src={`http://localhost:7070/api/dynteam/book/cover/download/${row.cover}`} className="img-thumbnail img-book" style={{ width: '60px' }} alt="" />
+                    <img src={`../img/book/${row.id_book}.jpg`} className="img-thumbnail img-book" style={{ width: '60px' }} alt="" />
                 </Row>
             )
         }
     }, {
-        dataField: 'categoryEntity.categoryName',
+        dataField: 'category',
         text: 'Category',
         sort: true
     }, {
@@ -70,11 +82,11 @@ const TableBooks = (props) => {
         text: 'Title',
         sort: true
     }, {
-        dataField: 'authorEntity.authorName',
+        dataField: 'author',
         text: 'Author',
         sort: true
     }, {
-        dataField: 'publisherEntity.publisherName',
+        dataField: 'publisher',
         text: 'Publisher',
         sort: true
     }, {
@@ -101,22 +113,22 @@ const TableBooks = (props) => {
             return (
                 <>
                     <Row className='justify-content-center'>
-                        <Link to={'edit-book/' + row.bookId}>
+                        <Link to={'edit-book/' + row.id}>
                             <Button color='warning' className="mr-2 btn-crud">
                                 <FontAwesomeIcon icon={faEdit} />
                             </Button>
                         </Link>
-                        <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.bookId)}>
+                        <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.id)}>
                             <FontAwesomeIcon icon={faTrash} />
                         </Button>
                     </Row>
                     <Row className='justify-content-center mt-2'>
-                        <Link to={'add-stock/' + row.bookId}>
+                        <Link to={'add-stock/' + row.id}>
                             <Button color='warning' className="mr-2 btn-crud">
                                 <FontAwesomeIcon icon={faPlus} />
                             </Button>
                         </Link>
-                        <Link to={'discrepancy/' + row.bookId}>
+                        <Link to={'discrepancy/' + row.id}>
                             <Button color='warning' className="mr-2 btn-crud">
                                 <FontAwesomeIcon icon={faMinus} />
                             </Button>
@@ -126,18 +138,12 @@ const TableBooks = (props) => {
             )
         }
     }];
-
-    const defaultSorted = [{
-        dataField: 'bookId',
-        order: 'asc'
-    }];
-
     return (
         <>
-            <ToolkitProvider
+            {props.getBooksList ? <ToolkitProvider
                 bootstrap4
                 keyField='id'
-                data={data}
+                data={props.getBooksList}
                 columns={columns}
                 defaultSorted={defaultSorted}
                 search
@@ -171,10 +177,15 @@ const TableBooks = (props) => {
                         </div>
                     )
                 }
-            </ToolkitProvider>
+            </ToolkitProvider> : (
+                <div className="text-center">
+                    { props.errorBooks ? <h1>{props.errorBooks}</h1> : <Spinner color='dark' />}
+                </div>
+            )
+            }
 
         </>
     )
 }
 
-export default connect()(TableBooks);
+export default connect(mapStateToProps, null)(TableBooks);
