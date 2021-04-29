@@ -6,7 +6,6 @@ import { Button, Row, Col } from 'reactstrap';
 import { faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -80,8 +79,6 @@ const activedAuthor = (id) => {
         });
 }
 
-
-
 const defaultSorted = [{
     dataField: 'id',
     order: 'asc'
@@ -106,7 +103,7 @@ const TableAuthor = (props) => {
 
         handleEshow();
     }
-
+    
     const handleShow = () => setShow(true);
 
     const handleEshow = () => setEshow(true);

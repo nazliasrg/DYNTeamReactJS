@@ -8,6 +8,7 @@ import TableAuthor from '../../../../components/Admin/TableComponent/TableAuthor
 import axios from 'axios'
 
 class Author extends Component {
+    
     constructor() {
         super();
         this.state = {

@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { Badge, Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col } from 'reactstrap';
 import { faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import axios from 'axios';
 import { Modal } from 'react-bootstrap'

@@ -3,14 +3,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
 import logo from '../../../assets/logo.png';
 import { withRouter } from 'react-router-dom';
-
+import axios from 'axios'
+import { Button } from 'bootstrap';
 
 class Login extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            username: ''
+            username: '',
+            password: '',
+            roles: []
         };
     }
 
@@ -18,10 +21,47 @@ class Login extends Component {
         this.setState({ username: event.target.value })
     }
 
-    handleUsername = () => {
-        alert('Welcome ' + this.state.username + '!');
-        const { history } = this.props;
-        history.push('/home-admin');
+    handlePasswordChange = (event) => {
+        this.setState({ password: event.target.value })
+    }
+
+    submitAction = (e) => {
+        e.preventDefault();
+
+        const admin = {
+            username: this.state.username,
+            password: this.state.password
+        }
+
+        console.log(admin)
+
+        axios.post('http://localhost:7070/api/dynteam/auth/admin/login', admin)
+            .then(res => {
+                console.log(res);
+                this.setState({
+                    roles: res.data.data.role
+                })
+                alert('Welcome ' + this.state.username + '!');
+                this.props.history.push({
+                    pathname: '/home-admin',
+                    state: res.data.data
+                })
+                console.log(this.props.history.location.state);
+                this.state.roles.forEach(role => {
+                    if (res.data.data.token && role === 'SUPER_ADMIN') {
+                        localStorage.setItem('super_admin', JSON.stringify(res.data))
+                    }
+                    if (res.data.data.token && role === 'ADMIN') {
+                        localStorage.setItem('admin', JSON.stringify(res.data))
+                    }
+                })
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+
+        // const { history } = this.props;
+        // history.push('/home-admin');
     }
 
     render() {
@@ -42,9 +82,9 @@ class Login extends Component {
                                             <label>Username</label>
                                             <input type="text" className="form-control" id="username" onChange={this.handleUsernameChange} required />
                                             <label>Password</label>
-                                            <input type="password" className="form-control" id="password" required />
+                                            <input type="password" className="form-control" id="password" onChange={this.handlePasswordChange} required />
                                             <br />
-                                            <button type="submit" className="btn btn-login" onClick={this.handleUsername}>LOGIN</button>
+                                            <button type="submit" className="btn btn-login" onClick={this.submitAction}>LOGIN</button>
                                         </div>
                                     </div>
                                 </form>
