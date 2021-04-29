@@ -80,20 +80,6 @@ const activedAuthor = (id) => {
         });
 }
 
-
-const defaultSorted = [{
-    dataField: 'adminId',
-    order: 'asc'
-}];
-
-const mapStateToProps = (state) => {
-    return {
-        getAdminList: state.adminRole.getAdminList,
-        errorAdmin: state.adminRole.errorAdmin
-    }
-}
-
-
 const TableAdmin = (props) => {
 
     const [show, setShow] = useState(false);
@@ -106,34 +92,23 @@ const TableAdmin = (props) => {
 
     const [password, setPassword] = useState("");
 
-    const [superAdmin, setSuperAdmin] = useState(false);
-
-    const [admin, setAdmin] = useState(false);
-
-    const [role, setRole] = useState([]);
+    const [roles, setRoles] = useState([]);
 
     const onSubmit = () => {
 
         const adminData = {
             username: username,
             password: password,
-            role: role
+            role: roles
         }
 
-        if (superAdmin) {
-            role.push("superadmin")
-        }
-
-        else if (admin) {
-            role.push("admin")
-        }
-
+        console.log("admin Data :")
         console.log(adminData)
 
         axios.post("http://localhost:7070/api/dynteam/auth/admin/register", adminData)
             .then(function (response) {
                 console.log(response);
-                setRole([])
+                setRoles([])
             })
             .catch(function (error) {
                 console.log(error);
@@ -150,19 +125,27 @@ const TableAdmin = (props) => {
         console.log(password)
     }
 
-    const roleChange = (event) => {
-        setRole(event.target.value)
-        console.log(role)
-    }
+    const roleChange = (e) => {
+        if (e.detail === 0) {
+            console.log("roles1:")
+            console.log(e.target.value)
 
-    const superAdminCheck = () => {
-        setSuperAdmin(!superAdmin)
-        console.log("Super admin")
-        console.log(superAdmin)
-    }
+            if (e.target.value == "superadmin") {
+                roles.splice(0, 1);
+                roles.push(e.target.value)
+                console.log("roles2:")
+                console.log(roles)
+                setRoles(roles)
+            }
+            else if (e.target.value == "admin") {
+                roles.splice(0, 1);
+                roles.push(e.target.value)
+                console.log("roles2:")
+                console.log(roles)
+                setRoles(roles)
+            }
 
-    const adminCheck = () => {
-        setAdmin(!admin)
+        }
     }
 
     const columns = [{
@@ -214,6 +197,11 @@ const TableAdmin = (props) => {
         }
     }];
 
+    const defaultSorted = [{
+        dataField: 'adminId',
+        order: 'asc'
+    }];
+
     const { data } = props;
 
     return (
@@ -258,9 +246,9 @@ const TableAdmin = (props) => {
                                                         </div>
                                                         <div className="form-group">
                                                             <label htmlFor="role">Role</label><br />
-                                                            <select className="form-group" name="role" id="role">
-                                                                <option value="superadmin" onClick={superAdminCheck}>Super Admin</option>
-                                                                <option value="admin" onClick={adminCheck}>Admin</option>
+                                                            <select className="form-group" name="role" id="role" onClick={roleChange}>
+                                                                <option value="superadmin">Super Admin</option>
+                                                                <option value="admin">Admin</option>
                                                             </select>
                                                         </div>
                                                         <div className="form-group">
@@ -290,4 +278,4 @@ const TableAdmin = (props) => {
     )
 }
 
-export default connect(mapStateToProps, null)(TableAdmin);
+export default connect()(TableAdmin);
