@@ -13,20 +13,102 @@ class AddBook extends Component {
             books: [],
             title: "",
             cover: "",
-            categoryId: 0,
-            publisherId: 0,
-            authorId: 0,
+            categoryId: 1,
+            publisherId: 1,
+            authorId: 1,
             year: 0,
             synopsis: "",
             stock: 0,
-            file: null
+            file: null,
+            namafile: "",
+            author: [],
+            category: [],
+            publisher: []
         }
+    }
+
+    componentDidMount() {
+        this.getAllAuthors()
+        this.getAllCategories()
+        this.getAllPublishers()
+    }
+
+    getAllAuthors = () => {
+        axios.get('http://localhost:7070/api/dynteam/book/author/authors')
+            .then(res => {
+                this.setState({
+                    author: res.data
+                })
+                console.log("authors : ")
+                console.log(this.state.author)
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+    }
+
+    getAllCategories = () => {
+        axios.get('http://localhost:7070/api/dynteam/book/category/categories')
+            .then(res => {
+                this.setState({
+                    category: res.data
+                })
+                console.log("categories : ")
+                console.log(this.state.category)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
+    getAllPublishers = () => {
+        axios.get('http://localhost:7070/api/dynteam/book/publisher/publishers')
+            .then(res => {
+                this.setState({
+                    publisher: res.data
+                })
+                console.log("publishers : ")
+                console.log(this.state.publisher)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
     }
 
     inputChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
+    }
+
+    categoryChange = (event) => {
+        if (event.detail === 0) {
+            console.log("category terpilih : ")
+            console.log(event.target.value)
+            this.setState({
+                categoryId: event.target.value
+            })
+        }
+    }
+
+    publisherChange = (event) => {
+        if (event.detail === 0) {
+            console.log("publisher terpilih : ")
+            console.log(event.target.value)
+            this.setState({
+                publisherId: event.target.value
+            })
+        }
+    }
+
+    authorChange = (event) => {
+        if (event.detail === 0) {
+            console.log("author terpilih : ")
+            console.log(event.target.value)
+            this.setState({
+                authorId: event.target.value
+            })
+        }
     }
 
     fileChange = async (e) => {
@@ -37,17 +119,55 @@ class AddBook extends Component {
         await console.log(this.state.file);
     }
 
-    onSubmitForm = () => {
+    onSubmitForm = (e) => {
+        e.preventDefault();
+
         const data = new FormData();
         data.append('file', this.state.file);
 
+        console.log(data)
 
-        axios.post("http://localhost:7070/api/dynteam/book/cover/upload", data)
-            .then(function (response) {
+        axios.post('http://localhost:7070/api/dynteam/book/cover/upload', data)
+            .then(res => {
                 console.log("cover : ");
-                console.log(response);
+                console.log(res);
                 this.setState({
                     file: null
+                })
+                this.insertBook(res);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    insertBook = (res) => {
+        const book = {
+            title: this.state.title,
+            categoryId: this.state.categoryId,
+            publisherId: this.state.publisherId,
+            authorId: this.state.authorId,
+            year: this.state.year,
+            synopsis: this.state.synopsis,
+            stock: this.state.stock
+        }
+
+        this.setState({
+            namafile: res.data
+        })
+        console.log("file")
+        console.log(this.state.namafile)
+
+        console.log("data buku : ")
+        console.log(book)
+
+        axios.post('http://localhost:7070/api/dynteam/book/insert/' + this.state.namafile, book)
+            .then(res => {
+                console.log("hasil insert book : ")
+                console.log(res)
+                alert('Data buku \"' + res.data.data.title + '\" berhasil dimasukkan');
+                this.props.history.push({
+                    pathname: '/home-admin'
                 })
             })
             .catch(function (error) {
@@ -55,9 +175,11 @@ class AddBook extends Component {
             });
     }
 
+
+
     render() {
 
-        const { title, categoryId, publisherId, authorId, year, stock, synopsis } = this.state;
+        const { author, category, publisher, title, categoryId, publisherId, authorId, year, stock, synopsis } = this.state;
         return (
             <Fragment>
                 <div className="wrapper">
@@ -80,22 +202,46 @@ class AddBook extends Component {
                                     <Row>
                                         <Col md={6}>
                                             <div className="form-group">
-                                                <label htmlFor="category">Category</label>
-                                                <input className="form-control" id="categoryId" name="categoryId" value={categoryId} onChange={this.inputChange} />
+                                                <label htmlFor="categoryId">Category</label><br />
+                                                <select class="form-control" name="categoryId" id="categoryId" onClick={this.categoryChange} >
+                                                    {
+                                                        category.map(categoryVal => {
+                                                            return (
+                                                                <option value={categoryVal.categoryId}>{categoryVal.categoryName}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
                                             </div>
                                         </Col>
                                         <Col md={6}>
                                             <div className="form-group">
-                                                <label htmlFor="publisher">Publisher</label>
-                                                <input className="form-control" id="publisherId" name="publisherId" value={publisherId} onChange={this.inputChange} />
+                                                <label htmlFor="publisherId">Publisher</label><br />
+                                                <select class="form-control" name="publisherId" id="publisherId" onClick={this.publisherChange}>
+                                                    {
+                                                        publisher.map(publisherVal => {
+                                                            return (
+                                                                <option value={publisherVal.publisherId}>{publisherVal.publisherName}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
                                             </div>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col md={6}>
                                             <div className="form-group">
-                                                <label htmlFor="author">Author</label>
-                                                <input className="form-control" id="authorId" name="authorId" value={authorId} onChange={this.inputChange} />
+                                                <label htmlFor="authorId">Author</label><br />
+                                                <select class="form-control" name="authorId" id="authorId" onClick={this.authorChange}>
+                                                    {
+                                                        author.map(authorVal => {
+                                                            return (
+                                                                <option value={authorVal.authorId}>{authorVal.authorName}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
                                             </div>
                                         </Col>
                                         <Col md={6}>
@@ -119,7 +265,6 @@ class AddBook extends Component {
                                                     type='file'
                                                     className='form-control-file'
                                                     id='cover'
-                                                    multiple
                                                     onChange={this.fileChange}
                                                     name='file' />
                                             </div>
