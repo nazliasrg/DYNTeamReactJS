@@ -208,28 +208,52 @@ const TableBooks = (props) => {
             return { textAlign: 'center' }
         },
         formatter: (rowContent, row) => {
-            return (
-                <>
-                    <Row className='justify-content-center'>
-                        <Link to={'edit-book/' + row.bookId}>
-                            <Button color='warning' className="mr-2 btn-crud">
-                                <FontAwesomeIcon icon={faEdit} />
+            if (row.isAvailable == 1) {
+                return (
+                    <>
+                        <Row className='justify-content-center'>
+                            <Link to={'edit-book/' + row.bookId}>
+                                <Button color='warning' className="mr-2 btn-crud">
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </Button>
+                            </Link>
+                            <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.bookId)}>
+                                <FontAwesomeIcon icon={faTrash} />
                             </Button>
-                        </Link>
-                        <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.bookId)}>
-                            <FontAwesomeIcon icon={faTrash} />
-                        </Button>
-                    </Row>
-                    <Row className='justify-content-center mt-2'>
-                        <Button color='warning' className="mr-2 btn-crud" onClick={() => addStockButton(row.bookId)}>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </Button>
-                        <Button color='warning' className="mr-2 btn-crud" onClick={() => discrepancyButton(row.bookId)}>
-                            <FontAwesomeIcon icon={faMinus} />
-                        </Button>
-                    </Row>
-                </>
-            )
+                        </Row>
+                        <Row className='justify-content-center mt-2'>
+                            <Button color='warning' className="mr-2 btn-crud" onClick={() => addStockButton(row.bookId)}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </Button>
+                            <Button color='warning' className="mr-2 btn-crud" onClick={() => discrepancyButton(row.bookId)}>
+                                <FontAwesomeIcon icon={faMinus} />
+                            </Button>
+                        </Row>
+                    </>
+                )
+            }
+            else {
+                return (
+                    <>
+                        <Row className='justify-content-center'>
+                            <Link to={'edit-book/' + row.bookId}>
+                                <Button color='warning' className="mr-2 btn-crud">
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </Button>
+                            </Link>
+                        </Row>
+                        <Row className='justify-content-center mt-2'>
+                            <Button color='warning' className="mr-2 btn-crud" onClick={() => addStockButton(row.bookId)}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </Button>
+                            <Button color='warning' className="mr-2 btn-crud" onClick={() => discrepancyButton(row.bookId)}>
+                                <FontAwesomeIcon icon={faMinus} />
+                            </Button>
+                        </Row>
+                    </>
+                )
+            }
+
         }
     }];
 
