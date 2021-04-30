@@ -246,7 +246,7 @@ const TableAdmin = (props) => {
                                                         </div>
                                                         <div className="form-group">
                                                             <label htmlFor="role">Role</label><br />
-                                                            <select className="form-group" name="role" id="role" onClick={roleChange}>
+                                                            <select class="form-control" name="role" id="role" onClick={roleChange}>
                                                                 <option value="superadmin">Super Admin</option>
                                                                 <option value="admin">Admin</option>
                                                             </select>
