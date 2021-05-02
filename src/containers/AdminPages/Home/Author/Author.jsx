@@ -8,6 +8,7 @@ import TableAuthor from '../../../../components/Admin/TableComponent/TableAuthor
 import axios from 'axios'
 
 class Author extends Component {
+
     constructor() {
         super();
         this.state = {
@@ -29,6 +30,7 @@ class Author extends Component {
                 console.log(this.state.data);
             })
     }
+
     render() {
         return (
             <Fragment>

@@ -8,8 +8,6 @@ import Pending from '../containers/AdminPages/Pending/Pending';
 import Activity from '../containers/AdminPages/Activity/Activity';
 import History from '../containers/AdminPages/History/History';
 import Admin from '../containers/AdminPages/Admin/Admin';
-import CreateAdmin from '../containers/AdminPages/Admin/CreateAdmin';
-import EditAdmin from '../containers/AdminPages/Admin/EditAdmin';
 import CreateUser from '../containers/AdminPages/Users/CreateUser';
 import EditUser from '../containers/AdminPages/Users/EditUser';
 import AddBook from '../containers/AdminPages/Home/AddBook';
@@ -25,10 +23,8 @@ import DetailBook from '../containers/UserPages/DetailBook/DetailBook';
 import Author from '../containers/AdminPages/Home/Author/Author';
 import Category from '../containers/AdminPages/Home/Category/Category';
 import Publisher from '../containers/AdminPages/Home/Publisher/Publisher';
-import EditAuthor from '../containers/AdminPages/Home/Author/EditAuthor';
 import EditCategory from '../containers/AdminPages/Home/Category/EditCategory';
 import EditPublisher from '../containers/AdminPages/Home/Publisher/EditPublisher';
-import AddAuthor from '../containers/AdminPages/Home/Author/AddAuthor';
 import AddCategory from '../containers/AdminPages/Home/Category/AddCategory';
 import AddPublisher from '../containers/AdminPages/Home/Publisher/AddPublisher';
 import BookDetail from '../components/User/DetailBook';
@@ -53,9 +49,6 @@ const App = () => {
                 <Route path="/history" component={History} />
                 <Route path="/admin-role" component={Admin} />
 
-                {/* admin table */}
-                <Route path="/create-admin" component={CreateAdmin} />
-                <Route path="/edit-admin/:no" component={EditAdmin} />
 
                 {/* users table */}
                 <Route path="/create-user" component={CreateUser} />
@@ -67,8 +60,7 @@ const App = () => {
                 <Route path="/book-author" component={Author} />
                 <Route path="/book-category" component={Category} />
                 <Route path="/book-publisher" component={Publisher} />
-                <Route path="/edit-author/:authorId" component={EditAuthor} />
-                <Route path="/add-author" component={AddAuthor} />
+
                 <Route path="/edit-category/:categoryId" component={EditCategory} />
                 <Route path="/add-category" component={AddCategory} />
                 <Route path="/edit-publisher/:publisherId" component={EditPublisher} />

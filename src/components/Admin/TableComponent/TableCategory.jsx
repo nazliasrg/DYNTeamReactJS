@@ -86,6 +86,7 @@ const defaultSorted = [{
 const TableCategory = (props) => {
 
     const [show, setShow] = useState(false);
+
     const [eshow, setEshow] = useState(false);
 
     const getIdCategory = (id) => {
