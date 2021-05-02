@@ -31,6 +31,7 @@ import EditPublisher from '../containers/AdminPages/Home/Publisher/EditPublisher
 import AddAuthor from '../containers/AdminPages/Home/Author/AddAuthor';
 import AddCategory from '../containers/AdminPages/Home/Category/AddCategory';
 import AddPublisher from '../containers/AdminPages/Home/Publisher/AddPublisher';
+import BookDetail from '../components/User/DetailBook';
 
 const App = () => {
     return (
@@ -42,7 +43,7 @@ const App = () => {
                 <Route path="/Profileuser" exact component={Profileuser} />
                 <Route path="/location" exact component={Location} />
                 <Route path="/Genre" exact component={Genre} />
-                <Route path="/detail-book/:bookId" exact component={DetailBook} />
+                <Route path="/detail/:bookId" exact component={BookDetail} />
 
                 <Route path="/login-admin" exact component={Login} />
                 <Route path="/home-admin" component={Home} />

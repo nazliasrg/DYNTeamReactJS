@@ -1,0 +1,76 @@
+.container-card{
+    height: 520px;
+    width: 250px;
+    border-radius: 10px 10px 10px 10px;
+    padding: 20px 0 0 18px;
+    background-color:rgb(255, 255, 255);
+    box-shadow: 5px 5px 13px 0 rgb(165, 165, 165);
+    margin: 1% 0 2% 2%;
+}
+
+.container-card:hover{
+    /* cursor: pointer; */
+    transform: scale(1.02);
+}
+
+.img-container{
+    height: 320px;
+    width: 215px;
+    border-radius: 5px 5px 5px 5px;
+    margin-bottom: 20px;
+    box-shadow: 5px 5px 13px 0 rgb(165, 165, 165);
+    
+}
+
+.pic-container{
+    width: 200px;
+    margin-bottom: 10px;
+    border: 1px solid;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.title-container{
+    width: 215px;
+    height: 90px;
+    /* height: 70px; */
+    text-align: center;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+}
+
+.title-container::-webkit-scrollbar { 
+    display: none;  
+}
+
+.title-container p{
+    font-size: 17px;
+}
+
+/* .author-container{
+    width: 200px;
+    height: 20px;
+    text-align: center;
+}
+
+.author-container p{
+    font-size: 15px;
+    color: rgb(63, 63, 63);
+} */
+
+.button-bar{
+    width: 215px;
+    height: 30px;
+    margin-top: 20px;
+    border-radius: 20px 20px 20px 20px;
+}
+
+.tombol{
+    border: 1px solid rgb(187, 187, 187);
+    background-color: white;
+    height: 33px;
+    width: 250px;
+    border-radius: 10px 10px 10px 10px;
+    cursor: pointer;
+    color: rgb(77, 77, 77);
+    margin-top: auto;
+}
