@@ -9,33 +9,39 @@ import { connect } from 'react-redux';
 const { SearchBar } = Search;
 
 const columns = [{
-    dataField: 'id',
+    dataField: 'requestId',
     text: 'No',
     sort: true,
     headerStyle: () => {
-        return {
-            width: '7%'
-        }
+        return { width: '7%' }
     }
 }, {
-    dataField: 'id_activity',
-    text: 'ID User',
+    dataField: 'userEntity.username',
+    text: 'Username',
     sort: true
 }, {
-    dataField: 'title_book',
-    text: 'Name',
+    dataField: 'requestCode',
+    text: 'Request Code',
     sort: true
 }, {
-    dataField: 'user',
-    text: 'Email',
+    dataField: 'bookEntity.title',
+    text: 'Title',
     sort: true
 }, {
-    dataField: 'start_date',
-    text: 'Phone Number',
+    dataField: 'durationEntity.duration',
+    text: 'Duration',
     sort: true
 }, {
-    dataField: 'return_date',
-    text: 'Member',
+    dataField: 'requestDate',
+    text: 'Request Date',
+    sort: true
+}, {
+    dataField: 'approvedDate',
+    text: 'Approved Date',
+    sort: true
+}, {
+    dataField: 'decisionDate',
+    text: 'Return Date',
     sort: true
 }, {
     dataField: 'link',
@@ -46,12 +52,12 @@ const columns = [{
         }
     },
     formatter: (rowContent, row) => {
-        if (row.fine === 0) {
+        if (row.fine === 0 || row.fine === null) {
             return (
                 <>
                     <Row className='justify-content-center'>
                         <Badge color='primary' className="text-center">
-                            Rp {row.fine}
+                            Rp 0
                         </Badge>
                     </Row>
                 </>
@@ -62,7 +68,7 @@ const columns = [{
                 <>
                     <Row className='justify-content-center'>
                         <Badge color='danger' className="mr-2">
-                            Rp {row.fine * 800}
+                            Rp {row.fine * 1000}
                         </Badge>
                     </Row>
                 </>
@@ -78,12 +84,12 @@ const columns = [{
         }
     },
     formatter: (rowContent, row) => {
-        if (row.status === "In the Periode") {
+        if (row.fine === 0 || row.fine === null) {
             return (
                 <>
                     <Row className='justify-content-center'>
                         <Badge color='primary' className="text-center">
-                            {row.status}
+                            In the Periode
                         </Badge>
                     </Row>
                 </>
@@ -94,36 +100,56 @@ const columns = [{
                 <>
                     <Row className='justify-content-center'>
                         <Badge color='danger' className="mr-2">
-                            {row.status}
+                            {row.fine} days late
                         </Badge>
                     </Row>
                 </>
             )
         }
     }
+}, {
+    dataField: 'cost',
+    text: 'Cost',
+    sort: true,
+    headerStyle: () => {
+        return {
+            textAlign: 'center'
+        }
+    },
+    formatter: (rowContent, row) => {
+        if (row.cost === null || row.cost === 0) {
+            return (
+                <label>
+                    Rp 0
+                </label>
+            )
+        }
+        else {
+            return (
+                <label>
+                    Rp {row.cost}
+                </label>
+            )
+        }
+
+    }
 }
 ];
 
 const defaultSorted = [{
-    dataField: 'id',
-    order: 'asc'
+    dataField: 'requestId',
+    order: 'desc'
 }];
 
-const mapStateToProps = (state) => {
-    return {
-        getActivityList: state.activity.getActivityList,
-        errorActivity: state.activity.errorActivity
-    }
-}
-
-
 const TableHistory = (props) => {
+
+    const { data } = props;
     return (
         <>
-            {props.getActivityList ? <ToolkitProvider
+            <ToolkitProvider
                 bootstrap4
                 keyField='id'
-                data={props.getActivityList}
+                data={data}
                 columns={columns}
                 defaultSorted={defaultSorted}
                 search
@@ -148,15 +174,10 @@ const TableHistory = (props) => {
                         </div>
                     )
                 }
-            </ToolkitProvider> : (
-                <div className="text-center">
-                    { props.errorActivity ? <h1>{props.errorActivity}</h1> : <Spinner color='dark' />}
-                </div>
-            )
-            }
+            </ToolkitProvider>
 
         </>
     )
 }
 
-export default connect(mapStateToProps, null)(TableHistory);
+export default connect()(TableHistory);

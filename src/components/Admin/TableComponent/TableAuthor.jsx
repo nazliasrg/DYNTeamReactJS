@@ -103,7 +103,7 @@ const TableAuthor = (props) => {
 
         handleEshow();
     }
-    
+
     const handleShow = () => setShow(true);
 
     const handleEshow = () => setEshow(true);
@@ -253,7 +253,7 @@ const TableAuthor = (props) => {
                                                     <form onSubmit={onSubmit}>
                                                         <div className="form-group">
                                                             <label htmlFor="authorName">Author Name</label>
-                                                            <input className="form-control" id="authorName" value={authorName} onChange={authorChange} />
+                                                            <input className="form-control" id="authorName" value={authorName} onChange={authorChange} required />
                                                         </div>
                                                         <div className="form-group">
                                                             <button className="form-control btn btn-primary" type="submit">Add</button>
@@ -273,7 +273,7 @@ const TableAuthor = (props) => {
                                                     <form onSubmit={onSubmitE}>
                                                         <div className="form-group">
                                                             <label htmlFor="authorName">Author Name</label>
-                                                            <input className="form-control" id="authorName" value={authorName} onChange={authorChange} />
+                                                            <input className="form-control" id="authorName" value={authorName} onChange={authorChange} required />
                                                         </div>
                                                         <div className="form-group">
                                                             <button className="form-control btn btn-primary" type="submit">Edit</button>

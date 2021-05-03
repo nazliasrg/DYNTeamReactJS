@@ -238,15 +238,15 @@ const TableAdmin = (props) => {
                                                     <form onSubmit={onSubmit}>
                                                         <div className="form-group">
                                                             <label htmlFor="username">Username</label>
-                                                            <input className="form-control" id="username" value={username} onChange={usernameChange} />
+                                                            <input className="form-control" id="username" value={username} onChange={usernameChange} required />
                                                         </div>
                                                         <div className="form-group">
                                                             <label htmlFor="username">Password</label>
-                                                            <input className="form-control" id="password" value={password} onChange={passwordChange} />
+                                                            <input className="form-control" id="password" value={password} onChange={passwordChange} required />
                                                         </div>
                                                         <div className="form-group">
                                                             <label htmlFor="role">Role</label><br />
-                                                            <select class="form-control" name="role" id="role" onClick={roleChange}>
+                                                            <select class="form-control" name="role" id="role" onClick={roleChange} required>
                                                                 <option value="superadmin">Super Admin</option>
                                                                 <option value="admin">Admin</option>
                                                             </select>

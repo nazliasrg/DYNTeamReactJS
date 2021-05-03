@@ -7,22 +7,34 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
+import axios from 'axios'
 
 const { SearchBar } = Search;
 
-const handleClickExtend = (no) => {
-    console.log('data ke: ' + no)
+const handleClickExtend = (id) => {
+    console.log('data ke: ' + id)
     swal({
         title: "Are you sure to extends activity?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     })
-        .then((willDelete) => {
-            if (willDelete) {
+        .then((willExtends) => {
+            axios.put('http://localhost:7070/api/dynteam/request/extend/' + id)
+                .then(function (res) {
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+
+            if (willExtends) {
                 swal("Activity has been extended!", {
                     icon: "success",
-                });
+                })
+                    .then((OK) => {
+                        window.location.reload(false);
+                    })
             } else {
                 swal("Activity is not extended!");
             }
@@ -37,11 +49,21 @@ const handleClickReturn = (id) => {
         buttons: true,
         dangerMode: true,
     })
-        .then((willDelete) => {
-            if (willDelete) {
+        .then((willReturn) => {
+            axios.put('http://localhost:7070/api/dynteam/request/return/' + id)
+                .then(function (res) {
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+            if (willReturn) {
                 swal("Activity has been return!", {
                     icon: "success",
-                });
+                })
+                    .then((OK) => {
+                        window.location.reload(false);
+                    })
             } else {
                 swal("Activity is not return!");
             }
@@ -49,31 +71,39 @@ const handleClickReturn = (id) => {
 }
 
 const columns = [{
-    dataField: 'id',
+    dataField: 'requestId',
     text: 'No',
     sort: true,
     headerStyle: () => {
         return { width: '7%' }
     }
 }, {
-    dataField: 'id_activity',
-    text: 'ID User',
+    dataField: 'userEntity.username',
+    text: 'Username',
     sort: true
 }, {
-    dataField: 'title_book',
-    text: 'Name',
+    dataField: 'requestCode',
+    text: 'Request Code',
     sort: true
 }, {
-    dataField: 'user',
-    text: 'Email',
+    dataField: 'bookEntity.title',
+    text: 'Title',
     sort: true
 }, {
-    dataField: 'start_date',
-    text: 'Phone Number',
+    dataField: 'durationEntity.duration',
+    text: 'Duration',
     sort: true
 }, {
-    dataField: 'return_date',
-    text: 'Member',
+    dataField: 'requestDate',
+    text: 'Request Date',
+    sort: true
+}, {
+    dataField: 'approvedDate',
+    text: 'Approved Date',
+    sort: true
+}, {
+    dataField: 'decisionDate',
+    text: 'Return Date',
     sort: true
 }, {
     dataField: 'link',
@@ -84,16 +114,13 @@ const columns = [{
         }
     },
     formatter: (rowContent, row) => {
-        if (row.fine === 0) {
+        if (row.fine === 0 || row.fine === null) {
             return (
                 <>
                     <Row className='justify-content-center'>
                         <Badge color='primary' className="text-center">
-                            Rp {row.fine}
+                            Rp 0
                         </Badge>
-                    </Row>
-                    <Row className='justify-content-center'>
-                        <Label className="text-xs text-muted">{row.status}</Label>
                     </Row>
                 </>
             )
@@ -103,11 +130,8 @@ const columns = [{
                 <>
                     <Row className='justify-content-center'>
                         <Badge color='danger' className="mr-2">
-                            Rp {row.fine * 800}
+                            Rp {row.fine * 1000}
                         </Badge>
-                    </Row>
-                    <Row className='justify-content-center'>
-                        <Label className="text-xs text-muted">{row.status}</Label>
                     </Row>
                 </>
             )
@@ -125,13 +149,13 @@ const columns = [{
         return (
             <Row className='justify-content-center'>
                 <Link to={'#'}>
-                    <Badge color='success' className="mr-2" onClick={() => handleClickExtend(row.id)}>
+                    <Badge color='success' className="mr-2" onClick={() => handleClickExtend(row.requestId)}>
                         Extend
                     </Badge>
                 </Link>
 
                 <Link to={'#'}>
-                    <Badge color='danger' className="mr-2" onClick={() => handleClickReturn(row.id)}>
+                    <Badge color='danger' className="mr-2" onClick={() => handleClickReturn(row.requestId)}>
                         Return
                     </Badge>
                 </Link>
@@ -142,25 +166,19 @@ const columns = [{
 }];
 
 const defaultSorted = [{
-    dataField: 'id',
+    dataField: 'requestId',
     order: 'asc'
 }];
 
-const mapStateToProps = (state) => {
-    return {
-        getActivityList: state.activity.getActivityList,
-        errorActivity: state.activity.errorActivity
-    }
-}
-
 
 const TableActivity = (props) => {
+    const { data } = props;
     return (
         <>
-            {props.getActivityList ? <ToolkitProvider
+            <ToolkitProvider
                 bootstrap4
                 keyField='id'
-                data={props.getActivityList}
+                data={data}
                 columns={columns}
                 defaultSorted={defaultSorted}
                 search
@@ -185,15 +203,10 @@ const TableActivity = (props) => {
                         </div>
                     )
                 }
-            </ToolkitProvider> : (
-                <div className="text-center">
-                    { props.errorActivity ? <h1>{props.errorActivity}</h1> : <Spinner color='dark' />}
-                </div>
-            )
-            }
+            </ToolkitProvider>
 
         </>
     )
 }
 
-export default connect(mapStateToProps, null)(TableActivity);
+export default connect()(TableActivity);
