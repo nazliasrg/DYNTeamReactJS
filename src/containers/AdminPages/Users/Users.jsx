@@ -4,13 +4,33 @@ import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarCom
 import './Users.css';
 import TableUsers from '../../../components/Admin/TableComponent/TableUsers';
 import { connect } from 'react-redux';
-import { getUsersList } from '../../../actions/UsersAction';
+import axios from 'axios'
 
 
 class Users extends Component {
 
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        }
+    }
+
     componentDidMount() {
-        this.props.dispatch(getUsersList());
+        this.getUsers()
+    }
+
+    getUsers = () => {
+        axios.get('http://localhost:7070/api/dynteam/auth/users')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
     }
 
     render() {
@@ -27,7 +47,7 @@ class Users extends Component {
                             </div>
                             <div className="card-body">
 
-                                <TableUsers />
+                                <TableUsers data={this.state.data} />
 
                             </div>
                         </div>

@@ -52,11 +52,19 @@ const handleClickDecline = (id) => {
         dangerMode: true,
     })
         .then((willDecline) => {
-
+            axios.put('http://localhost:7070/api/dynteam/request/decline/' + id)
+                .then(function (res) {
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             if (willDecline) {
                 swal("Request has been declined!", {
                     icon: "success",
-                });
+                }).then((OK) => {
+                    window.location.reload(false);
+                })
             } else {
                 swal("Request is not declined!");
             }
