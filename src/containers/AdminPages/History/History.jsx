@@ -4,13 +4,35 @@ import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarCom
 import './History.css';
 import TableHistory from '../../../components/Admin/TableComponent/TableHistory';
 import { connect } from 'react-redux';
-import getActivityList from '../../../actions/ActivityAction';
+import axios from 'axios'
 
 class History extends Component {
 
-    componentDidMount() {
-        this.props.dispatch(getActivityList());
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        }
     }
+
+    componentDidMount() {
+        this.getActivitiesHistory()
+    }
+
+    getActivitiesHistory = () => {
+        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/3')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
+
 
     render() {
         return (
@@ -24,7 +46,7 @@ class History extends Component {
                                 <h6 className="m-0 font-weight-bold text-dark">History</h6>
                             </div>
                             <div className="card-body">
-                                <TableHistory />
+                                <TableHistory data={this.state.data} />
                             </div>
                         </div>
                     </div>

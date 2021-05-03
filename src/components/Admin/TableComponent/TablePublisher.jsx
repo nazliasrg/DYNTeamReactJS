@@ -246,7 +246,7 @@ const TablePublisher = (props) => {
                                                     <form onSubmit={onSubmit}>
                                                         <div className="form-group">
                                                             <label htmlFor="publisherName">Publisher Name</label>
-                                                            <input className="form-control" id="publisherName" value={publisherName} onChange={publisherChange} />
+                                                            <input className="form-control" id="publisherName" value={publisherName} onChange={publisherChange} required />
                                                         </div>
                                                         <div className="form-group">
                                                             <button className="form-control btn btn-primary" type="submit">Add</button>
@@ -266,7 +266,7 @@ const TablePublisher = (props) => {
                                                     <form onSubmit={onSubmitE}>
                                                         <div className="form-group">
                                                             <label htmlFor="publisherName">Publisher Name</label>
-                                                            <input className="form-control" id="publisherName" value={publisherName} onChange={publisherChange} />
+                                                            <input className="form-control" id="publisherName" value={publisherName} onChange={publisherChange} required />
                                                         </div>
                                                         <div className="form-group">
                                                             <button className="form-control btn btn-primary" type="submit">Edit</button>

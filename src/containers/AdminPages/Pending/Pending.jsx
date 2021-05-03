@@ -4,13 +4,32 @@ import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarCom
 import './Pending.css';
 import TablePending from '../../../components/Admin/TableComponent/TablePending';
 import { connect } from 'react-redux';
-import getActivityList from '../../../actions/ActivityAction';
+import axios from 'axios'
 
 
 class Pending extends Component {
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        }
+    }
 
     componentDidMount() {
-        this.props.dispatch(getActivityList());
+        this.getActivitiesPending()
+    }
+
+    getActivitiesPending = () => {
+        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/1')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
     }
 
     render() {
@@ -26,7 +45,7 @@ class Pending extends Component {
                                 <h6 className="m-0 font-weight-bold text-dark">Confirmation</h6>
                             </div>
                             <div className="card-body">
-                                <TablePending />
+                                <TablePending data={this.state.data} />
                             </div>
                         </div>
                     </div>

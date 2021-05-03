@@ -249,7 +249,7 @@ const TableCategory = (props) => {
                                                     <form onSubmit={onSubmit}>
                                                         <div className="form-group">
                                                             <label htmlFor="categoryName">Category Name</label>
-                                                            <input className="form-control" id="categoryName" value={categoryName} onChange={categoryChange} />
+                                                            <input className="form-control" id="categoryName" value={categoryName} onChange={categoryChange} required />
                                                         </div>
                                                         <div className="form-group">
                                                             <button className="form-control btn btn-primary" type="submit">Add</button>
@@ -269,7 +269,7 @@ const TableCategory = (props) => {
                                                     <form onSubmit={onSubmitE}>
                                                         <div className="form-group">
                                                             <label htmlFor="categoryName">Category Name</label>
-                                                            <input className="form-control" id="categoryName" value={categoryName} onChange={categoryChange} />
+                                                            <input className="form-control" id="categoryName" value={categoryName} onChange={categoryChange} required />
                                                         </div>
                                                         <div className="form-group">
                                                             <button className="form-control btn btn-primary" type="submit">Edit</button>
