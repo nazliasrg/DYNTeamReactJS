@@ -169,7 +169,6 @@ const defaultSorted = [{
     order: 'asc'
 }];
 
-
 const TableActivity = (props) => {
     const { data } = props;
     return (

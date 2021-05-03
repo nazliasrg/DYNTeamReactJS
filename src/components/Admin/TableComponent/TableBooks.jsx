@@ -107,8 +107,8 @@ const TableBooks = (props) => {
     const submitAddStock = () => {
         axios.put('http://localhost:7070/api/dynteam/book/add/' + bookId + '/' + addStock)
             .then(res => {
-                console.log(res)
-                alert('Stock berhasil ditambah!');
+                // console.log(res)
+                alert('Stock was successfully added!')
             })
             .catch(function (error) {
                 console.log(error)
@@ -118,8 +118,8 @@ const TableBooks = (props) => {
     const submitDiscStock = () => {
         axios.put('http://localhost:7070/api/dynteam/book/discrepancy/' + bookId + '/' + addStock)
             .then(res => {
-                console.log(res)
-                alert('Stock berhasil dikurangi!');
+                // console.log(res)
+                alert('Stock has been reduced!')
             })
             .catch(function (error) {
                 console.log(error)

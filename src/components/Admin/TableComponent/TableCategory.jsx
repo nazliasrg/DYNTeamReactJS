@@ -78,10 +78,7 @@ const activedCategory = (id) => {
         });
 }
 
-const defaultSorted = [{
-    dataField: 'id',
-    order: 'asc'
-}];
+
 
 const TableCategory = (props) => {
 
@@ -123,7 +120,7 @@ const TableCategory = (props) => {
 
         axios.post("http://localhost:7070/api/dynteam/book/category/insert", category)
             .then(function (response) {
-                console.log(response);
+                alert(categoryName + ' data added successfully!')
             })
             .catch(function (error) {
                 console.log(error);
@@ -141,7 +138,7 @@ const TableCategory = (props) => {
 
         axios.put("http://localhost:7070/api/dynteam/book/category/update/" + id, category)
             .then(function (response) {
-                console.log(response);
+                alert(categoryName + ' data updated successfully!')
             })
             .catch(function (error) {
                 console.log(error);
@@ -213,6 +210,11 @@ const TableCategory = (props) => {
                 </Row>
             )
         }
+    }];
+
+    const defaultSorted = [{
+        dataField: 'categoryId',
+        order: 'asc'
     }];
 
     return (

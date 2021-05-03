@@ -78,11 +78,6 @@ const activedCategory = (id) => {
         });
 }
 
-const defaultSorted = [{
-    dataField: 'id',
-    order: 'asc'
-}];
-
 const TablePublisher = (props) => {
     const [show, setShow] = useState(false);
 
@@ -123,7 +118,7 @@ const TablePublisher = (props) => {
 
         axios.post("http://localhost:7070/api/dynteam/book/publisher/insert", publisher)
             .then(function (response) {
-                console.log(response);
+                alert(publisherName + ' data added successfully!')
             })
             .catch(function (error) {
                 console.log(error);
@@ -141,7 +136,7 @@ const TablePublisher = (props) => {
 
         axios.put("http://localhost:7070/api/dynteam/book/publisher/update/" + id, publisher)
             .then(function (response) {
-                console.log(response);
+                alert(publisherName + ' data updated successfully!')
             })
             .catch(function (error) {
                 console.log(error);
@@ -212,6 +207,11 @@ const TablePublisher = (props) => {
                 </Row>
             )
         }
+    }];
+
+    const defaultSorted = [{
+        dataField: 'publisherId',
+        order: 'asc'
     }];
 
     return (
