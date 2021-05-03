@@ -7,7 +7,6 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { connect } from 'react-redux';
 import swal from 'sweetalert';
 import axios from 'axios'
 
@@ -172,4 +171,4 @@ const TablePending = (props) => {
     )
 }
 
-export default connect()(TablePending);
+export default TablePending;

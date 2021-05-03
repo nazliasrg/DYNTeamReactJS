@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react'
 import { Row, Col, Container } from 'reactstrap'
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent'
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
-import { connect } from 'react-redux'
 import axios from 'axios'
 
 class AddBook extends Component {
@@ -184,7 +183,6 @@ class AddBook extends Component {
                     <SidebarComponent />
                     <div id="content">
                         <NavbarComponent />
-
                         <div className="card shadow mb-4">
                             <Container>
                                 <h6 className='mt-3'>Add Book</h6>
@@ -293,4 +291,4 @@ class AddBook extends Component {
     }
 }
 
-export default connect()(AddBook)
+export default AddBook;

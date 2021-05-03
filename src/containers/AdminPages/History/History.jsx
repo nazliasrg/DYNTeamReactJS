@@ -3,7 +3,6 @@ import SidebarComponent from '../../../components/Admin/SidebarComponent/Sidebar
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import './History.css';
 import TableHistory from '../../../components/Admin/TableComponent/TableHistory';
-import { connect } from 'react-redux';
 import axios from 'axios'
 
 class History extends Component {
@@ -56,4 +55,4 @@ class History extends Component {
     }
 }
 
-export default connect()(History);
+export default History;

@@ -3,9 +3,7 @@ import SidebarComponent from '../../../components/Admin/SidebarComponent/Sidebar
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import './Pending.css';
 import TablePending from '../../../components/Admin/TableComponent/TablePending';
-import { connect } from 'react-redux';
 import axios from 'axios'
-
 
 class Pending extends Component {
     constructor() {
@@ -55,4 +53,4 @@ class Pending extends Component {
     }
 }
 
-export default connect()(Pending);
+export default Pending;

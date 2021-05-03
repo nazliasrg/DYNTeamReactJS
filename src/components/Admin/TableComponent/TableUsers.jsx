@@ -1,13 +1,11 @@
-import { faEdit, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Badge, Row, Col } from 'reactstrap';
 import React, { useState } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next';
-import { Link } from 'react-router-dom';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { connect } from 'react-redux';
 import swal from 'sweetalert';
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -16,27 +14,37 @@ import { Modal } from 'react-bootstrap'
 
 const { SearchBar } = Search;
 
-const handleClick = (id) => {
+const handleClickActive = (id) => {
     console.log('data ke: ' + id)
     swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover data!",
+        title: "Are you sure to inactived account?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     })
         .then((willDelete) => {
+            inactivedUser(id);
             if (willDelete) {
-                swal("Data user has been deleted!", {
+                swal("Data user has been inactived!", {
                     icon: "success",
-                });
+                }).then((OK) => {
+                    window.location.reload(false);
+                })
             } else {
                 swal("Data user is safe!");
             }
         });
 }
 
-
+const inactivedUser = (id) => {
+    axios.delete("http://localhost:7070/api/dynteam/auth/user/delete/" + id)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
 const TableUsers = (props) => {
     const columns = [{
@@ -126,7 +134,7 @@ const TableUsers = (props) => {
         formatter: (rowContent, row) => {
             return (
                 <Row className='justify-content-center'>
-                    <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.userId)}>
+                    <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClickActive(row.userId)}>
                         <FontAwesomeIcon icon={faTrash} />
                     </Button>
                 </Row>
@@ -247,4 +255,4 @@ const TableUsers = (props) => {
     )
 }
 
-export default connect()(TableUsers);
+export default TableUsers;
