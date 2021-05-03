@@ -3,7 +3,6 @@ import './Admin.css';
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent';
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import TableAdmin from '../../../components/Admin/TableComponent/TableAdmin';
-import { connect } from 'react-redux';
 import axios from 'axios';
 
 class Admin extends Component {
@@ -53,4 +52,4 @@ class Admin extends Component {
     }
 }
 
-export default connect()(Admin);
+export default Admin;

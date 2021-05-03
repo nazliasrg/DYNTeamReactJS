@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent'
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
-import { connect } from 'react-redux'
 import { Row, Col, Container } from 'reactstrap'
 import axios from 'axios'
 
@@ -292,4 +291,4 @@ class EditBook extends Component {
     }
 }
 
-export default connect()(EditBook)
+export default EditBook;

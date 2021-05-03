@@ -3,7 +3,6 @@ import '../Home.css'
 import SidebarComponent from '../../../../components/Admin/SidebarComponent/SidebarComponent'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavbarComponent from '../../../../components/Admin/NavbarComponent/NavbarComponent'
-import { connect } from 'react-redux'
 import TableCategory from '../../../../components/Admin/TableComponent/TableCategory';
 import axios from 'axios'
 
@@ -54,4 +53,4 @@ class Category extends Component {
     }
 }
 
-export default connect()(Category)
+export default Category;

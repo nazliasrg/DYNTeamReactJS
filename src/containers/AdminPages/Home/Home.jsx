@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import TableBooks from '../../../components/Admin/TableComponent/TableBooks';
-import { connect } from 'react-redux';
 import axios from 'axios'
 
 class Home extends Component {
@@ -56,4 +55,4 @@ class Home extends Component {
     }
 }
 
-export default connect()(Home);
+export default Home;
