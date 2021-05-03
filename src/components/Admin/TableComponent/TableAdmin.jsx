@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Badge, Row, Col, Label } from 'reactstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -89,15 +89,13 @@ const TableAdmin = (props) => {
 
     const [username, setUsername] = useState("");
 
-    const [password, setPassword] = useState("");
-
     const [roles, setRoles] = useState([]);
 
     const onSubmit = () => {
 
         const adminData = {
             username: username,
-            password: password,
+            password: "admin123",
             role: roles
         }
 
@@ -106,7 +104,7 @@ const TableAdmin = (props) => {
 
         axios.post("http://localhost:7070/api/dynteam/auth/admin/register", adminData)
             .then(function (response) {
-                console.log(response);
+                alert(username + ' account successfully registered!')
                 setRoles([])
             })
             .catch(function (error) {
@@ -117,11 +115,6 @@ const TableAdmin = (props) => {
     const usernameChange = (event) => {
         setUsername(event.target.value)
         console.log(username)
-    }
-
-    const passwordChange = (event) => {
-        setPassword(event.target.value)
-        console.log(password)
     }
 
     const roleChange = (e) => {
@@ -165,7 +158,32 @@ const TableAdmin = (props) => {
     }, {
         dataField: 'roles[0].roleName',
         text: 'Role',
-        sort: true
+        sort: true,
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            if (row.roles[0].roleName === 'SUPER_ADMIN') {
+                return (
+                    <Row className='justify-content-center'>
+                        <Label color='dark' className="mr-2">
+                            Super Admin
+                        </Label>
+                    </Row>
+                )
+            }
+            else {
+                return (
+                    <Row className='justify-content-center'>
+                        <Label color='dark' className="mr-2">
+                            Admin
+                        </Label>
+                    </Row>
+                )
+            }
+        }
     }, {
         dataField: 'link',
         text: 'Status',
@@ -195,7 +213,6 @@ const TableAdmin = (props) => {
             }
         }
     }];
-
 
     const defaultSorted = [{
         dataField: 'adminId',
@@ -239,10 +256,6 @@ const TableAdmin = (props) => {
                                                         <div className="form-group">
                                                             <label htmlFor="username">Username</label>
                                                             <input className="form-control" id="username" value={username} onChange={usernameChange} required />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="username">Password</label>
-                                                            <input className="form-control" id="password" value={password} onChange={passwordChange} required />
                                                         </div>
                                                         <div className="form-group">
                                                             <label htmlFor="role">Role</label><br />

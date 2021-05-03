@@ -124,7 +124,7 @@ const TableAuthor = (props) => {
 
         axios.post("http://localhost:7070/api/dynteam/book/author/insert", author)
             .then(function (response) {
-                console.log(response);
+                alert(authorName + ' author data added successfully!')
             })
             .catch(function (error) {
                 console.log(error);
@@ -142,7 +142,7 @@ const TableAuthor = (props) => {
 
         axios.put("http://localhost:7070/api/dynteam/book/author/update/" + id, author)
             .then(function (response) {
-                console.log(response);
+                alert(authorName + ' author data updated successfully!')
             })
             .catch(function (error) {
                 console.log(error);
