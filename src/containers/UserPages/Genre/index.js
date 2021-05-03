@@ -34,6 +34,15 @@ class GenrePage extends Component{
         })
     }
 
+    // getCover = () =>{
+    //     axios.get(`http://localhost:7070/api/dynteam/book/cover/download/${}`).then(res =>{
+    //         this.setState({
+    //             data: res.data
+    //         })
+    //         console.log(this.state.data);
+    //     })
+    // }
+
     handleInput = (e) =>{
         // MENGETAHUI APAKAH DATA YANG KITA MASUKAN DITERIMA ATAU TIDAK
         // console.log(e.target.value); 
@@ -66,6 +75,7 @@ class GenrePage extends Component{
                         {
                             // diubah dari data.map jadi filterbooks supaya saat mencari buku dapat tertampil. map digunakan untuk memanggil data yang ada di dalam database
                             filterbooks.map((val) => { 
+                                // console.log(val.cover);
                                 return(
                                     <BookCard
                                         key = {val.bookId}

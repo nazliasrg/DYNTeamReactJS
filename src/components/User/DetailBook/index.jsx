@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import cover from '../../../assets/book/B001.jpg'
+// import cover from '../../../assets/book/B001.jpg'
 // import './BookDetail.css';
 
 class BookDetail extends Component{
@@ -13,6 +14,8 @@ class BookDetail extends Component{
             category:{},
             publisher:{},
             book_id: "",
+            data:"",
+            showModal: false
         }
     }
 
@@ -35,13 +38,39 @@ class BookDetail extends Component{
         })
     }
 
+
+    getCover = () =>{
+            axios.get(`http://localhost:7070/api/dynteam/book/cover/download/${this.state.detailData.cover}`).then(res =>{
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
+        }
+
+
+    handleClose = () => {
+        this.setState({
+            showModal: false
+        });
+    }
+
+
+    handleShow = () => {
+        this.setState({
+            showModal: true
+        });
+    }
+
+
     render(){        
         document.body.style.backgroundColor = "rgb(214, 214, 214)";
-        const {title, synopsis, year} = this.state.detailData;
+        const {cover, title, synopsis, year} = this.state.detailData;
         const {authorName} = this.state.author;
         const {categoryName} = this.state.category;
         const {publisherName} = this.state.publisher;
         return(
+            <Fragment>
             <div className="container detail-book-container">
                 <div className="row">
                     <div className="col-md-4 col-12 cover-container">
@@ -81,7 +110,7 @@ class BookDetail extends Component{
                         </div>
                         <div className="d-flex justify-content-between">
                             <div>
-                                <button className="mt-3">Rent book</button>
+                                <button className="mt-3" onClick={this.handleShow}>Rent book</button>
                             </div>
                             <div>
                                 <Link to={`/Genre`}>
@@ -92,6 +121,25 @@ class BookDetail extends Component{
                     </div>
                 </div>
             </div>
+
+            <div class="modal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Modal body text goes here.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </Fragment>
         );
     }
 }
