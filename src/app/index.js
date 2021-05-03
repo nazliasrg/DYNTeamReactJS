@@ -8,8 +8,6 @@ import Pending from '../containers/AdminPages/Pending/Pending';
 import Activity from '../containers/AdminPages/Activity/Activity';
 import History from '../containers/AdminPages/History/History';
 import Admin from '../containers/AdminPages/Admin/Admin';
-import CreateUser from '../containers/AdminPages/Users/CreateUser';
-import EditUser from '../containers/AdminPages/Users/EditUser';
 import AddBook from '../containers/AdminPages/Home/AddBook';
 import EditBook from '../containers/AdminPages/Home/EditBook';
 import Loginuser from '../containers/UserPages/Loginuser/Loginuser';
@@ -23,10 +21,6 @@ import DetailBook from '../containers/UserPages/DetailBook/DetailBook';
 import Author from '../containers/AdminPages/Home/Author/Author';
 import Category from '../containers/AdminPages/Home/Category/Category';
 import Publisher from '../containers/AdminPages/Home/Publisher/Publisher';
-import EditCategory from '../containers/AdminPages/Home/Category/EditCategory';
-import EditPublisher from '../containers/AdminPages/Home/Publisher/EditPublisher';
-import AddCategory from '../containers/AdminPages/Home/Category/AddCategory';
-import AddPublisher from '../containers/AdminPages/Home/Publisher/AddPublisher';
 
 const App = () => {
     return (
@@ -48,11 +42,6 @@ const App = () => {
                 <Route path="/history" component={History} />
                 <Route path="/admin-role" component={Admin} />
 
-
-                {/* users table */}
-                <Route path="/create-user" component={CreateUser} />
-                <Route path="/edit-user/:id" component={EditUser} />
-
                 {/* books table */}
                 <Route path="/add-book" component={AddBook} />
                 <Route path="/edit-book/:no" component={EditBook} />
@@ -60,10 +49,6 @@ const App = () => {
                 <Route path="/book-category" component={Category} />
                 <Route path="/book-publisher" component={Publisher} />
 
-                <Route path="/edit-category/:categoryId" component={EditCategory} />
-                <Route path="/add-category" component={AddCategory} />
-                <Route path="/edit-publisher/:publisherId" component={EditPublisher} />
-                <Route path="/add-publisher" component={AddPublisher} />
 
 
             </Switch>
