@@ -196,7 +196,7 @@ class EditBook extends Component {
                                         <Col md={12}>
                                             <div className="form-group">
                                                 <label htmlFor="title">Title</label>
-                                                <input className="form-control" id="title" name="title" value={title} onChange={this.inputChange} />
+                                                <input className="form-control" id="title" name="title" value={title} onChange={this.inputChange} required />
                                             </div>
                                         </Col>
                                     </Row>
@@ -204,7 +204,7 @@ class EditBook extends Component {
                                         <Col md={6}>
                                             <div className="form-group">
                                                 <label htmlFor="categoryId">Category</label><br />
-                                                <select class="form-control" name="categoryId" id="categoryId" onClick={this.categoryChange} >
+                                                <select class="form-control" name="categoryId" id="categoryId" onClick={this.categoryChange} required >
                                                     {
                                                         categoryList.map(categoryVal => {
                                                             if (categoryVal.categoryId == categoryId) {
@@ -224,7 +224,7 @@ class EditBook extends Component {
                                         <Col md={6}>
                                             <div className="form-group">
                                                 <label htmlFor="publisherId">Publisher</label><br />
-                                                <select class="form-control" name="publisherId" id="publisherId" onClick={this.publisherChange}>
+                                                <select class="form-control" name="publisherId" id="publisherId" onClick={this.publisherChange} required>
                                                     {
                                                         publisherList.map(publisherVal => {
                                                             if (publisherVal.publisherId == publisherId) {
@@ -245,7 +245,7 @@ class EditBook extends Component {
                                         <Col md={6}>
                                             <div className="form-group">
                                                 <label htmlFor="authorId">Author</label><br />
-                                                <select class="form-control" name="authorId" id="authorId" onClick={this.authorChange}>
+                                                <select class="form-control" name="authorId" id="authorId" onClick={this.authorChange} required>
                                                     {
                                                         authorList.map(authorVal => {
                                                             if (authorVal.authorId == authorId) {
@@ -264,7 +264,7 @@ class EditBook extends Component {
                                         <Col md={6}>
                                             <div className="form-group">
                                                 <label htmlFor="year">Year</label>
-                                                <input className="form-control" id="year" name="year" value={year} onChange={this.inputChange} />
+                                                <input className="form-control" id="year" name="year" value={year} onChange={this.inputChange} required />
                                             </div>
                                         </Col>
                                     </Row>
@@ -272,7 +272,7 @@ class EditBook extends Component {
                                         <Col md={12}>
                                             <div className="form-group">
                                                 <label htmlFor="synopsis">Synopsis</label>
-                                                <textarea className="form-control" id="synopsis" rows="10" name="synopsis" value={synopsis} onChange={this.inputChange} />
+                                                <textarea className="form-control" id="synopsis" rows="10" name="synopsis" value={synopsis} onChange={this.inputChange} required />
                                             </div>
                                         </Col>
                                     </Row>

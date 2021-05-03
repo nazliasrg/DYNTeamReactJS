@@ -175,8 +175,6 @@ class AddBook extends Component {
             });
     }
 
-
-
     render() {
 
         const { author, category, publisher, title, categoryId, publisherId, authorId, year, stock, synopsis } = this.state;
@@ -195,7 +193,7 @@ class AddBook extends Component {
                                         <Col md={12}>
                                             <div className="form-group">
                                                 <label htmlFor="title">Title</label>
-                                                <input className="form-control" id="title" name="title" value={title} onChange={this.inputChange} />
+                                                <input className="form-control" id="title" name="title" value={title} onChange={this.inputChange} required />
                                             </div>
                                         </Col>
                                     </Row>
@@ -203,7 +201,7 @@ class AddBook extends Component {
                                         <Col md={6}>
                                             <div className="form-group">
                                                 <label htmlFor="categoryId">Category</label><br />
-                                                <select class="form-control" name="categoryId" id="categoryId" onClick={this.categoryChange} >
+                                                <select class="form-control" name="categoryId" id="categoryId" onClick={this.categoryChange} required>
                                                     {
                                                         category.map(categoryVal => {
                                                             return (
@@ -217,7 +215,7 @@ class AddBook extends Component {
                                         <Col md={6}>
                                             <div className="form-group">
                                                 <label htmlFor="publisherId">Publisher</label><br />
-                                                <select class="form-control" name="publisherId" id="publisherId" onClick={this.publisherChange}>
+                                                <select class="form-control" name="publisherId" id="publisherId" onClick={this.publisherChange} required>
                                                     {
                                                         publisher.map(publisherVal => {
                                                             return (
@@ -233,7 +231,7 @@ class AddBook extends Component {
                                         <Col md={6}>
                                             <div className="form-group">
                                                 <label htmlFor="authorId">Author</label><br />
-                                                <select class="form-control" name="authorId" id="authorId" onClick={this.authorChange}>
+                                                <select class="form-control" name="authorId" id="authorId" onClick={this.authorChange} required>
                                                     {
                                                         author.map(authorVal => {
                                                             return (
@@ -247,7 +245,7 @@ class AddBook extends Component {
                                         <Col md={6}>
                                             <div className="form-group">
                                                 <label htmlFor="year">Year</label>
-                                                <input className="form-control" id="year" name="year" value={year} onChange={this.inputChange} />
+                                                <input className="form-control" id="year" name="year" value={year} onChange={this.inputChange} required />
                                             </div>
                                         </Col>
                                     </Row>
@@ -255,7 +253,7 @@ class AddBook extends Component {
                                         <Col md={6}>
                                             <div className="form-group">
                                                 <label htmlFor="stock">Stock</label>
-                                                <input type="number" className="form-control" id="stock" min="0" step="1" name="stock" value={stock} onChange={this.inputChange} />
+                                                <input type="number" className="form-control" id="stock" min="0" step="1" name="stock" value={stock} onChange={this.inputChange} required />
                                             </div>
                                         </Col>
                                         <Col md={6}>
@@ -266,7 +264,8 @@ class AddBook extends Component {
                                                     className='form-control-file'
                                                     id='cover'
                                                     onChange={this.fileChange}
-                                                    name='file' />
+                                                    name='file'
+                                                    required />
                                             </div>
                                         </Col>
                                     </Row>
@@ -274,7 +273,7 @@ class AddBook extends Component {
                                         <Col md={12}>
                                             <div className="form-group">
                                                 <label htmlFor="synopsis">Synopsis</label>
-                                                <textarea className="form-control" id="synopsis" rows="10" name="synopsis" value={synopsis} onChange={this.inputChange} />
+                                                <textarea className="form-control" id="synopsis" rows="10" name="synopsis" value={synopsis} onChange={this.inputChange} required />
                                             </div>
                                         </Col>
                                     </Row>
@@ -283,7 +282,6 @@ class AddBook extends Component {
                                             <button className="form-control btn btn-primary" type="submit">Add</button>
                                         </div>
                                     </Row>
-
                                 </form>
                             </Container>
                         </div>

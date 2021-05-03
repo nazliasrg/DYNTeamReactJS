@@ -4,13 +4,34 @@ import SidebarComponent from '../../../components/Admin/SidebarComponent/Sidebar
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import TableActivity from '../../../components/Admin/TableComponent/TableActivity';
 import { connect } from 'react-redux';
-import getActivityList from '../../../actions/ActivityAction';
+import axios from 'axios'
 
 class Activity extends Component {
 
-    componentDidMount() {
-        this.props.dispatch(getActivityList());
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        }
     }
+
+    componentDidMount() {
+        this.getActivitiesPending()
+    }
+
+    getActivitiesPending = () => {
+        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/2')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
 
     render() {
 
@@ -26,7 +47,7 @@ class Activity extends Component {
                                 <h6 className="m-0 font-weight-bold text-dark">Manage Activities</h6>
                             </div>
                             <div className="card-body">
-                                <TableActivity />
+                                <TableActivity data={this.state.data} />
                             </div>
                         </div>
                     </div>

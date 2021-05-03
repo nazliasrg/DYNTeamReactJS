@@ -1,15 +1,17 @@
 import { faEdit, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Badge, Row, Col, Spinner } from 'reactstrap';
-import React from 'react'
+import { Button, Badge, Row, Col } from 'reactstrap';
+import React, { useState } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
-
+import axios from 'axios'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Modal } from 'react-bootstrap'
 
 
 const { SearchBar } = Search;
@@ -34,105 +36,161 @@ const handleClick = (id) => {
         });
 }
 
-const columns = [{
-    dataField: 'id',
-    text: 'No',
-    sort: true,
-    headerStyle: () => {
-        return { width: '7%' }
-    }
-}, {
-    dataField: 'id_user',
-    text: 'ID User',
-    sort: true
-}, {
-    dataField: 'name',
-    text: 'Name',
-    sort: true
-}, {
-    dataField: 'email',
-    text: 'Email',
-    sort: true
-}, {
-    dataField: 'phone_number',
-    text: 'Phone Number',
-    sort: true
-}, {
-    dataField: 'member',
-    text: 'Member',
-    sort: true
-}, {
-    dataField: 'link',
-    text: 'Status',
-    headerStyle: () => {
-        return {
-            textAlign: 'center'
-        }
-    },
-    formatter: (rowContent, row) => {
-        if (row.status === 1) {
-            return (
-                <Row className='justify-content-center'>
-                    <Badge color='primary' className="mr-2">
-                        Active
-                    </Badge>
-                </Row>
-            )
-        }
-        else {
-            return (
-                <Row className='justify-content-center'>
-                    <Badge color='danger' className="mr-2">
-                        Inactive
-                    </Badge>
-                </Row>
-            )
-        }
-    }
-}, {
-    dataField: 'link',
-    text: 'Action',
-    headerStyle: () => {
-        return {
-            textAlign: 'center'
-        }
-    },
-    formatter: (rowContent, row) => {
-        return (
-            <Row className='justify-content-center'>
-                <Link to={'edit-user/' + row.id}>
-                    <Button color='warning' className="mr-2 btn-crud">
-                        <FontAwesomeIcon icon={faEdit} />
-                    </Button>
-                </Link>
-                <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.id)}>
-                    <FontAwesomeIcon icon={faTrash} />
-                </Button>
-            </Row>
-        )
-    }
-}];
-
-const defaultSorted = [{
-    dataField: 'id',
-    order: 'asc'
-}];
-
-const mapStateToProps = (state) => {
-    return {
-        getUsersList: state.users.getUsersList,
-        errorUsers: state.users.errorUsers
-    }
-}
 
 
 const TableUsers = (props) => {
+    const columns = [{
+        dataField: 'userId',
+        text: 'No',
+        sort: true,
+        headerStyle: () => {
+            return { width: '7%' }
+        }
+    }, {
+        dataField: 'detailUserEntity.fullname',
+        text: 'Full Name',
+        sort: true
+    }, {
+        dataField: 'username',
+        text: 'Username',
+        sort: true
+    }, {
+        dataField: 'detailUserEntity.email',
+        text: 'Email',
+        sort: true
+    }, {
+        dataField: 'detailUserEntity.phoneNumber',
+        text: 'Phone Number',
+        sort: true
+    }, {
+        dataField: 'saldoUser',
+        text: 'Saldo',
+        sort: true,
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            if (row.saldoUser === 0) {
+                return (
+                    <label>
+                        Rp 0
+                    </label>
+                )
+            }
+            else {
+                return (
+                    <label>
+                        Rp {row.saldoUser}
+                    </label>
+                )
+            }
+        }
+    }, {
+        dataField: 'link',
+        text: 'Status',
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            if (row.statusAccount === 1) {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color='primary' className="mr-2">
+                            Active
+                        </Badge>
+                    </Row>
+                )
+            }
+            else {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color='danger' className="mr-2">
+                            Inactive
+                        </Badge>
+                    </Row>
+                )
+            }
+        }
+    }, {
+        dataField: 'link',
+        text: 'Action',
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            return (
+                <Row className='justify-content-center'>
+                    <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.userId)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                </Row>
+            )
+        }
+    }];
+
+    const defaultSorted = [{
+        dataField: 'userId',
+        order: 'asc'
+    }];
+    const [show, setShow] = useState(false);
+
+    const handleShow = () => setShow(true);
+
+    const closeModal = () => setShow(false);
+
+    const [username, setUsername] = useState("");
+
+    const usernameChange = (e) => {
+        setUsername(e.target.value)
+    }
+    const onSubmit = () => {
+
+        const user = {
+            addressUserDto: {
+                street: "",
+                city: "",
+                province: "",
+                country: ""
+            },
+            socialMediaDto: {
+                facebook: "",
+                instagram: "",
+                twitter: ""
+
+            },
+            detailUserDto: {
+                email: "",
+                fullname: "",
+                phoneNumber: "",
+                userPhoto: ""
+
+            },
+            username: username,
+            password: "user123"
+        }
+
+        axios.post("http://localhost:7070/api/dynteam/auth/user/regis", user)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const { data } = props;
     return (
         <>
-            {props.getUsersList ? <ToolkitProvider
+            <ToolkitProvider
                 bootstrap4
                 keyField='id'
-                data={props.getUsersList}
+                data={data}
                 columns={columns}
                 defaultSorted={defaultSorted}
                 search
@@ -146,12 +204,31 @@ const TableUsers = (props) => {
                                 </Col>
                                 <Col>
                                     <div className="float-right">
-                                        <Link to={'/create-user'}>
-                                            <Button color='dark' className="mr-2">
-                                                <FontAwesomeIcon icon={faUserPlus} />
+
+                                        <Button color='dark' className="mr-2" onClick={handleShow}>
+                                            <FontAwesomeIcon icon={faUserPlus} />
                                                 Add User
                                         </Button>
-                                        </Link>
+
+                                        {/* modal add */}
+                                        <Modal show={show}>
+                                            <Modal.Header closeButton onClick={closeModal}>
+                                                <Modal.Title>Add Author</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                                <>
+                                                    <form onSubmit={onSubmit}>
+                                                        <div className="form-group">
+                                                            <label htmlFor="username">Username</label>
+                                                            <input className="form-control" id="username" value={username} onChange={usernameChange} required />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <button className="form-control btn btn-primary" type="submit">Add</button>
+                                                        </div>
+                                                    </form>
+                                                </>
+                                            </Modal.Body>
+                                        </Modal>
                                     </div>
                                 </Col>
                             </Row>
@@ -165,15 +242,9 @@ const TableUsers = (props) => {
                         </div>
                     )
                 }
-            </ToolkitProvider> : (
-                <div className="text-center">
-                    { props.errorUsers ? <h1>{props.errorUsers}</h1> : <Spinner color='dark' />}
-                </div>
-            )
-            }
-
+            </ToolkitProvider>
         </>
     )
 }
 
-export default connect(mapStateToProps, null)(TableUsers);
+export default connect()(TableUsers);

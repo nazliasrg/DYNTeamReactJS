@@ -9,6 +9,7 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
+import axios from 'axios'
 
 const { SearchBar } = Search;
 
@@ -20,11 +21,22 @@ const handleClickAccept = (id) => {
         buttons: true,
         dangerMode: true,
     })
-        .then((willDelete) => {
-            if (willDelete) {
+        .then((willAccept) => {
+            axios.put('http://localhost:7070/api/dynteam/request/confirm/' + id)
+                .then(function (res) {
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            if (willAccept) {
                 swal("Request has been accepted!", {
                     icon: "success",
-                });
+                })
+                    .then((OK) => {
+                        window.location.reload(false);
+                    })
             } else {
                 swal("Request is not accepted!");
             }
@@ -39,11 +51,20 @@ const handleClickDecline = (id) => {
         buttons: true,
         dangerMode: true,
     })
-        .then((willDelete) => {
-            if (willDelete) {
+        .then((willDecline) => {
+            axios.put('http://localhost:7070/api/dynteam/request/decline/' + id)
+                .then(function (res) {
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            if (willDecline) {
                 swal("Request has been declined!", {
                     icon: "success",
-                });
+                }).then((OK) => {
+                    window.location.reload(false);
+                })
             } else {
                 swal("Request is not declined!");
             }
@@ -51,31 +72,35 @@ const handleClickDecline = (id) => {
 }
 
 const columns = [{
-    dataField: 'id',
+    dataField: 'requestId',
     text: 'No',
     sort: true,
     headerStyle: () => {
         return { width: '7%' }
     }
 }, {
-    dataField: 'id_activity',
-    text: 'ID User',
+    dataField: 'userEntity.username',
+    text: 'Username',
     sort: true
 }, {
-    dataField: 'title_book',
-    text: 'Name',
+    dataField: 'requestCode',
+    text: 'Request Code',
     sort: true
 }, {
-    dataField: 'user',
-    text: 'Email',
+    dataField: 'bookEntity.title',
+    text: 'Title',
     sort: true
 }, {
-    dataField: 'start_date',
-    text: 'Phone Number',
+    dataField: 'bookEntity.stock',
+    text: 'Stock',
     sort: true
 }, {
-    dataField: 'return_date',
-    text: 'Member',
+    dataField: 'durationEntity.duration',
+    text: 'Duration',
+    sort: true
+}, {
+    dataField: 'requestDate',
+    text: 'Request Date',
     sort: true
 }, {
     dataField: 'link',
@@ -89,13 +114,13 @@ const columns = [{
         return (
             <Row className='justify-content-center'>
                 <Link to={'#'}>
-                    <Button color='success' className="mr-2 btn-crud" onClick={() => handleClickAccept(row.id)}>
+                    <Button color='success' className="mr-2 btn-crud" onClick={() => handleClickAccept(row.requestId)}>
                         <FontAwesomeIcon icon={faCheck} />
                     </Button>
                 </Link>
 
                 <Link to={'#'}>
-                    <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClickDecline(row.id)}>
+                    <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClickDecline(row.requestId)}>
                         <FontAwesomeIcon icon={faTimes} />
                     </Button>
                 </Link>
@@ -106,25 +131,18 @@ const columns = [{
 }];
 
 const defaultSorted = [{
-    dataField: 'id',
+    dataField: 'requestId',
     order: 'asc'
 }];
 
-const mapStateToProps = (state) => {
-    return {
-        getActivityList: state.activity.getActivityList,
-        errorActivity: state.activity.errorActivity
-    }
-}
-
-
 const TablePending = (props) => {
+    const { data } = props;
     return (
         <>
-            {props.getActivityList ? <ToolkitProvider
+            <ToolkitProvider
                 bootstrap4
                 keyField='id'
-                data={props.getActivityList}
+                data={data}
                 columns={columns}
                 defaultSorted={defaultSorted}
                 search
@@ -149,15 +167,9 @@ const TablePending = (props) => {
                         </div>
                     )
                 }
-            </ToolkitProvider> : (
-                <div className="text-center">
-                    { props.errorActivity ? <h1>{props.errorActivity}</h1> : <Spinner color='dark' />}
-                </div>
-            )
-            }
-
+            </ToolkitProvider>
         </>
     )
 }
 
-export default connect(mapStateToProps, null)(TablePending);
+export default connect()(TablePending);
