@@ -17,14 +17,9 @@ import Location from '../containers/UserPages/Location/Location';
 import HomeUser from '../containers/UserPages/HomeUser/HomeUser';
 import Genre from '../containers/UserPages/Genre/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import DetailBook from '../containers/UserPages/DetailBook/DetailBook';
 import Author from '../containers/AdminPages/Home/Author/Author';
 import Category from '../containers/AdminPages/Home/Category/Category';
 import Publisher from '../containers/AdminPages/Home/Publisher/Publisher';
-import EditCategory from '../containers/AdminPages/Home/Category/EditCategory';
-import EditPublisher from '../containers/AdminPages/Home/Publisher/EditPublisher';
-import AddCategory from '../containers/AdminPages/Home/Category/AddCategory';
-import AddPublisher from '../containers/AdminPages/Home/Publisher/AddPublisher';
 import BookDetail from '../components/User/DetailBook';
 
 const App = () => {
