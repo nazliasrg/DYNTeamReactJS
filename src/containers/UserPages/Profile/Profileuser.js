@@ -13,7 +13,8 @@ import ProfileHistory from '../../../components/User/ProfileHistory/ProfileHisto
 import ProfileMedsos from '../../../components/User/ProfileMedsos/ProfileMedsos';
 import ProfileDatauser from '../../../components/User/ProfileDatauser/ProfileDatauser';
 import ProfilePicture from '../../../components/User/ProfilePicture/ProfilePicture';
-
+import axios from 'axios';
+import { ReactSession } from 'react-client-session';
 
 const Profileuser = () => {
     const [show, setShow] = useState(false);
@@ -24,7 +25,23 @@ const Profileuser = () => {
     const close = () => setShowdonasi(false);
     const open = () => setShowdonasi(true);
 
-   
+    const [showEditProfile, setShowEditProfil] = useState(false);
+    const closeProfile = () => setShowEditProfil(false);
+    const openProfile = () => setShowEditProfil(true);
+
+    useEffect(() => {
+        // Update the document title using the browser API
+        var userId = ReactSession.get("userId");
+        console.log(userId)
+        axios
+                .post('http://localhost:7070/api/dynteam/auth/user/' + userId)
+                .then(res => {
+                    console.log(res.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+      },[]);
 
     return (
         <Fragment>
@@ -87,6 +104,7 @@ const Profileuser = () => {
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>
+                                
                                     <br />
                                     <Button variant="primary" onClick={open}>
                                         Donasi
@@ -122,6 +140,167 @@ const Profileuser = () => {
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button variant="primary" onClick={close}>
+                                                Send
+                                            </Button>
+                                        </Modal.Footer>
+                                    </Modal>
+
+                                    <Button variant="primary" onClick={openProfile }>
+                                        Edit Profile
+                                    </Button>
+
+                                    <Modal show={showEditProfile} onHide={closeProfile }>
+                                        <Modal.Header closeButton>
+                                            <Modal.Title>Edit Profile</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Fullname :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Email :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Username :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Password :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Phone Number :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Facebook :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Instagram :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Twitter :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>City :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Province :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Country :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Street :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Profile Picture :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button variant="primary" onClick={closeProfile }>
                                                 Send
                                             </Button>
                                         </Modal.Footer>
