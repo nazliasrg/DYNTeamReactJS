@@ -3,7 +3,6 @@ import '../Home.css'
 import SidebarComponent from '../../../../components/Admin/SidebarComponent/SidebarComponent'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavbarComponent from '../../../../components/Admin/NavbarComponent/NavbarComponent'
-import { connect } from 'react-redux'
 import TableAuthor from '../../../../components/Admin/TableComponent/TableAuthor';
 import axios from 'axios'
 
@@ -56,5 +55,5 @@ class Author extends Component {
     }
 }
 
-export default connect()(Author);
+export default Author;
 

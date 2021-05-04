@@ -3,7 +3,6 @@ import './Activity.css';
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent';
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import TableActivity from '../../../components/Admin/TableComponent/TableActivity';
-import { connect } from 'react-redux';
 import axios from 'axios'
 
 class Activity extends Component {
@@ -16,10 +15,10 @@ class Activity extends Component {
     }
 
     componentDidMount() {
-        this.getActivitiesPending()
+        this.getActivitiesCurrent()
     }
 
-    getActivitiesPending = () => {
+    getActivitiesCurrent = () => {
         axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/2')
             .then(res => {
                 this.setState({
@@ -31,7 +30,6 @@ class Activity extends Component {
                 console.log(error)
             })
     }
-
 
     render() {
 
@@ -57,4 +55,4 @@ class Activity extends Component {
     }
 }
 
-export default connect()(Activity);
+export default Activity;

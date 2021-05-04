@@ -3,7 +3,6 @@ import SidebarComponent from '../../../components/Admin/SidebarComponent/Sidebar
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import './Users.css';
 import TableUsers from '../../../components/Admin/TableComponent/TableUsers';
-import { connect } from 'react-redux';
 import axios from 'axios'
 
 
@@ -58,4 +57,4 @@ class Users extends Component {
     }
 }
 
-export default connect()(Users);
+export default Users;

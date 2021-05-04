@@ -7,7 +7,6 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { connect } from 'react-redux';
 import swal from 'sweetalert';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
@@ -108,8 +107,8 @@ const TableBooks = (props) => {
     const submitAddStock = () => {
         axios.put('http://localhost:7070/api/dynteam/book/add/' + bookId + '/' + addStock)
             .then(res => {
-                console.log(res)
-                alert('Stock berhasil ditambah!');
+                // console.log(res)
+                alert('Stock was successfully added!')
             })
             .catch(function (error) {
                 console.log(error)
@@ -119,8 +118,8 @@ const TableBooks = (props) => {
     const submitDiscStock = () => {
         axios.put('http://localhost:7070/api/dynteam/book/discrepancy/' + bookId + '/' + addStock)
             .then(res => {
-                console.log(res)
-                alert('Stock berhasil dikurangi!');
+                // console.log(res)
+                alert('Stock has been reduced!')
             })
             .catch(function (error) {
                 console.log(error)
@@ -363,4 +362,4 @@ const TableBooks = (props) => {
     )
 }
 
-export default connect()(TableBooks);
+export default TableBooks;

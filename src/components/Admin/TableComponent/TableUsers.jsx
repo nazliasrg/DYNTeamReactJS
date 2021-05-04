@@ -1,13 +1,11 @@
-import { faEdit, faTrash, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Badge, Row, Col } from 'reactstrap';
 import React, { useState } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next';
-import { Link } from 'react-router-dom';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { connect } from 'react-redux';
 import swal from 'sweetalert';
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -16,27 +14,69 @@ import { Modal } from 'react-bootstrap'
 
 const { SearchBar } = Search;
 
-const handleClick = (id) => {
+const handleClickActive = (id) => {
     console.log('data ke: ' + id)
     swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover data!",
+        title: "Are you sure to inactived account?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     })
         .then((willDelete) => {
+            inactivedUser(id);
             if (willDelete) {
-                swal("Data user has been deleted!", {
+                swal("Data user has been inactived!", {
                     icon: "success",
-                });
+                }).then((OK) => {
+                    window.location.reload(false);
+                })
             } else {
                 swal("Data user is safe!");
             }
         });
 }
 
+const inactivedUser = (id) => {
+    axios.put('http://localhost:7070/api/dynteam/auth/user/delete/' + id)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
+const handleClickInactive = (id) => {
+    console.log('data ke: ' + id)
+    swal({
+        title: "Are you sure to actived account?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            activedUser(id);
+            if (willDelete) {
+                swal("Data user has been actived!", {
+                    icon: "success",
+                }).then((OK) => {
+                    window.location.reload(false);
+                })
+            } else {
+                swal("Data user is safe!");
+            }
+        });
+}
+
+const activedUser = (id) => {
+    axios.put('http://localhost:7070/api/dynteam/auth/user/active/' + id)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
 const TableUsers = (props) => {
     const columns = [{
@@ -74,16 +114,29 @@ const TableUsers = (props) => {
         formatter: (rowContent, row) => {
             if (row.saldoUser === 0) {
                 return (
-                    <label>
-                        Rp 0
-                    </label>
+                    <Row className='justify-content-center'>
+                        <Badge color="warning">
+                            Rp 0
+                    </Badge>
+                    </Row>
+                )
+            }
+            else if (row.saldoUser < 0) {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color="danger">
+                            Rp {row.saldoUser}
+                        </Badge>
+                    </Row>
                 )
             }
             else {
                 return (
-                    <label>
-                        Rp {row.saldoUser}
-                    </label>
+                    <Row className='justify-content-center'>
+                        <Badge color="success">
+                            Rp {row.saldoUser}
+                        </Badge>
+                    </Row>
                 )
             }
         }
@@ -99,38 +152,21 @@ const TableUsers = (props) => {
             if (row.statusAccount === 1) {
                 return (
                     <Row className='justify-content-center'>
-                        <Badge color='primary' className="mr-2">
+                        <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.userId)}>
                             Active
-                        </Badge>
+                        </Button>
                     </Row>
                 )
             }
             else {
                 return (
                     <Row className='justify-content-center'>
-                        <Badge color='danger' className="mr-2">
+                        <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.userId)}>
                             Inactive
-                        </Badge>
+                        </Button>
                     </Row>
                 )
             }
-        }
-    }, {
-        dataField: 'link',
-        text: 'Action',
-        headerStyle: () => {
-            return {
-                textAlign: 'center'
-            }
-        },
-        formatter: (rowContent, row) => {
-            return (
-                <Row className='justify-content-center'>
-                    <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.userId)}>
-                        <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                </Row>
-            )
         }
     }];
 
@@ -213,7 +249,7 @@ const TableUsers = (props) => {
                                         {/* modal add */}
                                         <Modal show={show}>
                                             <Modal.Header closeButton onClick={closeModal}>
-                                                <Modal.Title>Add Author</Modal.Title>
+                                                <Modal.Title>Add User</Modal.Title>
                                             </Modal.Header>
                                             <Modal.Body>
                                                 <>
@@ -247,4 +283,4 @@ const TableUsers = (props) => {
     )
 }
 
-export default connect()(TableUsers);
+export default TableUsers;

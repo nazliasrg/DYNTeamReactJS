@@ -48,9 +48,6 @@ const App = () => {
                 <Route path="/book-author" component={Author} />
                 <Route path="/book-category" component={Category} />
                 <Route path="/book-publisher" component={Publisher} />
-
-
-
             </Switch>
         </Router>
     )

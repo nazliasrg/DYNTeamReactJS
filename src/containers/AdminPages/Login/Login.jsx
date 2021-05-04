@@ -18,6 +18,7 @@ class Login extends Component {
     }
 
     handleUsernameChange = (event) => {
+        window.sessionStorage.setItem("username", event.target.value);
         this.setState({ username: event.target.value })
     }
 
@@ -33,6 +34,7 @@ class Login extends Component {
             password: this.state.password
         }
 
+
         console.log(admin)
 
         axios.post('http://localhost:7070/api/dynteam/auth/admin/login', admin)
@@ -44,25 +46,24 @@ class Login extends Component {
                 alert('Welcome ' + this.state.username + '!');
                 this.props.history.push({
                     pathname: '/home-admin',
-                    state: res.data.data
+                    state: res.data.data,
                 })
+
+
                 console.log(this.props.history.location.state);
                 this.state.roles.forEach(role => {
-                    if (res.data.data.token && role === 'SUPER_ADMIN') {
-                        localStorage.setItem('super_admin', JSON.stringify(res.data))
-                    }
-                    if (res.data.data.token && role === 'ADMIN') {
-                        localStorage.setItem('admin', JSON.stringify(res.data))
+                    if (res.data.data.token && (role === 'SUPER_ADMIN' || role === 'ADMIN')) {
+                        localStorage.setItem('data_admin', JSON.stringify(res.data));
                     }
                 })
+
             })
             .catch(function (error) {
                 alert(error);
             });
-
-        // const { history } = this.props;
-        // history.push('/home-admin');
     }
+
+
 
     render() {
         return (

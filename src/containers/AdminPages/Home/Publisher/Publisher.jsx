@@ -3,7 +3,6 @@ import '../Home.css'
 import SidebarComponent from '../../../../components/Admin/SidebarComponent/SidebarComponent'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavbarComponent from '../../../../components/Admin/NavbarComponent/NavbarComponent'
-import { connect } from 'react-redux'
 import TablePublisher from '../../../../components/Admin/TableComponent/TablePublisher';
 import axios from 'axios'
 
@@ -55,4 +54,4 @@ class Publisher extends Component {
     }
 }
 
-export default connect()(Publisher);
+export default Publisher;
