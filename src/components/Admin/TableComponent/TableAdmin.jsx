@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Badge, Row, Col, Label } from 'reactstrap';
+import { Button, Row, Col, Label } from 'reactstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
