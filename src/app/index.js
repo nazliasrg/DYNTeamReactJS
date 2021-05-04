@@ -17,10 +17,10 @@ import Location from '../containers/UserPages/Location/Location';
 import HomeUser from '../containers/UserPages/HomeUser/HomeUser';
 import Genre from '../containers/UserPages/Genre/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import DetailBook from '../containers/UserPages/DetailBook/DetailBook';
 import Author from '../containers/AdminPages/Home/Author/Author';
 import Category from '../containers/AdminPages/Home/Category/Category';
 import Publisher from '../containers/AdminPages/Home/Publisher/Publisher';
+import BookDetail from '../components/User/DetailBook';
 
 const App = () => {
     return (
@@ -32,7 +32,7 @@ const App = () => {
                 <Route path="/Profileuser" exact component={Profileuser} />
                 <Route path="/location" exact component={Location} />
                 <Route path="/Genre" exact component={Genre} />
-                <Route path="/detail-book/:bookId" exact component={DetailBook} />
+                <Route path="/detail/:bookId" exact component={BookDetail} />
 
                 <Route path="/login-admin" exact component={Login} />
                 <Route path="/home-admin" component={Home} />

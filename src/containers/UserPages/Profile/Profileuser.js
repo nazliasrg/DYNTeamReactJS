@@ -195,7 +195,7 @@ const Profileuser = () => {
                                                 </div>
                                                 <button type="button" className="collapsible" style={{ marginTop: 5 }}>Information Transfer ATM</button>
                                                 <div className="content-collapsible">
-                                                    <p> 1. Select Transfer Menu> Virtual Account </p>
+                                                    <p> 1. Select Transfer Menu Virtual Account </p>
                                                     <p> 2. Enter the virtual account number 112233 </p>
                                                     <p> 3. Check the information on the screen and make sure your username is correct. </p>
                                                     <p> 4. Click Yes </p>
