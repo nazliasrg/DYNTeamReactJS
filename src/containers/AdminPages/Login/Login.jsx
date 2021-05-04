@@ -55,12 +55,6 @@ class Login extends Component {
                     if (res.data.data.token && (role === 'SUPER_ADMIN' || role === 'ADMIN')) {
                         localStorage.setItem('data_admin', JSON.stringify(res.data));
                     }
-                    // if (res.data.data.token && role === 'SUPER_ADMIN') {
-                    //     localStorage.setItem('super_admin', JSON.stringify(res.data));
-                    // }
-                    // if (res.data.data.token && role === 'ADMIN') {
-                    //     localStorage.setItem('admin', JSON.stringify(res.data));
-                    // }
                 })
 
             })

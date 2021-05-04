@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Row, Col, Label } from 'reactstrap';
+import { Button, Badge, Row, Col, Label } from 'reactstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -90,6 +90,17 @@ const TableAdmin = (props) => {
     const [username, setUsername] = useState("");
 
     const [roles, setRoles] = useState([]);
+
+    const [role, setRole] = useState([]);
+
+    useEffect(() => {
+        const uname = JSON.parse(localStorage.getItem('data_admin'))
+        console.log("role")
+        role.push(uname.data.role)
+        console.log(role)
+        const roles = role[0]
+        console.log(roles == "SUPER_ADMIN")
+    });
 
     const onSubmit = () => {
 
@@ -193,23 +204,45 @@ const TableAdmin = (props) => {
             }
         },
         formatter: (rowContent, row) => {
-            if (row.statusAccount === 1) {
-                return (
-                    <Row className='justify-content-center'>
-                        <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.adminId)}>
-                            Active
-                        </Button>
-                    </Row>
-                )
+            if (role == 'SUPER_ADMIN') {
+                if (row.statusAccount === 1) {
+                    return (
+                        <Row className='justify-content-center'>
+                            <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.adminId)}>
+                                Active
+                            </Button>
+                        </Row>
+                    )
+                }
+                else {
+                    return (
+                        <Row className='justify-content-center'>
+                            <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.adminId)}>
+                                Inactive
+                            </Button>
+                        </Row>
+                    )
+                }
             }
             else {
-                return (
-                    <Row className='justify-content-center'>
-                        <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.adminId)}>
-                            Inactive
-                        </Button>
-                    </Row>
-                )
+                if (row.statusAccount === 1) {
+                    return (
+                        <Row className='justify-content-center'>
+                            <Badge color='primary' className="mr-2">
+                                Active
+                            </Badge>
+                        </Row>
+                    )
+                }
+                else {
+                    return (
+                        <Row className='justify-content-center'>
+                            <Badge color='danger' className="mr-2">
+                                Inactive
+                            </Badge>
+                        </Row>
+                    )
+                }
             }
         }
     }];
@@ -223,72 +256,101 @@ const TableAdmin = (props) => {
 
     return (
         <>
-            <ToolkitProvider
-                bootstrap4
-                keyField='id'
-                data={data}
-                columns={columns}
-                defaultSorted={defaultSorted}
-                search
-            >
-                {
-                    props => (
-                        <div>
-                            <Row>
-                                <Col>
-                                    <SearchBar {...props.searchProps} placeholder="Search .." />
-                                </Col>
-                                <Col>
-                                    <div className="float-right">
-                                        <Button color='dark' className="mr-2" onClick={handleShow}>
-                                            <FontAwesomeIcon icon={faUserPlus} />
+            {role[0] == 'SUPER_ADMIN' ?
+                <ToolkitProvider
+                    bootstrap4
+                    keyField='id'
+                    data={data}
+                    columns={columns}
+                    defaultSorted={defaultSorted}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <SearchBar {...props.searchProps} placeholder="Search .." />
+                                    </Col>
+                                    <Col>
+                                        <div className="float-right">
+                                            <Button color='dark' className="mr-2" onClick={handleShow}>
+                                                <FontAwesomeIcon icon={faUserPlus} />
                                                 Add Admin
                                         </Button>
 
-                                        {/* modal add */}
-                                        <Modal show={show}>
-                                            <Modal.Header closeButton onClick={closeModal}>
-                                                <Modal.Title>Add Admin</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <>
-                                                    <form onSubmit={onSubmit}>
-                                                        <div className="form-group">
-                                                            <label htmlFor="username">Username</label>
-                                                            <input className="form-control" id="username" value={username} onChange={usernameChange} required />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="role">Role</label><br />
-                                                            <select class="form-control" name="role" id="role" onClick={roleChange} required>
-                                                                <option value="superadmin">Super Admin</option>
-                                                                <option value="admin">Admin</option>
-                                                            </select>
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <button className="form-control btn btn-primary" type="submit">Add</button>
-                                                        </div>
-                                                    </form>
-                                                </>
-                                            </Modal.Body>
-                                        </Modal>
+                                            {/* modal add */}
+                                            <Modal show={show}>
+                                                <Modal.Header closeButton onClick={closeModal}>
+                                                    <Modal.Title>Add Admin</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <>
+                                                        <form onSubmit={onSubmit}>
+                                                            <div className="form-group">
+                                                                <label htmlFor="username">Username</label>
+                                                                <input className="form-control" id="username" value={username} onChange={usernameChange} required />
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="role">Role</label><br />
+                                                                <select class="form-control" name="role" id="role" onClick={roleChange} required>
+                                                                    <option value="superadmin">Super Admin</option>
+                                                                    <option value="admin">Admin</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <button className="form-control btn btn-primary" type="submit">Add</button>
+                                                            </div>
+                                                        </form>
+                                                    </>
+                                                </Modal.Body>
+                                            </Modal>
 
-                                    </div>
-                                </Col>
-                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
 
-                            <div className="float-center">
-                                <BootstrapTable
-                                    {...props.baseProps}
-                                    pagination={paginationFactory()}
-                                />
+                                <div className="float-center">
+                                    <BootstrapTable
+                                        {...props.baseProps}
+                                        pagination={paginationFactory()}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                }
-            </ToolkitProvider>
+                        )
+                    }
+                </ToolkitProvider> :
+                <ToolkitProvider
+                    bootstrap4
+                    keyField='id'
+                    data={data}
+                    columns={columns}
+                    defaultSorted={defaultSorted}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <SearchBar {...props.searchProps} placeholder="Search .." />
+                                    </Col>
+                                </Row>
 
-        </>
-    )
+                                <div className="float-center">
+                                    <BootstrapTable
+                                        {...props.baseProps}
+                                        pagination={paginationFactory()}
+                                    />
+                                </div>
+                            </div>
+                        )
+                    }
+                </ToolkitProvider>
+
+
+            }
+        </>)
 }
 
 export default TableAdmin;
