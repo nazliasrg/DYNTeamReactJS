@@ -17,16 +17,18 @@ class BookDetail extends Component{
             category:{},
             publisher:{},
             book_id: "",
+            bookCode:"",
             data:"",
-            showModal: false
+            showModal: false,
+            durationId: "0",
+            userId:"3"
         }
     }
 
     componentDidMount(){
         const book_id=  this.props.match.params.bookId
-        console.log(book_id);
+        console.log(this.props);
         this.getDetailBook(book_id);
-        this.getUsers();
     }
 
     getDetailBook(book_id){
@@ -34,6 +36,7 @@ class BookDetail extends Component{
             console.log(res);
         this.setState({
             detailData: res.data,
+            bookCode:res.data.bookCode,
             author: res.data.authorEntity,
             category: res.data.categoryEntity,
             publisher: res.data.publisherEntity
@@ -53,23 +56,34 @@ class BookDetail extends Component{
     //     })
     // }, []);
 
-    getUsers = () => {
-        axios.get('http://localhost:7070/api/dynteam/auth/users')
+    // INPUT KE DATABASAE DENGAN AXIOS.POST
+    submitRequest = (e) => {
+        e.preventDefault();
+        
+        const request ={
+            userId: this.state.userId,
+            bookCode: this.state.bookCode,
+            durationId: this.state.durationId
+        }
+        console.log(request);
+        
+        axios.post('http://localhost:7070/api/dynteam/request/requestbook', request)
             .then(res => {
                 console.log(res);
-                
-                // this.setState({
-                //     data: res.data
-                // })
+                // this.insertBook(res);
             })
-            .catch(function (error) {
-                console.log(error)
+            .catch(function (error){
+                console.log(error);
             })
     }
 
-    // submitRequest = (e) => {
-
-    // }
+    // MENDAPATKAN DURASI PEMINJAMAN
+    formChange = (e)=>{
+        // console.log(e.target.value);
+        this.setState({
+            durationId: e.target.value
+        })
+    }
 
     // UNTUK MENUTUP MODAL PEMINJALAN BUKU
     closeModal = () => {
@@ -158,19 +172,21 @@ class BookDetail extends Component{
                         Author: {authorName}
                     </p>
 
-                    <p>Please choose how many days you want to rent this book:</p>
-                    <br/>
-                    <p><small>
-                        *Cost for 3 days Rp.3000 and for 7 days Rp.7000
-                    </small></p>
-                    <select name="day" id="days">
+                    <p>
+                        Please input days you want to rent this book <br/>
+                        <small>
+                            *Cost Rp. 1.000 per day
+                        </small>
+                    </p>
+                    <select name="day" id="days" value={this.state.durationId} onChange={this.formChange}>
+                        <option value="0">choose days</option>
                         <option value="1">3 days</option>
                         <option value="2">7 days</option>
                     </select>
                 </ModalBody>
 
                 <ModalFooter>
-                    <button onClick={this.closeModal}>Rent this Book</button>
+                    <button onClick={this.submitRequest}>Rent this Book</button>
                     <button onClick={this.closeModal}>Close</button>
                 </ModalFooter>
             </Modal>
