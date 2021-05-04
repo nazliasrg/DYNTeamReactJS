@@ -43,6 +43,17 @@ const Profileuser = () => {
     const [valueDonasi, setValueDonasi] = useState();
 
     const [fullname, setFullname] = useState('');
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [facebook, setInstagram] = useState('');
+    const [instagram, setFacebook] = useState('');
+    const [twitter, setTwitter] = useState('');
+    const [city, setCity] = useState('');
+    const [province, setProvince] = useState('');
+    const [country, setCountry] = useState('');
+    const [street, setStreet] = useState('');
 
     useEffect(() => {
         // Update the document title using the browser API
@@ -60,6 +71,18 @@ const Profileuser = () => {
                 console.log(res.data);
                 setSaldoUser(res.data.saldoUser);
                 setFullname(res.data.detailUserEntity.fullname);
+                setEmail(res.data.detailUserEntity.email);
+                setUsername(res.data.username);
+                setPassword(res.data.password);
+                setPhoneNumber(res.data.detailUserEntity.phoneNumber);
+                setInstagram(res.data.detailUserEntity.socialMediaEntity.instagram);
+                setFacebook(res.data.detailUserEntity.socialMediaEntity.facebook);
+                setTwitter(res.data.detailUserEntity.socialMediaEntity.twitter);
+                setCity(res.data.detailUserEntity.addressUserEntity.city);
+                setProvince(res.data.detailUserEntity.addressUserEntity.province);
+                setCountry(res.data.detailUserEntity.addressUserEntity.country);
+                setStreet(res.data.detailUserEntity.addressUserEntity.street);
+
             })
             .catch(error => {
                 console.log(error);
@@ -124,7 +147,6 @@ const Profileuser = () => {
                 console.log(error)
             })
     }
-
 
     return (
         <Fragment>
@@ -230,8 +252,7 @@ const Profileuser = () => {
                                         </Modal.Footer>
                                     </Modal>
 
-                                    
-
+                                
                                     <Button variant="secondary" onClick={openProfile} >
                                         Edit Profile
                                     </Button>
@@ -258,7 +279,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Email :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="email" />
+                                                        <input type="text" className="form-control" id="email"  value={email} onChange={e => { setEmail(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -269,7 +290,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Username :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="username" />
+                                                        <input type="text" className="form-control" id="username" value={username} onChange={e => { setUsername(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -280,7 +301,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Password :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="password" value={password} onChange={e => { setPassword(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -291,7 +312,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Phone Number :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="phoneNumber" value={phoneNumber} onChange={e => { setPhoneNumber(e.target.value) }}/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -302,7 +323,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Facebook :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="facebook" value={facebook} onChange={e => { setFacebook(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -313,7 +334,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Instagram :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="instagram" value={instagram} onChange={e => { setInstagram(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -324,7 +345,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Twitter :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="twitter" value={twitter} onChange={e => { setTwitter(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -335,7 +356,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>City :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="city" value={city} onChange={e => { setCity(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -346,7 +367,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Province :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="province" value={province} onChange={e => { setProvince(e.target.value) }}  />
                                                     </div>
                                                 </div>
                                             </div>
@@ -357,7 +378,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Country :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="country"  value={country} onChange={e => { setCountry(e.target.value) }}/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -368,7 +389,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Street :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="street" value={street} onChange={e => { setStreet(e.target.value) }}/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -379,7 +400,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Profile Picture :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="profPic" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -388,7 +409,7 @@ const Profileuser = () => {
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button variant="primary" onClick={closeProfile}>
-                                                Send
+                                                Edit Profile
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>
