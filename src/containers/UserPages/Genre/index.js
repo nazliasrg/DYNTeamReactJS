@@ -34,15 +34,6 @@ class GenrePage extends Component{
         })
     }
 
-    // getCover = () =>{
-    //     axios.get(`http://localhost:7070/api/dynteam/book/cover/download/${}`).then(res =>{
-    //         this.setState({
-    //             data: res.data
-    //         })
-    //         console.log(this.state.data);
-    //     })
-    // }
-
     handleInput = (e) =>{
         // MENGETAHUI APAKAH DATA YANG KITA MASUKAN DITERIMA ATAU TIDAK
         // console.log(e.target.value); 

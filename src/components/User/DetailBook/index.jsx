@@ -1,7 +1,10 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Fragment } from 'react';
+import { ModalTitle } from 'react-bootstrap';
+import { RiLockFill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 // import cover from '../../../assets/book/B001.jpg'
 // import './BookDetail.css';
 
@@ -9,7 +12,7 @@ class BookDetail extends Component{
     constructor(){
         super();
         this.state={
-            detailData:{},
+            detailData:[],
             author:{},
             category:{},
             publisher:{},
@@ -23,40 +26,60 @@ class BookDetail extends Component{
         const book_id=  this.props.match.params.bookId
         console.log(book_id);
         this.getDetailBook(book_id);
+        this.getUsers();
     }
 
     getDetailBook(book_id){
         axios.get(`http://localhost:7070/api/dynteam/book/${book_id}`).then(res =>{   
             console.log(res);
         this.setState({
-                detailData: res.data,
-                author: res.data.authorEntity,
-                category: res.data.categoryEntity,
-                publisher: res.data.publisherEntity
-            })
-            console.log(this.state.detailData);
+            detailData: res.data,
+            author: res.data.authorEntity,
+            category: res.data.categoryEntity,
+            publisher: res.data.publisherEntity
+        })
+        console.log(this.state.detailData);
         })
     }
 
+    // useEffect(() => {
+    //     var userId= ResactSession.get("userId");
+    //     console.log(userId);
+    //     axios.post('http://localhost:7070/api/dynteam/auth/user/' + userId).then(res =>{
+    //         console.log(res.data);
+    //     })
+    //     .catch (error => {
+    //         console.log(error);
+    //     })
+    // }, []);
 
-    getCover = () =>{
-            axios.get(`http://localhost:7070/api/dynteam/book/cover/download/${this.state.detailData.cover}`).then(res =>{
-                this.setState({
-                    data: res.data
-                })
-                console.log(this.state.data);
+    getUsers = () => {
+        axios.get('http://localhost:7070/api/dynteam/auth/users')
+            .then(res => {
+                console.log(res);
+                
+                // this.setState({
+                //     data: res.data
+                // })
             })
-        }
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
 
+    // submitRequest = (e) => {
 
-    handleClose = () => {
+    // }
+
+    // UNTUK MENUTUP MODAL PEMINJALAN BUKU
+    closeModal = () => {
         this.setState({
             showModal: false
         });
     }
 
-
-    handleShow = () => {
+    // UNTUK MEMBUKA MODAL PEMINJAMAN
+    openModal = () => {
         this.setState({
             showModal: true
         });
@@ -75,7 +98,7 @@ class BookDetail extends Component{
                 <div className="row">
                     <div className="col-md-4 col-12 cover-container">
                         <div className="cover-container">
-                            <img className="img-fluid mt-3" src={cover} alt=""/>
+                            <img className="img-fluid mt-3" src={`http://localhost:7070/api/dynteam/book/cover/download/${cover}`} alt=""/>
                         </div>
                         <div>
                             <table className="table table-striped mt-2">
@@ -110,11 +133,11 @@ class BookDetail extends Component{
                         </div>
                         <div className="d-flex justify-content-between">
                             <div>
-                                <button className="mt-3" onClick={this.handleShow}>Rent book</button>
+                                <button className="mt-3" onClick={this.openModal}>Rent Book</button>
                             </div>
                             <div>
                                 <Link to={`/Genre`}>
-                                    <button className="mt-3">Kembali</button>
+                                    <button className="mt-3">Back to Catalogue</button>
                                 </Link>
                             </div>
                         </div>
@@ -122,23 +145,35 @@ class BookDetail extends Component{
                 </div>
             </div>
 
-            <div class="modal" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Modal title</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Modal body text goes here.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Modal isOpen={this.state.showModal}>
+                <ModalHeader>
+                    <ModalTitle className="text-center">
+                        Rent Book
+                    </ModalTitle>
+                </ModalHeader>
+
+                <ModalBody>
+                    <p>
+                        Title book: {title} <br/>
+                        Author: {authorName}
+                    </p>
+
+                    <p>Please choose how many days you want to rent this book:</p>
+                    <br/>
+                    <p><small>
+                        *Cost for 3 days Rp.3000 and for 7 days Rp.7000
+                    </small></p>
+                    <select name="day" id="days">
+                        <option value="1">3 days</option>
+                        <option value="2">7 days</option>
+                    </select>
+                </ModalBody>
+
+                <ModalFooter>
+                    <button onClick={this.closeModal}>Rent this Book</button>
+                    <button onClick={this.closeModal}>Close</button>
+                </ModalFooter>
+            </Modal>
             </Fragment>
         );
     }
