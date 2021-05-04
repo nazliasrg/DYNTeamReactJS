@@ -15,33 +15,116 @@ import ProfileDatauser from '../../../components/User/ProfileDatauser/ProfileDat
 import ProfilePicture from '../../../components/User/ProfilePicture/ProfilePicture';
 import axios from 'axios';
 import { ReactSession } from 'react-client-session';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 const Profileuser = () => {
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        setShow(true);
+        setValueTopup();
+    }
 
     const [showdonasi, setShowdonasi] = useState(false);
     const close = () => setShowdonasi(false);
-    const open = () => setShowdonasi(true);
+    const open = () => {
+        setShowdonasi(true);
+        setValueDonasi();
+    }
 
     const [showEditProfile, setShowEditProfil] = useState(false);
     const closeProfile = () => setShowEditProfil(false);
     const openProfile = () => setShowEditProfil(true);
 
+    const [saldoUser, setSaldoUser] = useState(0);
+    const [valueTopup, setValueTopup] = useState();
+    const [valueDonasi, setValueDonasi] = useState();
+
+    const [fullname, setFullname] = useState('');
+
     useEffect(() => {
         // Update the document title using the browser API
+        getSaldoUser();
+
+    }, []);
+
+    //Untuk bikin const saldoUsernya
+    const getSaldoUser = async () => {
         var userId = ReactSession.get("userId");
-        console.log(userId)
+        console.log(userId);
         axios
-                .post('http://localhost:7070/api/dynteam/auth/user/' + userId)
-                .then(res => {
-                    console.log(res.data)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-      },[]);
+            .get('http://localhost:7070/api/dynteam/auth/user/' + userId)
+            .then(res => {
+                console.log(res.data);
+                setSaldoUser(res.data.saldoUser);
+                setFullname(res.data.detailUserEntity.fullname);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
+    }
+
+    //Untuk bikin const topupUsernya
+    const topupUser = async () => {
+        const topup = {
+            userId: ReactSession.get("userId"),
+            type: 1,
+            value: valueTopup
+
+        }
+        axios
+            .post('http://localhost:7070/api/dynteam/auth/user/transaction', topup)
+            .then(res => {
+                var status = res.data.status;
+                var message = res.data.message;
+                if (status == 200) {
+                    console.log(res.data);
+                    getSaldoUser();
+                    setShow(false);
+                    NotificationManager.success(message);
+
+                } else {
+                    NotificationManager.error(message);
+
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    //Untuk bikin const donasiUsernya
+    const donasiUser = async () => {
+        const donasi = {
+            userId: ReactSession.get("userId"),
+            type: 2,
+            value: valueDonasi
+
+        }
+        axios
+            .post('http://localhost:7070/api/dynteam/auth/user/transaction', donasi)
+            .then(res => {
+                var status = res.data.status;
+                var message = res.data.message;
+                if (status == 200) {
+                    console.log(res.data);
+                    getSaldoUser();
+                    setShowdonasi(false);
+                    NotificationManager.success(message);
+
+                } else {
+                    NotificationManager.error(message);
+
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
 
     return (
         <Fragment>
@@ -52,11 +135,13 @@ const Profileuser = () => {
                         <div className="row gutters-sm">
                             <div className="col-md-3 mb-3">
                                 <ProfilePicture />
+
                                 <div className="card mt-3">
                                     <ul className="list-group list-group-flush" style={{ marginBottom: '10' }} ></ul>
                                     <button className="btn btn-light" data-bs-toggle="modal" data-bs-target="#modalsaldo1">
-                                        Saldo : <br /> Rp. 10.000,00
+                                        Saldo : <br /> {saldoUser}
                                     </button> <br />
+
                                     <Button variant="primary" onClick={handleShow}>
                                         Top Up
                                     </Button>
@@ -72,12 +157,12 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Input topup nominal</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="nominaltopup" value={valueTopup} onChange={e => { setValueTopup(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="container-topup">
+                                            {/* <div className="container-topup">
                                                 <div className="row">
                                                     <div className="col">
                                                         <label style={{ textAlign: 'left' }}>Input payment method</label>
@@ -94,17 +179,17 @@ const Profileuser = () => {
                                                     <p> 4. Click Yes </p>
                                                     <p> 5. Enter your pin number, click OK </p>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
                                         </Modal.Body>
                                         <Modal.Footer>
 
-                                            <Button variant="primary" onClick={handleClose}>
+                                            <Button variant="primary" onClick={topupUser}>
                                                 Send
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>
-                                
+
                                     <br />
                                     <Button variant="primary" onClick={open}>
                                         Donasi
@@ -115,18 +200,18 @@ const Profileuser = () => {
                                             <Modal.Title>Donasi</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <div className="container-topup">
+                                            <div className="container-donasi">
                                                 <div className="row">
                                                     <div className="col">
                                                         <label style={{ textAlign: 'left' }}>Input donation nominal</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="nominaltopup" value={valueDonasi} onChange={e => { setValueDonasi(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="container-topup">
+                                            {/* <div className="container-topup">
                                                 <div className="row">
                                                     <div className="col">
                                                         <label style={{ textAlign: 'left' }}>Information</label>
@@ -135,32 +220,34 @@ const Profileuser = () => {
                                                         <input type="text" className="form-control" id="nominaltopup" />
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button variant="primary" onClick={close}>
+                                            <Button variant="primary" onClick={donasiUser}>
                                                 Send
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>
 
-                                    <Button variant="primary" onClick={openProfile }>
+                                    
+
+                                    <Button variant="secondary" onClick={openProfile} >
                                         Edit Profile
                                     </Button>
 
-                                    <Modal show={showEditProfile} onHide={closeProfile }>
+                                    <Modal show={showEditProfile} onHide={closeProfile}>
                                         <Modal.Header closeButton>
                                             <Modal.Title>Edit Profile</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <div className="container-topup">
+                                            <div className="container-editProfil">
                                                 <div className="row">
                                                     <div className="col">
                                                         <label style={{ textAlign: 'left' }}>Fullname :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="fullname" value={fullname} onChange={e => { setFullname(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -171,7 +258,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Email :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="email" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,7 +269,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Username :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
+                                                        <input type="text" className="form-control" id="username" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -296,15 +383,17 @@ const Profileuser = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
 
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button variant="primary" onClick={closeProfile }>
+                                            <Button variant="primary" onClick={closeProfile}>
                                                 Send
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>
+
+                                  
 
                                     <ProfileMedsos />
                                 </div>
@@ -324,6 +413,7 @@ const Profileuser = () => {
                 </div>
             </div>
             <Footer />
+            <NotificationContainer />
         </Fragment>
     )
 }
