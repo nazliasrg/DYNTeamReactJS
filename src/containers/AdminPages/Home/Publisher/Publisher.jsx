@@ -20,7 +20,7 @@ class Publisher extends Component {
     }
 
     getPublishers = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/publisher/publishers')
+        axios.get('http://localhost:7070/api/dynteam/book/publisher/all-publishers')
             .then(res => {
                 this.setState({
                     data: res.data

@@ -20,7 +20,7 @@ class Author extends Component {
     }
 
     getAuthors = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/author/authors')
+        axios.get('http://localhost:7070/api/dynteam/book/author/all-authors')
             .then(res => {
                 this.setState({
                     data: res.data
