@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 import axios from 'axios'
 import swal from 'sweetalert'
+import { useHistory } from 'react-router';
 
 const handleSidebar = () => {
     $('#sidebar').toggleClass('active');
@@ -15,7 +16,17 @@ const handleSidebar = () => {
 const NavbarComponent = () => {
     const [show, setShow] = useState(false);
 
+    const history = useHistory();
+
     const handleShow = () => setShow(true);
+
+    const handleLogout = () => {
+
+        // localStorage.clear();
+        history.push({
+            pathname: '/login-admin'
+        });
+    }
 
     const closeModal = () => setShow(false);
 
@@ -51,13 +62,11 @@ const NavbarComponent = () => {
             })
     }
 
-    useEffect(() => {
-        // Update the document title using the browser API
-        const uname = JSON.parse(localStorage.getItem('data_admin'))
-        console.log("username")
-        console.log(uname.data.username)
-        setUsername(uname.data.username)
-
+    useEffect(async () => {
+        const uname = await JSON.parse(localStorage.getItem('data_admin'))
+        await console.log("username")
+        await console.log(uname.data.username)
+        await setUsername(uname.data.username)
     });
 
     return (
@@ -80,6 +89,7 @@ const NavbarComponent = () => {
 
                         <Dropdown.Menu>
                             <Dropdown.Item onClick={handleShow}>Change Password</Dropdown.Item>
+                            <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
 

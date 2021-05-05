@@ -77,12 +77,5 @@ export const SidebarData = [
                 icon: <FaIcons.FaHistory />
             }
         ]
-    },
-    {
-        title: 'Logout',
-        path: '/login-admin',
-        icon: <FiIcons.FiLogOut />,
-        iconClosed: <AiIcons.AiFillCaretDown />,
-        iconOpened: <AiIcons.AiFillCaretUp />,
     }
 ]

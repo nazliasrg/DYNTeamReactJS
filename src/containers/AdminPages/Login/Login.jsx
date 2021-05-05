@@ -34,7 +34,6 @@ class Login extends Component {
             password: this.state.password
         }
 
-
         console.log(admin)
 
         axios.post('http://localhost:7070/api/dynteam/auth/admin/login', admin)
@@ -59,7 +58,13 @@ class Login extends Component {
 
             })
             .catch(function (error) {
-                alert(error);
+                if (error == "Error: Request failed with status code 417") {
+                    alert("Account is not active!");
+                }
+                else if (error == "Request failed with status code 500") {
+                    alert("Username and password don't match!");
+                }
+                console.log(error.message)
             });
     }
 
