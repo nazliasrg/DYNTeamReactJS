@@ -44,8 +44,6 @@ const Profileuser = () => {
 
     const [fullname, setFullname] = useState('');
     const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [facebook, setInstagram] = useState('');
     const [instagram, setFacebook] = useState('');
@@ -72,8 +70,6 @@ const Profileuser = () => {
                 setSaldoUser(res.data.saldoUser);
                 setFullname(res.data.detailUserEntity.fullname);
                 setEmail(res.data.detailUserEntity.email);
-                setUsername(res.data.username);
-                setPassword(res.data.password);
                 setPhoneNumber(res.data.detailUserEntity.phoneNumber);
                 setInstagram(res.data.detailUserEntity.socialMediaEntity.instagram);
                 setFacebook(res.data.detailUserEntity.socialMediaEntity.facebook);
@@ -125,7 +121,6 @@ const Profileuser = () => {
             userId: ReactSession.get("userId"),
             type: 2,
             value: valueDonasi
-
         }
         axios
             .post('http://localhost:7070/api/dynteam/auth/user/transaction', donasi)
@@ -140,12 +135,57 @@ const Profileuser = () => {
 
                 } else {
                     NotificationManager.error(message);
-
                 }
             })
             .catch(error => {
                 console.log(error)
             })
+    }
+    //untuk bikin edit ProfileUsernya
+    const editProfileUser = async() => {
+        var userId = ReactSession.get("userId");
+        const addressUser = {
+            street:street, 
+            city:city,        
+            province:province,
+            country:country
+        }
+        const socialMedia = {
+            facebook:facebook,
+            instagram:instagram,
+            twitter:twitter
+        }
+        const detailUser ={
+            email:email,
+            fullname:fullname,
+            phoneNumber:phoneNumber,
+        }
+        
+        const editProfile = {
+            addressUserDto:addressUser,
+            socialMediaDto:socialMedia,
+            detailUserDto:detailUser
+
+        }
+        axios
+        .put('http://localhost:7070/api/dynteam/auth/user/updateProfile/' + userId, editProfile)
+        .then(res => {
+            var status = res.data.status;
+            var message = res.data.message;
+            if (status == 200) {
+                console.log(res.data);
+                getSaldoUser();
+                setShowEditProfil(false);
+                NotificationManager.success(message);
+
+            } else {
+                NotificationManager.error(message);
+
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     return (
@@ -282,29 +322,7 @@ const Profileuser = () => {
                                                         <input type="text" className="form-control" id="email"  value={email} onChange={e => { setEmail(e.target.value) }} />
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <div className="container-topup">
-                                                <div className="row">
-                                                    <div className="col">
-                                                        <label style={{ textAlign: 'left' }}>Username :</label>
-                                                    </div>
-                                                    <div className="col">
-                                                        <input type="text" className="form-control" id="username" value={username} onChange={e => { setUsername(e.target.value) }} />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="container-topup">
-                                                <div className="row">
-                                                    <div className="col">
-                                                        <label style={{ textAlign: 'left' }}>Password :</label>
-                                                    </div>
-                                                    <div className="col">
-                                                        <input type="text" className="form-control" id="password" value={password} onChange={e => { setPassword(e.target.value) }} />
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </div>                                          
 
                                             <div className="container-topup">
                                                 <div className="row">
@@ -408,7 +426,7 @@ const Profileuser = () => {
 
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button variant="primary" onClick={closeProfile}>
+                                            <Button variant="primary" onClick={editProfileUser}>
                                                 Edit Profile
                                             </Button>
                                         </Modal.Footer>
