@@ -178,7 +178,7 @@ class EditBook extends Component {
     }
 
     render() {
-        const { authorList, categoryList, publisherList, title, categoryId, publisherId, authorId, year, synopsis } = this.state;
+        const { authorList, categoryList, publisherList, title, categoryId, publisherId, authorId, year, synopsis, file } = this.state;
 
         return (
             <Fragment>
@@ -276,7 +276,25 @@ class EditBook extends Component {
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <div className="form-group">
+                                        <Col md={3}>
+                                            <img src={file} className="img-thumbnail" />
+                                        </Col>
+                                        <Col md={6}>
+                                            <div>
+                                                <label htmlFor="cover">Cover</label>
+                                                <input
+                                                    type='file'
+                                                    className='form-control-file'
+                                                    id='cover'
+                                                    src={file}
+                                                    // onChange={this.fileChange}
+                                                    name='file'
+                                                    required />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <div className="form-group mt-3 ml-3">
                                             <button className="form-control btn btn-primary" type="submit">Edit</button>
                                         </div>
                                     </Row>

@@ -1,7 +1,7 @@
 import { faMinus, faPlus, faEdit, faPlusCircle, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Row, Col, Spinner } from 'reactstrap';
+import { Button, Row, Col } from 'reactstrap';
 import { React, useState } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
