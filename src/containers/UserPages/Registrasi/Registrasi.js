@@ -6,7 +6,7 @@ import { Link, withRouter } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import axios from 'axios';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 const defaultState = {
@@ -119,51 +119,72 @@ class Registrasi extends Component {
         }
         return true;
     }
+    //Untuk ganti filenya
+    onFileChange = event => {
+        // Update the state 
+        this.setState({ selectedFile: event.target.files[0] });
+    };
 
-    onFileUpload = () => { 
+    //Untuk upload foto user
+    onFileUpload = (userId) => {
         // Create an object of formData 
-        const formData = new FormData(); 
-       
+        const formData = new FormData();
+
         // Update the formData object 
-        formData.append( 
-          "myFile", 
-          this.state.selectedFile, 
-          this.state.selectedFile.name 
-        ); 
-       
+        formData.append(
+            "file",
+            this.state.selectedFile,
+            this.state.selectedFile.name
+        );
+
+        formData.append(
+            "userId",
+            userId
+
+        );
+
         // Details of the uploaded file 
-        console.log(this.state.selectedFile); 
-       
+        console.log(this.state.selectedFile);
+
         // Request made to the backend api 
         // Send formData object 
-       // axios.post("api/uploadfile", formData); 
-      }; 
+        
+        axios
+            .post('http://localhost:7070/api/dynteam/auth/user/uploadProfile', formData)
+            .then(res => {
+                this.props.history.push('/')
+                
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    };
 
     submit() {
         if (this.validate()) {
             const address = {
-                city : this.state.city,
-                province : this.state.province,
-                country : this.state.country,
-                street : this.state.street
+                city: this.state.city,
+                province: this.state.province,
+                country: this.state.country,
+                street: this.state.street
             }
             const detailUser = {
-                fullname : this.state.fullname,
-                email : this.state.email,
-                phoneNumber : this.state.phoneNumber
+                fullname: this.state.fullname,
+                email: this.state.email,
+                phoneNumber: this.state.phoneNumber
 
             }
             const medsos = {
-                facebook : this.state.facebook,
-                instagram : this.state.instagram,
-                twitter : this.state.twitter
+                facebook: this.state.facebook,
+                instagram: this.state.instagram,
+                twitter: this.state.twitter
             }
-            
+
             const user = {
-                username : this.state.username,
-                password : this.state.password,
-                addressUserDto:address,
-                socialMediaDto:medsos,
+                username: this.state.username,
+                password: this.state.password,
+                addressUserDto: address,
+                socialMediaDto: medsos,
                 detailUserDto: detailUser
             }
 
@@ -174,9 +195,11 @@ class Registrasi extends Component {
                     var status = res.data.status;
                     var message = res.data.message;
                     if (status == 200) {
+                        var userId = res.data.data.userId;
+                        this.onFileUpload(userId);
                         this.setState(defaultState);
                         NotificationManager.success(message);
-                        this.props.history.push('/')
+
                     } else {
                         NotificationManager.error(message);
 
@@ -185,9 +208,8 @@ class Registrasi extends Component {
                 .catch(error => {
                     console.log(error)
                 })
-            
-           
-            
+
+
         }
     }
     render() {
@@ -319,7 +341,7 @@ class Registrasi extends Component {
                             </div>
                         </div>
                     </div>
-                    <NotificationContainer/>
+                    <NotificationContainer />
                 </div>
             </Fragment>
         )

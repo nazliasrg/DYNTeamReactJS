@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, withRouter } from 'react-router-dom';
 import logo from '../../../assets/Logouser.png';
 import {ReactSession} from 'react-client-session';
+import axios from 'axios';
 
 
 ReactSession.setStoreType("localStorage");
@@ -19,8 +20,27 @@ class ProfilePicture extends Component {
         this.setState({
             dataUser:(ReactSession.get("username"))
         });
-
+        this.getProfilPicture();
      }
+
+    getProfilPicture = async () => {
+        var userId = ReactSession.get("userId");
+        console.log(userId);
+        axios
+            .get('http://localhost:7070/api/dynteam/auth/user/' + userId)
+            .then(res => {
+                console.log(res.data);
+                this.setState({
+                    userPhoto : 'http://localhost:7070/api/dynteam/auth/user/download/' +res.data.detailUserEntity.userPhoto
+                });
+
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
+    }
+
 
     render() {
         
@@ -29,7 +49,7 @@ class ProfilePicture extends Component {
                 <div className="card">
                                     <div className="card-body">
                                         <div className="d-flex flex-column" style={{ alignItems: 'center' }}>
-                                            <img src={logo} style={{
+                                            <img src={this.state.userPhoto} style={{
                                                 height: 200,
                                             }} />
                                             <div className="mt-3">
