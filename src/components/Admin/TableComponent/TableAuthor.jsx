@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -11,87 +11,117 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 
-const { SearchBar } = Search;
-
-const handleClickActive = (id) => {
-    console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to inactive this author?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            inactivedAuthor(id);
-            if (willDelete) {
-                swal("Data author has been inactived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
-
-            } else {
-                swal("Data author is safe!");
-            }
-        });
-}
-
-const inactivedAuthor = (id) => {
-    axios.delete("http://localhost:7070/api/dynteam/book/author/delete/" + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-}
-
-const handleClickInactive = (id) => {
-    console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to active this author?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            activedAuthor(id);
-            if (willDelete) {
-                swal("Data author has been actived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
-
-            } else {
-                swal("Data author is safe!");
-            }
-        });
-}
-
-const activedAuthor = (id) => {
-    axios.put("http://localhost:7070/api/dynteam/book/author/actived/" + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-}
-
-const defaultSorted = [{
-    dataField: 'id',
-    order: 'asc'
-}];
-
 const TableAuthor = (props) => {
+
+    const { SearchBar } = Search;
+
+    const authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    useEffect(() => {
+        authHeader();
+    })
+
+    const handleClickActive = (id) => {
+        console.log('data ke: ' + id)
+        swal({
+            title: "Are you sure to inactive this author?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                inactivedAuthor(id);
+                if (willDelete) {
+                    swal("Data author has been inactived!", {
+                        icon: "success",
+                    }).then((OK) => {
+                        window.location.reload(false);
+                    })
+
+                } else {
+                    swal("Data author is safe!");
+                }
+            });
+    }
+
+    const inactivedAuthor = (id) => {
+        const admin = authHeader();
+
+        axios.delete("http://localhost:7070/api/dynteam/book/author/delete/" + id, {
+            headers: admin
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const handleClickInactive = (id) => {
+        console.log('data ke: ' + id)
+        swal({
+            title: "Are you sure to active this author?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                activedAuthor(id);
+                if (willDelete) {
+                    swal("Data author has been actived!", {
+                        icon: "success",
+                    }).then((OK) => {
+                        window.location.reload(false);
+                    })
+
+                } else {
+                    swal("Data author is safe!");
+                }
+            });
+    }
+
+    const activedAuthor = (id) => {
+        const admin = authHeader();
+
+        axios.delete("http://localhost:7070/api/dynteam/book/author/actived/" + id, {
+            headers: admin
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const defaultSorted = [{
+        dataField: 'id',
+        order: 'asc'
+    }];
+
+    const admin = authHeader();
 
     const [show, setShow] = useState(false);
 
     const [eshow, setEshow] = useState(false);
 
     const getIdAuthor = (id) => {
-        axios.get('http://localhost:7070/api/dynteam/book/author/' + id)
+        axios.get('http://localhost:7070/api/dynteam/book/author/' + id, {
+            headers: admin
+        })
             .then(function (response) {
                 console.log(response);
                 setId(response.data.authorId)
@@ -122,7 +152,9 @@ const TableAuthor = (props) => {
             authorName: authorName
         }
 
-        axios.post("http://localhost:7070/api/dynteam/book/author/insert", author)
+        axios.post("http://localhost:7070/api/dynteam/book/author/insert", author, {
+            headers: admin
+        })
             .then(function (response) {
                 alert(authorName + ' author data added successfully!')
             })
@@ -140,7 +172,9 @@ const TableAuthor = (props) => {
         console.log(id);
         console.log(author);
 
-        axios.put("http://localhost:7070/api/dynteam/book/author/update/" + id, author)
+        axios.put("http://localhost:7070/api/dynteam/book/author/update/" + id, author, {
+            headers: admin
+        })
             .then(function (response) {
                 alert(authorName + ' author data updated successfully!')
             })

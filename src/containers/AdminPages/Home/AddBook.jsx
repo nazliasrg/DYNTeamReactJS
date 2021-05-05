@@ -26,14 +26,33 @@ class AddBook extends Component {
         }
     }
 
-    componentDidMount() {
-        this.getAllAuthors()
-        this.getAllCategories()
-        this.getAllPublishers()
+    authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getAllAuthors()
+        await this.getAllCategories()
+        await this.getAllPublishers()
     }
 
     getAllAuthors = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/author/authors')
+        const admin = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/book/author/authors', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     author: res.data
@@ -47,7 +66,11 @@ class AddBook extends Component {
     }
 
     getAllCategories = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/category/categories')
+        const admin = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/book/category/categories', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     category: res.data
@@ -61,7 +84,11 @@ class AddBook extends Component {
     }
 
     getAllPublishers = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/publisher/publishers')
+        const admin = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/book/publisher/publishers', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     publisher: res.data
@@ -126,7 +153,11 @@ class AddBook extends Component {
 
         console.log(data)
 
-        axios.post('http://localhost:7070/api/dynteam/book/cover/upload', data)
+        const admin = this.authHeader();
+
+        axios.post('http://localhost:7070/api/dynteam/book/cover/upload', data, {
+            headers: admin
+        })
             .then(res => {
                 console.log("cover : ");
                 console.log(res);
@@ -160,7 +191,11 @@ class AddBook extends Component {
         console.log("data buku : ")
         console.log(book)
 
-        axios.post('http://localhost:7070/api/dynteam/book/insert/' + this.state.namafile, book)
+        const admin = this.authHeader();
+
+        axios.post('http://localhost:7070/api/dynteam/book/insert/' + this.state.namafile, book, {
+            headers: admin
+        })
             .then(res => {
                 console.log("hasil insert book : ")
                 console.log(res)

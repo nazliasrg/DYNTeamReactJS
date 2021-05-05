@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -10,84 +10,112 @@ import swal from 'sweetalert';
 import axios from 'axios'
 import { Modal } from 'react-bootstrap'
 
-const { SearchBar } = Search;
-
-const handleClickActive = (id) => {
-    console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to inactive this category?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            inactivedCategory(id);
-            if (willDelete) {
-                swal("Data category has been inactived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
-
-            } else {
-                swal("Data category is safe!");
-            }
-        });
-}
-
-const inactivedCategory = (id) => {
-    axios.delete("http://localhost:7070/api/dynteam/book/category/delete/" + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-}
-
-const handleClickInactive = (id) => {
-    console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to active this category?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            if (willDelete) {
-                activedCategory(id);
-                swal("Data category has been actived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
-
-            } else {
-                swal("Data category is safe!");
-            }
-        });
-}
-
-const activedCategory = (id) => {
-    axios.put("http://localhost:7070/api/dynteam/book/category/actived/" + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-}
-
-
-
 const TableCategory = (props) => {
+
+    const { SearchBar } = Search;
+
+    const authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    useEffect(() => {
+        authHeader();
+    })
+
+    const handleClickActive = (id) => {
+        console.log('data ke: ' + id)
+        swal({
+            title: "Are you sure to inactive this category?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                inactivedCategory(id);
+                if (willDelete) {
+                    swal("Data category has been inactived!", {
+                        icon: "success",
+                    }).then((OK) => {
+                        window.location.reload(false);
+                    })
+
+                } else {
+                    swal("Data category is safe!");
+                }
+            });
+    }
+
+    const inactivedCategory = (id) => {
+        const admin = authHeader();
+
+        axios.delete("http://localhost:7070/api/dynteam/book/category/delete/" + id, {
+            headers: admin
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const handleClickInactive = (id) => {
+        console.log('data ke: ' + id)
+        swal({
+            title: "Are you sure to active this category?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    activedCategory(id);
+                    swal("Data category has been actived!", {
+                        icon: "success",
+                    }).then((OK) => {
+                        window.location.reload(false);
+                    })
+
+                } else {
+                    swal("Data category is safe!");
+                }
+            });
+    }
+
+    const activedCategory = (id) => {
+        const admin = authHeader();
+
+        axios.delete("http://localhost:7070/api/dynteam/book/category/actived/" + id, {
+            headers: admin
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
     const [show, setShow] = useState(false);
 
     const [eshow, setEshow] = useState(false);
 
     const getIdCategory = (id) => {
-        axios.get('http://localhost:7070/api/dynteam/book/category/' + id)
+        const admin = authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/book/category/' + id, {
+            headers: admin
+        })
             .then(function (response) {
                 console.log(response);
                 setId(response.data.categoryId)
@@ -113,12 +141,15 @@ const TableCategory = (props) => {
     const [id, setId] = useState(0);
 
     const onSubmit = () => {
+        const admin = authHeader();
 
         const category = {
             categoryName: categoryName
         }
 
-        axios.post("http://localhost:7070/api/dynteam/book/category/insert", category)
+        axios.post("http://localhost:7070/api/dynteam/book/category/insert", category, {
+            headers: admin
+        })
             .then(function (response) {
                 alert(categoryName + ' data added successfully!')
             })
@@ -129,6 +160,8 @@ const TableCategory = (props) => {
 
     const onSubmitE = () => {
 
+        const admin = authHeader();
+
         const category = {
             categoryName: categoryName
         }
@@ -136,7 +169,9 @@ const TableCategory = (props) => {
         console.log(id);
         console.log(category);
 
-        axios.put("http://localhost:7070/api/dynteam/book/category/update/" + id, category)
+        axios.put("http://localhost:7070/api/dynteam/book/category/update/" + id, category, {
+            headers: admin
+        })
             .then(function (response) {
                 alert(categoryName + ' data updated successfully!')
             })

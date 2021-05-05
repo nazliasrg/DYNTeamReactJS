@@ -2,7 +2,7 @@ import { faMinus, faPlus, faEdit, faPlusCircle, faTrash, faEye } from '@fortawes
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Row, Col } from 'reactstrap';
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
@@ -12,9 +12,28 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 import axios from 'axios'
 
-const { SearchBar } = Search;
-
 const TableBooks = (props) => {
+    const { SearchBar } = Search;
+
+    const authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    useEffect(() => {
+        authHeader();
+    })
+
+    const admin = authHeader();
 
     const [show, setShow] = useState(false);
 
@@ -22,19 +41,19 @@ const TableBooks = (props) => {
 
     const [discShow, setDiscShow] = useState(false);
 
-    const closeModal = () => setShow(false)
-
-    const closeModalAdd = () => setAddShow(false)
-
-    const closeModalDisc = () => setDiscShow(false)
-
-    const [oldStock, setOldStock] = useState(0);
+    const [stock, setStock] = useState(0);
 
     const [addStock, setAddStock] = useState(0);
 
     const [bookId, setBookId] = useState(0);
 
     const [synopsis, setSynopsis] = useState("");
+
+    const closeModal = () => setShow(false)
+
+    const closeModalAdd = () => setAddShow(false)
+
+    const closeModalDisc = () => setDiscShow(false)
 
     const handleClick = (id) => {
         console.log('data ke: ' + id)
@@ -46,7 +65,9 @@ const TableBooks = (props) => {
             dangerMode: true,
         })
             .then((willDelete) => {
-                axios.delete("http://localhost:7070/api/dynteam/book/delete/" + id)
+                axios.delete("http://localhost:7070/api/dynteam/book/delete/" + id, {
+                    headers: admin
+                })
                     .then(function (response) {
                         console.log(response);
                     })
@@ -68,9 +89,13 @@ const TableBooks = (props) => {
     }
 
     const handleClickView = (id) => {
+
         setShow(true)
         console.log('data ke: ' + id)
-        axios.get('http://localhost:7070/api/dynteam/book/' + id)
+
+        axios.get('http://localhost:7070/api/dynteam/book/' + id, {
+            headers: admin
+        })
             .then(res => {
                 console.log(res)
                 setSynopsis(res.data.synopsis)
@@ -79,23 +104,35 @@ const TableBooks = (props) => {
     }
 
     const addStockButton = (id) => {
+
         setAddShow(true)
         console.log('data ke: ' + id)
-        axios.get('http://localhost:7070/api/dynteam/book/' + id)
+        axios.get('http://localhost:7070/api/dynteam/book/' + id, {
+            headers: admin
+        })
             .then(res => {
-                console.log(res)
-                setOldStock(res.data.stock)
+                console.log("res.data.stock")
+                console.log(res.data.stock)
+                setStock(res.data.stock)
+                console.log("oldStock")
+                console.log(stock)
                 setBookId(res.data.bookId)
+                console.log("bookId")
+                console.log(bookId)
             })
     }
 
     const discrepancyButton = (id) => {
+
         setDiscShow(true)
         console.log('data ke: ' + id)
-        axios.get('http://localhost:7070/api/dynteam/book/' + id)
+
+        axios.get('http://localhost:7070/api/dynteam/book/' + id, {
+            headers: admin
+        })
             .then(res => {
                 console.log(res)
-                setOldStock(res.data.stock)
+                setStock(res.data.stock)
                 setBookId(res.data.bookId)
             })
     }
@@ -105,7 +142,10 @@ const TableBooks = (props) => {
     }
 
     const submitAddStock = () => {
-        axios.put('http://localhost:7070/api/dynteam/book/add/' + bookId + '/' + addStock)
+
+        axios.put('http://localhost:7070/api/dynteam/book/add/' + bookId + '/' + addStock, {
+            headers: admin
+        })
             .then(res => {
                 // console.log(res)
                 alert('Stock was successfully added!')
@@ -116,7 +156,10 @@ const TableBooks = (props) => {
     }
 
     const submitDiscStock = () => {
-        axios.put('http://localhost:7070/api/dynteam/book/discrepancy/' + bookId + '/' + addStock)
+
+        axios.put('http://localhost:7070/api/dynteam/book/discrepancy/' + bookId + '/' + addStock, {
+            headers: admin
+        })
             .then(res => {
                 // console.log(res)
                 alert('Stock has been reduced!')
@@ -307,7 +350,7 @@ const TableBooks = (props) => {
                                                 <form onSubmit={submitAddStock}>
                                                     <div className="form-group">
                                                         <label htmlFor="oldStock">Old Saldo</label>
-                                                        <input className="form-control" id="oldStock" value={oldStock} readOnly />
+                                                        <input className="form-control" id="stock" value={stock} readOnly />
                                                     </div>
                                                     <div className="form-group">
                                                         <label htmlFor="addStock">Add Stock</label>
@@ -329,7 +372,7 @@ const TableBooks = (props) => {
                                                 <form onSubmit={submitDiscStock}>
                                                     <div className="form-group">
                                                         <label htmlFor="oldStock">Old Saldo</label>
-                                                        <input className="form-control" id="oldStock" value={oldStock} readOnly />
+                                                        <input className="form-control" id="stock" value={stock} readOnly />
                                                     </div>
                                                     <div className="form-group">
                                                         <label htmlFor="addStock">Discrepancy</label>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -10,81 +10,112 @@ import swal from 'sweetalert';
 import axios from 'axios';
 import { Modal } from 'react-bootstrap'
 
-const { SearchBar } = Search;
-
-const handleClickActive = (id) => {
-    console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to inactive this publisher?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            if (willDelete) {
-                inactivedPublisher(id);
-                swal("Data publisher has been inactived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
-
-            } else {
-                swal("Data publisher is safe!");
-            }
-        });
-}
-
-const inactivedPublisher = (id) => {
-    axios.delete("http://localhost:7070/api/dynteam/book/publisher/delete/" + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-}
-
-const handleClickInactive = (id) => {
-    console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to active this publisher?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            activedCategory(id);
-            if (willDelete) {
-                swal("Data publisher has been actived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
-
-            } else {
-                swal("Data publisher is safe!");
-            }
-        });
-}
-
-const activedCategory = (id) => {
-    axios.put("http://localhost:7070/api/dynteam/book/publisher/actived/" + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-}
-
 const TablePublisher = (props) => {
+
+    const { SearchBar } = Search;
+
+    const authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    useEffect(() => {
+        authHeader();
+    })
+
+    const handleClickActive = (id) => {
+        console.log('data ke: ' + id)
+        swal({
+            title: "Are you sure to inactive this publisher?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    inactivedPublisher(id);
+                    swal("Data publisher has been inactived!", {
+                        icon: "success",
+                    }).then((OK) => {
+                        window.location.reload(false);
+                    })
+
+                } else {
+                    swal("Data publisher is safe!");
+                }
+            });
+    }
+
+    const inactivedPublisher = (id) => {
+        const admin = authHeader();
+
+        axios.delete("http://localhost:7070/api/dynteam/book/publisher/delete/" + id, {
+            headers: admin
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const handleClickInactive = (id) => {
+        console.log('data ke: ' + id)
+        swal({
+            title: "Are you sure to active this publisher?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                activedPublisher(id);
+                if (willDelete) {
+                    swal("Data publisher has been actived!", {
+                        icon: "success",
+                    }).then((OK) => {
+                        window.location.reload(false);
+                    })
+
+                } else {
+                    swal("Data publisher is safe!");
+                }
+            });
+    }
+
+    const activedPublisher = (id) => {
+        const admin = authHeader();
+
+        axios.delete("http://localhost:7070/api/dynteam/book/publisher/actived/" + id, {
+            headers: admin
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     const [show, setShow] = useState(false);
 
     const [eshow, setEshow] = useState(false);
 
     const getIdPublisher = (id) => {
-        axios.get('http://localhost:7070/api/dynteam/book/publisher/' + id)
+        const admin = authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/book/publisher/' + id, {
+            headers: admin
+        })
             .then(function (response) {
                 console.log(response);
                 setId(response.data.publisherId)
@@ -111,12 +142,15 @@ const TablePublisher = (props) => {
 
 
     const onSubmit = () => {
+        const admin = authHeader();
 
         const publisher = {
             publisherName: publisherName
         }
 
-        axios.post("http://localhost:7070/api/dynteam/book/publisher/insert", publisher)
+        axios.post("http://localhost:7070/api/dynteam/book/publisher/insert", publisher, {
+            headers: admin
+        })
             .then(function (response) {
                 alert(publisherName + ' data added successfully!')
             })
@@ -126,6 +160,7 @@ const TablePublisher = (props) => {
     }
 
     const onSubmitE = () => {
+        const admin = authHeader();
 
         const publisher = {
             publisherName: publisherName
@@ -134,7 +169,9 @@ const TablePublisher = (props) => {
         console.log(id);
         console.log(publisher);
 
-        axios.put("http://localhost:7070/api/dynteam/book/publisher/update/" + id, publisher)
+        axios.put("http://localhost:7070/api/dynteam/book/publisher/update/" + id, publisher, {
+            headers: admin
+        })
             .then(function (response) {
                 alert(publisherName + ' data updated successfully!')
             })
