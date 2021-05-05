@@ -15,12 +15,32 @@ class Author extends Component {
         };
     }
 
-    componentDidMount = () => {
-        this.getAuthors()
+    authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getAuthors()
     }
 
     getAuthors = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/author/all-authors')
+        const admin = this.authHeader();
+        console.log(admin)
+
+        axios.get('http://localhost:7070/api/dynteam/book/author/all-authors', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     data: res.data

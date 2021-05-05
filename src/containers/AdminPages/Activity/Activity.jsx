@@ -14,12 +14,31 @@ class Activity extends Component {
         }
     }
 
-    componentDidMount() {
-        this.getActivitiesCurrent()
+    authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getActivitiesCurrent()
     }
 
     getActivitiesCurrent = () => {
-        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/2')
+        const admin = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/2', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     data: res.data

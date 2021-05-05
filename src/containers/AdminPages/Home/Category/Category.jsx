@@ -14,12 +14,33 @@ class Category extends Component {
         };
     }
 
-    componentDidMount = () => {
-        this.getCategories()
+    authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getCategories()
     }
 
     getCategories = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/category/all-categories')
+        const admin = this.authHeader();
+        console.log(admin)
+
+        axios.get('http://localhost:7070/api/dynteam/book/category/all-categories', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     data: res.data
