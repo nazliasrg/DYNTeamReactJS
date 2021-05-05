@@ -19,7 +19,7 @@ class Category extends Component {
     }
 
     getCategories = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/category/categories')
+        axios.get('http://localhost:7070/api/dynteam/book/category/all-categories')
             .then(res => {
                 this.setState({
                     data: res.data
