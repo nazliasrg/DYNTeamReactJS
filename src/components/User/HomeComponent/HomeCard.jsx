@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Card } from 'react-bootstrap'
 import axios from 'axios'
-import OwlCarousel from 'react-owl-carousel'
 
 
 class HomeCard extends Component {
