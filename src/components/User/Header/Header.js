@@ -9,13 +9,18 @@ class Header extends Component {
     constructor() {
         super();
         this.state = {
-            widthStyle: '0%'
+            widthStyle: '0%',
+            user: ""
         }
     }
 
     componentDidMount() {
         const width = this.state.widthStyle
         console.log(width)
+        const dataUser = JSON.parse(localStorage.getItem('data_user'))
+        this.setState({
+            user: dataUser.data.username
+        })
     }
 
     handleCloseNav = () => {
@@ -40,6 +45,8 @@ class Header extends Component {
 
         const { widthNavbar } = styles;
 
+        const { user } = this.state;
+
         return (
             <Fragment>
                 <div className="nav-container" id="navbar2">
@@ -61,7 +68,7 @@ class Header extends Component {
                     </div>
 
                     <Link to={'/Profileuser'} className="akun" id="profileLink">
-                        <button type="button" className="btn" id="btnProfile"> Login/Sign-Up</button>
+                        <button type="button" className="btn" id="btnProfile">{user}</button>
                     </Link>
                 </div>
 

@@ -5,29 +5,52 @@ import OwlCarousel from 'react-owl-carousel'
 
 
 class HomeCard extends Component {
+
     constructor() {
         super();
         this.state = {
-            data: []
+            popular: []
         };
     }
 
-    componentDidMount = () => {
-        this.getBooks()
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
+
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getBooks()
     }
 
     getBooks = () => {
-        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/book')
+        const user = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/auth/user/getBookPopuler', {
+            headers: user
+        })
             .then(res => {
+                console.log(res.data.data)
                 this.setState({
-                    data: res.data
+                    popular: res.data.data
                 })
-                console.log(this.state.data);
             })
+            .catch(function (error) {
+                console.log(error)
+            });
     }
 
     render() {
-        const { data } = this.state;
+        const { popular } = this.state;
 
         const titleStyle = {
             fontSize: "14px",
@@ -41,14 +64,14 @@ class HomeCard extends Component {
         return (
             <>
                 {
-                    data.map((val) => {
+                    popular.map((val) => {
                         return (
                             <div className='item'>
                                 <Card style={cardStyle}>
-                                    <Card.Img variant="top" src={`../img/book/${val.id_book}.jpg`} />
+                                    <Card.Img variant="top" src={`http://localhost:7070/api/dynteam/book/cover/download/${val.bookEntity.cover}`} />
                                     <Card.Body style={{ textAlign: "center" }}>
-                                        <Card.Title className="cardTitle" style={titleStyle}>{val.title}</Card.Title>
-                                        <small className="text-muted">{val.author}</small>
+                                        <Card.Title className="cardTitle" style={titleStyle}>{val.bookEntity.title}</Card.Title>
+                                        <small className="text-muted">{val.bookEntity.authorEntity.authorName}</small>
                                     </Card.Body>
                                 </Card>
                             </div>
