@@ -15,68 +15,47 @@ const { SearchBar } = Search;
 
 const handleClickActive = (id) => {
     console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to inactive this admin?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            inactivedAdmin(id);
-            if (willDelete) {
-                swal("Data admin has been inactived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
 
-            } else {
-                swal("Data admin is safe!");
-            }
-        });
-}
+    const r = window.confirm('Are you sure to inactive this admin?')
+    if (r == true) {
+        axios.delete("http://localhost:7070/api/dynteam/auth/admin/delete/" + id)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-const inactivedAdmin = (id) => {
-    axios.delete("http://localhost:7070/api/dynteam/auth/admin/delete/" + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        window.alert('Data admin has been inactived!')
+        window.location.reload(false);
+    }
+    else {
+        window.alert('Data admin is safe!')
+    }
+
+
 }
 
 const handleClickInactive = (id) => {
     console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to active this admin?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            activedAuthor(id);
-            if (willDelete) {
-                swal("Data admin has been actived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
 
-            } else {
-                swal("Data admin is safe!");
-            }
-        });
-}
+    const r = window.confirm('Are you sure to active this admin?')
+    if (r == true) {
+        axios.put("http://localhost:7070/api/dynteam/auth/admin/actived/" + id)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-const activedAuthor = (id) => {
-    axios.put("http://localhost:7070/api/dynteam/auth/admin/actived/" + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        window.alert('Data admin has been actived!')
+        window.location.reload(false);
+    }
+    else {
+        window.alert('Data admin is safe!')
+    }
+
 }
 
 const TableAdmin = (props) => {
@@ -115,7 +94,7 @@ const TableAdmin = (props) => {
 
         axios.post("http://localhost:7070/api/dynteam/auth/admin/register", adminData)
             .then(function (response) {
-                alert(username + ' account successfully registered!')
+                window.alert(username + ' account successfully registered!')
                 setRoles([])
             })
             .catch(function (error) {

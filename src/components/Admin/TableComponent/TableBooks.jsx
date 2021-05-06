@@ -59,35 +59,25 @@ const TableBooks = (props) => {
 
     const handleClick = (id) => {
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover data!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                axios.delete("http://localhost:7070/api/dynteam/book/delete/" + id, {
-                    headers: admin
-                })
-                    .then(function (response) {
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
 
-                if (willDelete) {
-                    swal("Data book has been deleted!", {
-                        icon: "success",
-                    })
-                        .then((OK) => {
-                            window.location.reload(false);
-                        })
-                } else {
-                    swal("Data book is safe!");
-                }
-            });
+        const r = window.confirm('Are you sure to make this book not available?')
+        if (r == true) {
+            axios.delete("http://localhost:7070/api/dynteam/book/delete/" + id, {
+                headers: admin
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Data book has been not available!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Data book is safe!')
+        }
+
     }
 
     const handleClickView = (id) => {
@@ -149,7 +139,7 @@ const TableBooks = (props) => {
             headers: admin
         })
             .then(res => {
-                alert('Stock was successfully added!')
+                window.alert('Stock was successfully added!')
                 window.location.reload(false);
             })
             .catch(function (error) {
@@ -163,7 +153,7 @@ const TableBooks = (props) => {
             headers: admin
         })
             .then(res => {
-                alert('Stock has been reduced!')
+                window.alert('Stock has been reduced!')
                 window.location.reload(false);
             })
             .catch(function (error) {

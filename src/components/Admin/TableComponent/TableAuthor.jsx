@@ -34,78 +34,56 @@ const TableAuthor = (props) => {
     })
 
     const handleClickActive = (id) => {
+
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure to inactive this author?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                inactivedAuthor(id);
-                if (willDelete) {
-                    swal("Data author has been inactived!", {
-                        icon: "success",
-                    }).then((OK) => {
-                        window.location.reload(false);
-                    })
 
-                } else {
-                    swal("Data author is safe!");
-                }
-            });
-    }
-
-    const inactivedAuthor = (id) => {
         const admin = authHeader();
 
-        axios.delete("http://localhost:7070/api/dynteam/book/author/delete/" + id, {
-            headers: admin
-        })
-            .then(function (response) {
-                console.log(response);
+        const r = window.confirm('Are you sure to inactive this author?')
+        if (r == true) {
+            axios.delete("http://localhost:7070/api/dynteam/book/author/delete/" + id, {
+                headers: admin
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Data author has been inactived!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Data author is safe!')
+        }
     }
 
     const handleClickInactive = (id) => {
+
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure to active this author?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                activedAuthor(id);
-                if (willDelete) {
-                    swal("Data author has been actived!", {
-                        icon: "success",
-                    }).then((OK) => {
-                        window.location.reload(false);
-                    })
 
-                } else {
-                    swal("Data author is safe!");
-                }
-            });
-    }
-
-    const activedAuthor = (id) => {
         const admin = authHeader();
 
-        axios.delete("http://localhost:7070/api/dynteam/book/author/actived/" + id, {
-            headers: admin
-        })
-            .then(function (response) {
-                console.log(response);
+        const r = window.confirm('Are you sure to active this author?')
+        if (r == true) {
+            axios.delete("http://localhost:7070/api/dynteam/book/author/actived/" + id, {
+                headers: admin
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Data author has been actived!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Data author is safe!')
+        }
+
     }
+
 
     const defaultSorted = [{
         dataField: 'id',
@@ -156,7 +134,7 @@ const TableAuthor = (props) => {
             headers: admin
         })
             .then(function (response) {
-                alert(authorName + ' author data added successfully!')
+                window.alert(authorName + ' author data added successfully!')
             })
             .catch(function (error) {
                 console.log(error);
@@ -176,7 +154,7 @@ const TableAuthor = (props) => {
             headers: admin
         })
             .then(function (response) {
-                alert(authorName + ' author data updated successfully!')
+                window.alert(authorName + ' author data updated successfully!')
             })
             .catch(function (error) {
                 console.log(error);

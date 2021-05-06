@@ -34,76 +34,51 @@ const TableCategory = (props) => {
 
     const handleClickActive = (id) => {
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure to inactive this category?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                inactivedCategory(id);
-                if (willDelete) {
-                    swal("Data category has been inactived!", {
-                        icon: "success",
-                    }).then((OK) => {
-                        window.location.reload(false);
-                    })
-
-                } else {
-                    swal("Data category is safe!");
-                }
-            });
-    }
-
-    const inactivedCategory = (id) => {
         const admin = authHeader();
 
-        axios.delete("http://localhost:7070/api/dynteam/book/category/delete/" + id, {
-            headers: admin
-        })
-            .then(function (response) {
-                console.log(response);
+        const r = window.confirm('Are you sure to inactive this category?')
+        if (r == true) {
+            axios.delete("http://localhost:7070/api/dynteam/book/category/delete/" + id, {
+                headers: admin
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Data category has been inactived!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Data category is safe!')
+        }
+
     }
 
     const handleClickInactive = (id) => {
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure to active this category?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    activedCategory(id);
-                    swal("Data category has been actived!", {
-                        icon: "success",
-                    }).then((OK) => {
-                        window.location.reload(false);
-                    })
 
-                } else {
-                    swal("Data category is safe!");
-                }
-            });
-    }
-
-    const activedCategory = (id) => {
         const admin = authHeader();
 
-        axios.delete("http://localhost:7070/api/dynteam/book/category/actived/" + id, {
-            headers: admin
-        })
-            .then(function (response) {
-                console.log(response);
+        const r = window.confirm('Are you sure to active this category?')
+        if (r == true) {
+            axios.delete("http://localhost:7070/api/dynteam/book/category/actived/" + id, {
+                headers: admin
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Data category has been inactived!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Data category is safe!')
+        }
+
     }
 
     const [show, setShow] = useState(false);
@@ -151,7 +126,7 @@ const TableCategory = (props) => {
             headers: admin
         })
             .then(function (response) {
-                alert(categoryName + ' data added successfully!')
+                window.alert(categoryName + ' data added successfully!')
             })
             .catch(function (error) {
                 console.log(error);
@@ -173,7 +148,7 @@ const TableCategory = (props) => {
             headers: admin
         })
             .then(function (response) {
-                alert(categoryName + ' data updated successfully!')
+                window.alert(categoryName + ' data updated successfully!')
             })
             .catch(function (error) {
                 console.log(error);
