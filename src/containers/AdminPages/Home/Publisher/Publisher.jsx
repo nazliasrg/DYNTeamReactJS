@@ -15,12 +15,33 @@ class Publisher extends Component {
         };
     }
 
-    componentDidMount = () => {
-        this.getPublishers()
+    authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getPublishers()
     }
 
     getPublishers = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/publisher/publishers')
+        const admin = this.authHeader();
+        console.log(admin)
+
+        axios.get('http://localhost:7070/api/dynteam/book/publisher/all-publishers', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     data: res.data

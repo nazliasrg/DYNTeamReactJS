@@ -14,12 +14,31 @@ class History extends Component {
         }
     }
 
-    componentDidMount() {
-        this.getActivitiesHistory()
+    authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getActivitiesHistory()
     }
 
     getActivitiesHistory = () => {
-        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/3')
+        const admin = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/3', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     data: res.data

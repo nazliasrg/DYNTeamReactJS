@@ -3,6 +3,7 @@ import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarCom
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
 import { Row, Col, Container } from 'reactstrap'
 import axios from 'axios'
+import { reset } from 'redux-form'
 
 class EditBook extends Component {
     constructor(props) {
@@ -17,6 +18,7 @@ class EditBook extends Component {
             authorId: 1,
             year: 0,
             synopsis: "",
+            cover: "",
             file: null,
             namafile: "",
             authorList: [],
@@ -28,17 +30,36 @@ class EditBook extends Component {
         }
     }
 
-    componentDidMount() {
-        console.log("id: ")
-        console.log(this.props.match.params.no)
-        this.getBookById(this.props.match.params.no)
-        this.getAllAuthors()
-        this.getAllCategories()
-        this.getAllPublishers()
+    authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    async componentDidMount() {
+        await this.authHeader();
+        await console.log("id: ")
+        await console.log(this.props.match.params.no)
+        await this.getBookById(this.props.match.params.no)
+        await this.getAllAuthors()
+        await this.getAllCategories()
+        await this.getAllPublishers()
     }
 
     getBookById = (id) => {
-        axios.get('http://localhost:7070/api/dynteam/book/' + id)
+        const admin = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/book/' + id, {
+            headers: admin
+        })
             .then(res => {
                 console.log("data book by id")
                 console.log(res)
@@ -53,6 +74,7 @@ class EditBook extends Component {
                     authorId: res.data.authorEntity.authorId,
                     year: res.data.year,
                     synopsis: res.data.synopsis,
+                    cover: res.data.cover,
                     file: "http://localhost:7070/api/dynteam/book/cover/download/" + res.data.cover
                 })
                 console.log("cover")
@@ -66,7 +88,11 @@ class EditBook extends Component {
     }
 
     getAllAuthors = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/author/authors')
+        const admin = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/book/author/authors', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     authorList: res.data
@@ -80,7 +106,11 @@ class EditBook extends Component {
     }
 
     getAllCategories = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/category/categories')
+        const admin = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/book/category/categories', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     categoryList: res.data
@@ -94,7 +124,11 @@ class EditBook extends Component {
     }
 
     getAllPublishers = () => {
-        axios.get('http://localhost:7070/api/dynteam/book/publisher/publishers')
+        const admin = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/book/publisher/publishers', {
+            headers: admin
+        })
             .then(res => {
                 this.setState({
                     publisherList: res.data
@@ -143,9 +177,49 @@ class EditBook extends Component {
         }
     }
 
+    fileChange = async (e) => {
+        console.log("e.target.files");
+        console.log(e.target.files);
+        await this.setState({
+            file: e.target.files[0],
+            cover: e.target.files[0].name
+        })
+        await console.log(this.state.file);
+    }
+
     onSubmitForm = (e) => {
         e.preventDefault();
 
+        const admin = this.authHeader();
+
+        if (this.state.file == "http://localhost:7070/api/dynteam/book/cover/download/" + this.state.cover) {
+            this.editBook(this.state.cover, admin);
+        }
+        else {
+            const data = new FormData();
+            data.append('file', this.state.file);
+
+            console.log(data)
+
+            axios.post('http://localhost:7070/api/dynteam/book/cover/upload', data, {
+                headers: admin
+            })
+                .then(res => {
+                    console.log("cover : ");
+                    console.log(res.data);
+                    this.setState({
+                        file: null
+                    })
+                    this.editBook(res.data, admin);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+    }
+
+    editBook = (res, admin) => {
         const book = {
             title: this.state.title,
             categoryId: this.state.categoryId,
@@ -162,7 +236,9 @@ class EditBook extends Component {
         console.log("data buku : ")
         console.log(book)
 
-        axios.put('http://localhost:7070/api/dynteam/book/update/' + this.state.id, book)
+        axios.put('http://localhost:7070/api/dynteam/book/update/' + this.state.id + '/' + res, book, {
+            headers: admin
+        })
             .then(res => {
                 console.log("hasil update book : ")
                 console.log(res)
@@ -174,11 +250,10 @@ class EditBook extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-
     }
 
     render() {
-        const { authorList, categoryList, publisherList, title, categoryId, publisherId, authorId, year, synopsis, file } = this.state;
+        const { authorList, categoryList, publisherList, title, categoryId, publisherId, authorId, year, synopsis, file, cover } = this.state;
 
         return (
             <Fragment>
@@ -277,7 +352,7 @@ class EditBook extends Component {
                                     </Row>
                                     <Row>
                                         <Col md={3}>
-                                            <img src={file} className="img-thumbnail" />
+                                            <img src={`http://localhost:7070/api/dynteam/book/cover/download/${cover}`} className="img-thumbnail" />
                                         </Col>
                                         <Col md={6}>
                                             <div>
@@ -287,9 +362,8 @@ class EditBook extends Component {
                                                     className='form-control-file'
                                                     id='cover'
                                                     src={file}
-                                                    // onChange={this.fileChange}
-                                                    name='file'
-                                                    required />
+                                                    onChange={this.fileChange}
+                                                    name='file' />
                                             </div>
                                         </Col>
                                     </Row>
