@@ -1,12 +1,16 @@
 import axios from "axios";
 import { Button } from "bootstrap";
 import React, { Component, Fragment } from "react";
+import { ReactSession } from "react-client-session";
+import NotificationContainer from "react-notifications/lib/NotificationContainer";
 import BookCard from '../../../components/User/BookCard';
 import DropDown from "../../../components/User/DropDownFilter";
 import Footer from '../../../components/User/Footer/Footer';
 import Header from '../../../components/User/Header/Header';
 import SearchBoxCatalogue from "../../../components/User/SearchBarCatalogue";
 import './Catalogue.css';
+
+ReactSession.setStoreType("localStorage");
 
 class GenrePage extends Component{
     constructor(){
@@ -21,12 +25,41 @@ class GenrePage extends Component{
         }
     }
 
-    componentDidMount(){
-        this.getBook();
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
+        
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    async componentDidMount(){
+        await this.authHeader();
+        await this.getBook();
+        await this.getUser();
+        await console.log("data_user");
+        await console.log(JSON.parse(localStorage.getItem("data_user")));
+    }
+
+    getUser(){
+        var userId = ReactSession.get("userId");
+        console.log(userId);
+        this.setState({
+            userId: userId
+        })
     }
 
     getBook = () =>{
-        axios.get('http://localhost:7070/api/dynteam/book/books').then(res =>{
+        const user = this.authHeader();
+        axios.get('http://localhost:7070/api/dynteam/book/books', {
+            headers: user
+        }).then(res =>{
             this.setState({
                 data: res.data
             })
@@ -48,6 +81,7 @@ class GenrePage extends Component{
         })
         return(
             <Fragment>
+                <Header/>
                 <div className="container-fluid catalogue-container">
                     <div className="row justify-content-center">
                         <div className="col-auto catalogue-title">
@@ -55,10 +89,7 @@ class GenrePage extends Component{
                         </div>
                     </div>
                     <div className="row justify-content-center">
-                        <div className="col-sm-auto">
-                            {/* <DropDown/> */}
-                        </div>
-                        <div className="col-sm-auto">
+                        <div className="col-sm-8">
                             <SearchBoxCatalogue handleInput={this.handleInput} />
                         </div>
                     </div>
@@ -82,6 +113,7 @@ class GenrePage extends Component{
                         }
                     </div>
                 </div>
+                <Footer />
             </Fragment>
         );
     }

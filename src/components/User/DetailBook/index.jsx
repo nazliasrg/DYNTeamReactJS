@@ -2,11 +2,16 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Fragment } from 'react';
 import { ModalTitle } from 'react-bootstrap';
-import { RiLockFill } from 'react-icons/ri';
+import { ReactSession } from 'react-client-session';
 import { Link } from 'react-router-dom';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 // import cover from '../../../assets/book/B001.jpg'
-// import './BookDetail.css';
+import './DetailBook.css';
+import Footer from '../Footer/Footer';
+
+// BUAT REACT SESSION UNTUK MENGGAMBIL DATA USER YANG SUDAH
+ReactSession.setStoreType("localStorage");
 
 class BookDetail extends Component{
     constructor(){
@@ -18,43 +23,69 @@ class BookDetail extends Component{
             publisher:{},
             book_id: "",
             bookCode:"",
+            stock:"",
             data:"",
             showModal: false,
             durationId: "0",
-            userId:"3"
+            isAvailable:"",
+            userId:""
         }
     }
 
-    componentDidMount(){
-        const book_id=  this.props.match.params.bookId
-        console.log(this.props);
-        this.getDetailBook(book_id);
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
+        
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
     }
 
+    async componentDidMount(){
+        await this.authHeader();
+        const book_id=  await this.props.match.params.bookId
+        await console.log(this.props);
+        await this.getDetailBook(book_id);
+        await this.getUser();
+        // await this.submitRequest();
+        await console.log("data_user");
+        await console.log(JSON.parse(localStorage.getItem("data_user")));
+    }
+
+
+    getUser(){
+        var userId = ReactSession.get("userId");
+        console.log(userId);
+        this.setState({
+            userId: userId
+        })
+    }
+
+
     getDetailBook(book_id){
-        axios.get(`http://localhost:7070/api/dynteam/book/${book_id}`).then(res =>{   
+        const user = this.authHeader();
+        axios.get(`http://localhost:7070/api/dynteam/book/${book_id}`,{
+            headers: user
+        }).then(res =>{   
             console.log(res);
         this.setState({
             detailData: res.data,
             bookCode:res.data.bookCode,
             author: res.data.authorEntity,
             category: res.data.categoryEntity,
-            publisher: res.data.publisherEntity
+            publisher: res.data.publisherEntity,
+            stock: res.data.stock,
+            isAvailable: res.data.isAvailable
         })
-        console.log(this.state.detailData);
+        console.log(this.state.stock);
         })
     }
 
-    // useEffect(() => {
-    //     var userId= ResactSession.get("userId");
-    //     console.log(userId);
-    //     axios.post('http://localhost:7070/api/dynteam/auth/user/' + userId).then(res =>{
-    //         console.log(res.data);
-    //     })
-    //     .catch (error => {
-    //         console.log(error);
-    //     })
-    // }, []);
 
     // INPUT KE DATABASAE DENGAN AXIOS.POST
     submitRequest = (e) => {
@@ -67,15 +98,30 @@ class BookDetail extends Component{
         }
         console.log(request);
         
-        axios.post('http://localhost:7070/api/dynteam/request/requestbook', request)
+        // if(this.state.isAvailable === 1 && this.state.stock === 0){
+            // NotificationManager.success("Sorry, this book is not available right now. Please check again later or call admin.");
+        // }else if(request.durationId === 0){
+        //     NotificationManager.success("Please choose duration.");
+        // }else if(request.userId === 0){
+        //     NotificationManager.success("Please login first.");
+        // }else{
+            const user = this.authHeader();
+            axios.post('http://localhost:7070/api/dynteam/request/requestbook', request, {
+                headers:user
+            })
             .then(res => {
                 console.log(res);
-                // this.insertBook(res);
+                NotificationManager.success("Thank you for rent this book. Please wait for confirmation from admin. We'll let you know if book is ready");
+                this.setState({
+                    showModal: false
+                })                
             })
             .catch(function (error){
                 console.log(error);
             })
+        // }
     }
+
 
     // MENDAPATKAN DURASI PEMINJAMAN
     formChange = (e)=>{
@@ -85,12 +131,14 @@ class BookDetail extends Component{
         })
     }
 
+
     // UNTUK MENUTUP MODAL PEMINJALAN BUKU
     closeModal = () => {
         this.setState({
             showModal: false
         });
     }
+
 
     // UNTUK MEMBUKA MODAL PEMINJAMAN
     openModal = () => {
@@ -118,19 +166,19 @@ class BookDetail extends Component{
                             <table className="table table-striped mt-2">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Author</th>
+                                        <td scope="col"><b>Author</b></td>
                                         <td>{authorName}</td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">Category</th>
+                                        <td scope="col"><b>Category</b></td>
                                         <td>{categoryName}</td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">Publisher</th>
+                                        <td scope="col"><b>Publisher</b></td>
                                         <td>{publisherName}</td>
                                     </tr>
                                     <tr>
-                                        <th scope="col">Year</th>
+                                        <td scope="col"><b>Year</b></td>
                                         <td>{year}</td>
                                     </tr>
                                 </thead>
@@ -158,6 +206,7 @@ class BookDetail extends Component{
                     </div>
                 </div>
             </div>
+            <Footer />
 
             <Modal isOpen={this.state.showModal}>
                 <ModalHeader>
@@ -190,6 +239,7 @@ class BookDetail extends Component{
                     <button onClick={this.closeModal}>Close</button>
                 </ModalFooter>
             </Modal>
+            <NotificationContainer />
             </Fragment>
         );
     }
