@@ -14,11 +14,11 @@ class Header extends Component {
         }
     }
 
-    componentDidMount() {
-        const width = this.state.widthStyle
-        console.log(width)
-        const dataUser = JSON.parse(localStorage.getItem('data_user'))
-        this.setState({
+    async componentDidMount() {
+        const width = await this.state.widthStyle
+        await console.log(width)
+        const dataUser = await JSON.parse(localStorage.getItem('data_user'))
+        await this.setState({
             user: dataUser.data.username
         })
     }
