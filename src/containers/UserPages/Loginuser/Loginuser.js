@@ -5,7 +5,7 @@ import logo from '../../../assets/Logouser.png';
 import { Link } from 'react-router-dom';
 import { ReactSession } from 'react-client-session';
 import axios from 'axios';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 ReactSession.setStoreType("localStorage");
@@ -65,34 +65,34 @@ class Loginuser extends Component {
             const user = {
                 username: this.state.username,
                 password: this.state.password
-              }
-          
+            }
+
             //   console.log(user);
 
-                 axios
-                 .post('http://localhost:7070/api/dynteam/auth/user/login', user)
-                 .then(res => {
+            axios
+                .post('http://localhost:7070/api/dynteam/auth/user/login', user)
+                .then(res => {
                     var status = res.data.status;
                     var message = res.data.message;
-                    if(status==200){
+                    if (status == 200) {
                         this.setState(defaultState);
                         NotificationManager.success(message);
                         ReactSession.set("username", this.state.username);//untuk menyimpat sessionnya yg dikasih nama username
-                        ReactSession.set("token" , res.data.data.token);
+                        ReactSession.set("token", res.data.data.token);
                         ReactSession.set("userId", res.data.data.userId);
                         console.log(ReactSession.get("username"));
                         this.props.history.push('/Home');
-                    } else{
+                    } else {
                         NotificationManager.error(message);
-    
+
                     }
-                 })
-                 .catch(error => {
+                })
+                .catch(error => {
                     console.log(error)
-                 })
-            
+                })
+
             // console.warn(this.state);
-            
+
         }
     }
     render() {
@@ -136,7 +136,7 @@ class Loginuser extends Component {
                             </div>
                         </div>
                     </div>
-                    <NotificationContainer/>
+                    <NotificationContainer />
                 </div>
             </Fragment>
         )

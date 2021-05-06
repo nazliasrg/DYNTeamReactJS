@@ -33,6 +33,7 @@ class Login extends Component {
             password: this.state.password
         }
 
+
         console.log(admin)
 
         axios.post('http://localhost:7070/api/dynteam/auth/admin/login', admin)
@@ -46,6 +47,7 @@ class Login extends Component {
                     pathname: '/home-admin',
                     state: res.data.data,
                 })
+
 
 
                 console.log(this.props.history.location.state);
