@@ -7,6 +7,7 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import swal from 'sweetalert';
 import axios from 'axios'
+import Dialog from 'react-bootstrap-dialog'
 
 const { SearchBar } = Search;
 
@@ -36,94 +37,48 @@ const TableActivity = (props) => {
 
         console.log('data ke: ' + id)
 
-        // confirmAlert({
-        //     title: 'Confirm to Extend',
-        //     message: 'Are you sure to extends activity?',
-        //     buttons: [
-        //         {
-        //             label: 'Yes',
-        //             onClick: () => {
-        //                 axios.put('http://localhost:7070/api/dynteam/request/extend/' + id, null, {
-        //                     headers: admin
-        //                 })
-        //                     .then(function (res) {
-        //                         console.log(res)
-        //                     })
-        //                     .catch(function (error) {
-        //                         console.log(error)
-        //                     })
-        //                 alert('Activity has been extended!')
-        //             }
-        //         },
-        //         {
-        //             label: 'No',
-        //             onClick: () => alert('Activity is not extended!')
-        //         }
-        //     ]
-        // });
-
-
-        swal({
-            title: "Are you sure to extends activity?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willExtends) => {
-                axios.put('http://localhost:7070/api/dynteam/request/extend/' + id, null, {
-                    headers: admin
+        const r = window.confirm('Are you sure to extends activity?')
+        if (r == true) {
+            axios.put('http://localhost:7070/api/dynteam/request/extend/' + id, null, {
+                headers: admin
+            })
+                .then(function (res) {
+                    console.log(res)
                 })
-                    .then(function (res) {
-                        console.log(res)
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
-
-                if (willExtends) {
-                    swal("Activity has been extended!", {
-                        icon: "success",
-                    })
-                        .then((OK) => {
-                            window.location.reload(false);
-                        })
-                } else {
-                    swal("Activity is not extended!");
-                }
-            });
+                .catch(function (error) {
+                    console.log(error)
+                })
+            window.alert('Activity has been extended!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Activity is not extended!')
+        }
     }
 
     const handleClickReturn = (id) => {
         const admin = authHeader();
 
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure to return activity?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willReturn) => {
-                axios.put('http://localhost:7070/api/dynteam/request/return/' + id, null, {
-                    headers: admin
+
+        const r = window.confirm('Are you sure to return activity?')
+        if (r == true) {
+            axios.put('http://localhost:7070/api/dynteam/request/return/' + id, null, {
+                headers: admin
+            })
+                .then(function (res) {
+                    console.log(res)
                 })
-                    .then(function (res) {
-                        console.log(res)
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
-                if (willReturn) {
-                    swal("Activity has been return!", {
-                        icon: "success",
-                    })
-                        .then((OK) => {
-                            window.location.reload(false);
-                        })
-                } else {
-                    swal("Activity is not return!");
-                }
-            });
+                .catch(function (error) {
+                    console.log(error)
+                })
+            window.alert('Activity has been return!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Activity is not return!')
+        }
+
     }
 
     const columns = [{

@@ -16,66 +16,44 @@ const { SearchBar } = Search;
 
 const handleClickActive = (id) => {
     console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to inactived account?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            inactivedUser(id);
-            if (willDelete) {
-                swal("Data user has been inactived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
-            } else {
-                swal("Data user is safe!");
-            }
-        });
-}
 
-const inactivedUser = (id) => {
-    axios.put('http://localhost:7070/api/dynteam/auth/user/delete/' + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    const r = window.confirm('Are you sure to inactived account?')
+    if (r == true) {
+        axios.put('http://localhost:7070/api/dynteam/auth/user/delete/' + id)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        window.alert('Data user has been inactived!')
+        window.location.reload(false);
+    }
+    else {
+        window.alert('Data user is safe!')
+    }
+
 }
 
 const handleClickInactive = (id) => {
     console.log('data ke: ' + id)
-    swal({
-        title: "Are you sure to actived account?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-        .then((willDelete) => {
-            activedUser(id);
-            if (willDelete) {
-                swal("Data user has been actived!", {
-                    icon: "success",
-                }).then((OK) => {
-                    window.location.reload(false);
-                })
-            } else {
-                swal("Data user is safe!");
-            }
-        });
-}
 
-const activedUser = (id) => {
-    axios.put('http://localhost:7070/api/dynteam/auth/user/active/' + id)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    const r = window.confirm('Are you sure to actived account?')
+    if (r == true) {
+        axios.put('http://localhost:7070/api/dynteam/auth/user/active/' + id)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        window.alert('Data user has been actived!')
+        window.location.reload(false);
+    }
+    else {
+        window.alert('Data user is safe!')
+    }
+
 }
 
 const TableUsers = (props) => {

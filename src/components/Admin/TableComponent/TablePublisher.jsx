@@ -34,76 +34,52 @@ const TablePublisher = (props) => {
 
     const handleClickActive = (id) => {
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure to inactive this publisher?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    inactivedPublisher(id);
-                    swal("Data publisher has been inactived!", {
-                        icon: "success",
-                    }).then((OK) => {
-                        window.location.reload(false);
-                    })
 
-                } else {
-                    swal("Data publisher is safe!");
-                }
-            });
-    }
-
-    const inactivedPublisher = (id) => {
         const admin = authHeader();
 
-        axios.delete("http://localhost:7070/api/dynteam/book/publisher/delete/" + id, {
-            headers: admin
-        })
-            .then(function (response) {
-                console.log(response);
+        const r = window.confirm('Are you sure to inactive this publisher?')
+        if (r == true) {
+            axios.delete("http://localhost:7070/api/dynteam/book/publisher/delete/" + id, {
+                headers: admin
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Data publisher has been inactived!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Data publisher is safe!')
+        }
+
     }
 
     const handleClickInactive = (id) => {
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure to active this publisher?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                activedPublisher(id);
-                if (willDelete) {
-                    swal("Data publisher has been actived!", {
-                        icon: "success",
-                    }).then((OK) => {
-                        window.location.reload(false);
-                    })
 
-                } else {
-                    swal("Data publisher is safe!");
-                }
-            });
-    }
-
-    const activedPublisher = (id) => {
         const admin = authHeader();
 
-        axios.delete("http://localhost:7070/api/dynteam/book/publisher/actived/" + id, {
-            headers: admin
-        })
-            .then(function (response) {
-                console.log(response);
+        const r = window.confirm('Are you sure to active this publisher?')
+        if (r == true) {
+            axios.delete("http://localhost:7070/api/dynteam/book/publisher/actived/" + id, {
+                headers: admin
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Data publisher has been actived!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Data publisher is safe!')
+        }
+
     }
 
     const [show, setShow] = useState(false);
@@ -152,7 +128,7 @@ const TablePublisher = (props) => {
             headers: admin
         })
             .then(function (response) {
-                alert(publisherName + ' data added successfully!')
+                window.alert(publisherName + ' data added successfully!')
             })
             .catch(function (error) {
                 console.log(error);
@@ -173,7 +149,7 @@ const TablePublisher = (props) => {
             headers: admin
         })
             .then(function (response) {
-                alert(publisherName + ' data updated successfully!')
+                window.alert(publisherName + ' data updated successfully!')
             })
             .catch(function (error) {
                 console.log(error);

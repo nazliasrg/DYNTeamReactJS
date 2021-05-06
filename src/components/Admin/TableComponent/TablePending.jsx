@@ -12,8 +12,6 @@ import axios from 'axios'
 
 const { SearchBar } = Search;
 
-
-
 const TablePending = (props) => {
 
     const authHeader = () => {
@@ -39,34 +37,25 @@ const TablePending = (props) => {
         const admin = authHeader();
 
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure to accept request?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willAccept) => {
-                axios.put('http://localhost:7070/api/dynteam/request/confirm/' + id, null, {
-                    headers: admin
-                })
-                    .then(function (res) {
-                        console.log(res)
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
 
-                if (willAccept) {
-                    swal("Request has been accepted!", {
-                        icon: "success",
-                    })
-                        .then((OK) => {
-                            window.location.reload(false);
-                        })
-                } else {
-                    swal("Request is not accepted!");
-                }
-            });
+        const r = window.confirm('Are you sure to accept request?')
+        if (r == true) {
+            axios.put('http://localhost:7070/api/dynteam/request/confirm/' + id, null, {
+                headers: admin
+            })
+                .then(function (res) {
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Request has been accepted!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Request is not accepted!')
+        }
+
     }
 
     const handleClickDecline = (id) => {
@@ -74,32 +63,25 @@ const TablePending = (props) => {
         const admin = authHeader();
 
         console.log('data ke: ' + id)
-        swal({
-            title: "Are you sure to decline request?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDecline) => {
-                axios.put('http://localhost:7070/api/dynteam/request/decline/' + id, null, {
-                    headers: admin
+
+        const r = window.confirm('Are you sure to decline request?')
+        if (r == true) {
+            axios.put('http://localhost:7070/api/dynteam/request/decline/' + id, null, {
+                headers: admin
+            })
+                .then(function (res) {
+                    console.log(res)
                 })
-                    .then(function (res) {
-                        console.log(res)
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                if (willDecline) {
-                    swal("Request has been declined!", {
-                        icon: "success",
-                    }).then((OK) => {
-                        window.location.reload(false);
-                    })
-                } else {
-                    swal("Request is not declined!");
-                }
-            });
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Request has been declined!')
+            window.location.reload(false);
+        }
+        else {
+            window.alert('Request is not declined!')
+        }
+
     }
 
     const columns = [{
