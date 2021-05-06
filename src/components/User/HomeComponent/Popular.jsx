@@ -1,15 +1,44 @@
 import React, { Component } from 'react'
-import { Container } from 'react-bootstrap'
+import { Container, Card } from 'react-bootstrap'
 import { Row, Col } from 'reactstrap'
 import OwlCarousel from 'react-owl-carousel'
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
+import axios from 'axios'
 import HomeCard from './HomeCard';
 
 export default class Popular extends Component {
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        };
+    }
+
+    componentDidMount = () => {
+        this.getBooks()
+    }
+
+    getBooks = () => {
+        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/book')
+            .then(res => {
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
+            })
+    }
 
     render() {
-
+        const { data } = this.state;
+        const titleStyle = {
+            fontSize: "14px",
+            fontWeight: "bold",
+            textAlign: "center"
+        }
+        const cardStyle = {
+            width: "95%"
+        }
         return (
 
             <section class="pt-5 pb-5 mt-4">

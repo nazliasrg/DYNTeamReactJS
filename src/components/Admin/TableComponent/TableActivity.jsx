@@ -7,7 +7,6 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import swal from 'sweetalert';
 import axios from 'axios'
-import confirmAlert from 'react-confirm-alert'
 
 const { SearchBar } = Search;
 
