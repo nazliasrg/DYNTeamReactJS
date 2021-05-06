@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Card } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { Row, Col } from 'reactstrap'
 import OwlCarousel from 'react-owl-carousel'
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -15,12 +15,31 @@ export default class Popular extends Component {
         };
     }
 
-    componentDidMount = () => {
-        this.getBooks()
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
+
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getBooks();
     }
 
     getBooks = () => {
-        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/book')
+        const user = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/auth/user/getBookPopuler', {
+            headers: user
+        })
             .then(res => {
                 this.setState({
                     data: res.data
@@ -30,15 +49,6 @@ export default class Popular extends Component {
     }
 
     render() {
-        const { data } = this.state;
-        const titleStyle = {
-            fontSize: "14px",
-            fontWeight: "bold",
-            textAlign: "center"
-        }
-        const cardStyle = {
-            width: "95%"
-        }
         return (
 
             <section class="pt-5 pb-5 mt-4">
