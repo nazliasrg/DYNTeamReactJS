@@ -3,6 +3,7 @@ import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarCom
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent'
 import { Row, Col, Container } from 'reactstrap'
 import axios from 'axios'
+import { reset } from 'redux-form'
 
 class EditBook extends Component {
     constructor(props) {
@@ -17,6 +18,7 @@ class EditBook extends Component {
             authorId: 1,
             year: 0,
             synopsis: "",
+            cover: "",
             file: null,
             namafile: "",
             authorList: [],
@@ -72,6 +74,7 @@ class EditBook extends Component {
                     authorId: res.data.authorEntity.authorId,
                     year: res.data.year,
                     synopsis: res.data.synopsis,
+                    cover: res.data.cover,
                     file: "http://localhost:7070/api/dynteam/book/cover/download/" + res.data.cover
                 })
                 console.log("cover")
@@ -175,9 +178,11 @@ class EditBook extends Component {
     }
 
     fileChange = async (e) => {
+        console.log("e.target.files");
         console.log(e.target.files);
         await this.setState({
-            file: e.target.files[0]
+            file: e.target.files[0],
+            cover: e.target.files[0].name
         })
         await console.log(this.state.file);
     }
@@ -185,27 +190,33 @@ class EditBook extends Component {
     onSubmitForm = (e) => {
         e.preventDefault();
 
-        const data = new FormData();
-        data.append('file', this.state.file);
-
-        console.log(data)
-
         const admin = this.authHeader();
 
-        axios.post('http://localhost:7070/api/dynteam/book/cover/upload', data, {
-            headers: admin
-        })
-            .then(res => {
-                console.log("cover : ");
-                console.log(res);
-                this.setState({
-                    file: null
-                })
-                this.editBook(res, admin);
+        if (this.state.file == "http://localhost:7070/api/dynteam/book/cover/download/" + this.state.cover) {
+            this.editBook(this.state.cover, admin);
+        }
+        else {
+            const data = new FormData();
+            data.append('file', this.state.file);
+
+            console.log(data)
+
+            axios.post('http://localhost:7070/api/dynteam/book/cover/upload', data, {
+                headers: admin
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(res => {
+                    console.log("cover : ");
+                    console.log(res.data);
+                    this.setState({
+                        file: null
+                    })
+                    this.editBook(res.data, admin);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
     }
 
     editBook = (res, admin) => {
@@ -225,7 +236,7 @@ class EditBook extends Component {
         console.log("data buku : ")
         console.log(book)
 
-        axios.put('http://localhost:7070/api/dynteam/book/update/' + this.state.id, book, {
+        axios.put('http://localhost:7070/api/dynteam/book/update/' + this.state.id + '/' + res, book, {
             headers: admin
         })
             .then(res => {
@@ -242,7 +253,7 @@ class EditBook extends Component {
     }
 
     render() {
-        const { authorList, categoryList, publisherList, title, categoryId, publisherId, authorId, year, synopsis, file } = this.state;
+        const { authorList, categoryList, publisherList, title, categoryId, publisherId, authorId, year, synopsis, file, cover } = this.state;
 
         return (
             <Fragment>
@@ -341,7 +352,7 @@ class EditBook extends Component {
                                     </Row>
                                     <Row>
                                         <Col md={3}>
-                                            <img src={file} className="img-thumbnail" />
+                                            <img src={`http://localhost:7070/api/dynteam/book/cover/download/${cover}`} className="img-thumbnail" />
                                         </Col>
                                         <Col md={6}>
                                             <div>
