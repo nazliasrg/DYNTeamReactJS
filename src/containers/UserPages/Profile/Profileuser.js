@@ -432,8 +432,6 @@ const Profileuser = () => {
                                         </Modal.Footer>
                                     </Modal>
 
-                                  
-
                                     <ProfileMedsos />
                                 </div>
                             </div>

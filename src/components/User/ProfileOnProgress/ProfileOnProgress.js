@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom';
 import coverbook from '../../../assets/B001.jpeg';
+import { ReactSession } from 'react-client-session';
 
 //1. panggi; library axios
 import axios from 'axios';
@@ -23,29 +24,38 @@ class ProfileOnProgress extends Component {
     componentDidMount() {
         
         //5. panggil web servicenya
-        axios.get('json/book.json')
-        .then(function (res) {
-            
-            var i = 0;
-            var data=[];
-            res.data.map((item) => {
-                if(i<3)
-                {
-                    //6. untuk nambahin kompponen ke arraynya.  
-                    data.push(
+        var userId = ReactSession.get("userId");
+        axios.get('http://localhost:7070/api/dynteam/auth/user/getBook/1/' +userId)
+        .then(res => {
 
-                        <div className="col-sm-3 mb-2">
-                            <div className="card coverBook">
-                                <img src={(item.cover).replace('../','../')} className="img-thumbnail" />
-                                <Button variant="primary">
-                                    Information
-                                </Button>
+            var message = res.data.message;
+            var status = res.data.status;
+            if(status==200){
+                var i = 0;
+                var data=[];
+                res.data.data.map((item) => {
+                    if(i<3)
+                    {
+                        var dataCover = item.bookEntity;
+                        //6. untuk nambahin kompponen ke arraynya.  
+                        var bookCover = 'http://localhost:7070/api/dynteam/book/cover/download/' + dataCover.cover;
+                        data.push(
+    
+                            <div className="col-sm-3 mb-2">
+                                <div className="card coverBook">
+                                    <img src={bookCover} className="img-thumbnail" />
+                                    <Button variant="primary">
+                                        Information
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                      )
-                }
-                i++;
-            });
+                          )
+                    }
+                    i++;
+                });
+
+            }
+           
             //7.Supaya listbooknya bisa ngrender ulang, utk isi list booknya (mkaanya butuh setState)
             self.setState({
                 listbook: data
@@ -53,8 +63,8 @@ class ProfileOnProgress extends Component {
             console.log(data);
             
         })
-        .catch(function (error) {
-            console.log(error);
+        .catch(error => {
+            console.log(error)
           
         })
 

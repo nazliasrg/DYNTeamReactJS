@@ -7,6 +7,27 @@ import Recommended from '../../../components/User/HomeComponent/Recommended'
 import Popular from '../../../components/User/HomeComponent/Popular'
 
 export default class HomeUser extends Component {
+
+    authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_user'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    async componentDidMount() {
+        await this.authHeader();
+        await console.log("user")
+        await console.log(localStorage.getItem('data_user'))
+    }
+
     render() {
         return (
             <Fragment>

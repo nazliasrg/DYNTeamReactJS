@@ -5,21 +5,20 @@ import logo from '../../../assets/Logouser.png';
 import { Link } from 'react-router-dom';
 import { ReactSession } from 'react-client-session';
 import axios from 'axios';
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { NotificationContainer } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 ReactSession.setStoreType("localStorage");
-
-const defaultState = {
-    username: null,
-    password: null,
-}
 
 class Loginuser extends Component {
 
     constructor() {
         super();
-        this.state = defaultState;
+        this.state = {
+            username: '',
+            password: '',
+            roles: ""
+        };
         this.handleInputChange = this.handleInputChange.bind(this);
     }
 
@@ -31,12 +30,6 @@ class Loginuser extends Component {
         this.setState({
             [name]: value
         });
-
-    }
-    componentDidMount() {
-
-    }
-    componentDidUpdate() {
 
     }
 
@@ -67,31 +60,38 @@ class Loginuser extends Component {
                 password: this.state.password
             }
 
-            //   console.log(user);
-
-            axios
-                .post('http://localhost:7070/api/dynteam/auth/user/login', user)
+            axios.post('http://localhost:7070/api/dynteam/auth/user/login', user)
                 .then(res => {
-                    var status = res.data.status;
-                    var message = res.data.message;
-                    if (status == 200) {
-                        this.setState(defaultState);
-                        NotificationManager.success(message);
-                        ReactSession.set("username", this.state.username);//untuk menyimpat sessionnya yg dikasih nama username
-                        ReactSession.set("token", res.data.data.token);
-                        ReactSession.set("userId", res.data.data.userId);
-                        console.log(ReactSession.get("username"));
-                        this.props.history.push('/Home');
-                    } else {
-                        NotificationManager.error(message);
+                    console.log("res");
+                    console.log(res.data.data.roles[0]);
+                    this.setState({
+                        roles: res.data.data.roles[0]
+                    })
 
+                    alert('Welcome ' + this.state.username + '!');
+                    this.props.history.push({
+                        pathname: '/Home',
+                        state: res.data.data,
+                    })
+
+                    console.log(this.props.history.location.state);
+                    console.log("res.data.data.token");
+                    console.log(res.data.data.token);
+
+                    if (res.data.data.token && (this.state.roles === 'USER')) {
+                        localStorage.setItem('data_user', JSON.stringify(res.data));
                     }
-                })
-                .catch(error => {
-                    console.log(error)
-                })
 
-            // console.warn(this.state);
+                })
+                .catch(function (error) {
+                    if (error == "Error: Request failed with status code 417") {
+                        alert("Account is not active!");
+                    }
+                    else if (error == "Request failed with status code 500") {
+                        alert("Username and password don't match!");
+                    }
+                    console.log(error.message)
+                });
 
         }
     }
