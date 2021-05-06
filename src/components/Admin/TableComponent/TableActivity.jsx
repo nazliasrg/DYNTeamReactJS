@@ -7,6 +7,7 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import swal from 'sweetalert';
 import axios from 'axios'
+import confirmAlert from 'react-confirm-alert'
 
 const { SearchBar } = Search;
 
@@ -35,6 +36,34 @@ const TableActivity = (props) => {
         const admin = authHeader();
 
         console.log('data ke: ' + id)
+
+        // confirmAlert({
+        //     title: 'Confirm to Extend',
+        //     message: 'Are you sure to extends activity?',
+        //     buttons: [
+        //         {
+        //             label: 'Yes',
+        //             onClick: () => {
+        //                 axios.put('http://localhost:7070/api/dynteam/request/extend/' + id, null, {
+        //                     headers: admin
+        //                 })
+        //                     .then(function (res) {
+        //                         console.log(res)
+        //                     })
+        //                     .catch(function (error) {
+        //                         console.log(error)
+        //                     })
+        //                 alert('Activity has been extended!')
+        //             }
+        //         },
+        //         {
+        //             label: 'No',
+        //             onClick: () => alert('Activity is not extended!')
+        //         }
+        //     ]
+        // });
+
+
         swal({
             title: "Are you sure to extends activity?",
             icon: "warning",
