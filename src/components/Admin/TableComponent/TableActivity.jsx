@@ -42,7 +42,7 @@ const TableActivity = (props) => {
             dangerMode: true,
         })
             .then((willExtends) => {
-                axios.put('http://localhost:7070/api/dynteam/request/extend/' + id, {
+                axios.put('http://localhost:7070/api/dynteam/request/extend/' + id, null, {
                     headers: admin
                 })
                     .then(function (res) {
@@ -76,7 +76,7 @@ const TableActivity = (props) => {
             dangerMode: true,
         })
             .then((willReturn) => {
-                axios.put('http://localhost:7070/api/dynteam/request/return/' + id, {
+                axios.put('http://localhost:7070/api/dynteam/request/return/' + id, null, {
                     headers: admin
                 })
                     .then(function (res) {
