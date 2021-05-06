@@ -9,18 +9,19 @@ import Popular from '../../../components/User/HomeComponent/Popular'
 export default class HomeUser extends Component {
 
     authHeader = () => {
-        const admin = JSON.parse(localStorage.getItem('data_user'));
-        console.log(admin)
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
 
-        if (admin && admin.data.token) {
+        if (user && user.data.token) {
             return {
-                'authorization': `Bearer ${admin.data.token}`
+                'authorization': `Bearer ${user.data.token}`
             }
         }
         else {
             return null;
         }
     }
+
 
     async componentDidMount() {
         await this.authHeader();

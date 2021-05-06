@@ -14,13 +14,32 @@ export default class Popular extends Component {
             data: []
         };
     }
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
 
-    componentDidMount = () => {
-        this.getBooks()
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getBooks()
     }
 
     getBooks = () => {
-        axios.get('https://605c7cdc6d85de00170da562.mockapi.io/book')
+        const user = this.authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/auth/user/getBookPopuler', {
+            headers: user
+        })
             .then(res => {
                 this.setState({
                     data: res.data
@@ -30,7 +49,6 @@ export default class Popular extends Component {
     }
 
     render() {
-        const { data } = this.state;
         const titleStyle = {
             fontSize: "14px",
             fontWeight: "bold",
@@ -39,6 +57,9 @@ export default class Popular extends Component {
         const cardStyle = {
             width: "95%"
         }
+
+        const data = this.state.data;
+
         return (
 
             <section class="pt-5 pb-5 mt-4">
@@ -50,7 +71,7 @@ export default class Popular extends Component {
                         <Col md={12}>
 
                             <OwlCarousel items={6} className='owl-theme' loop margin={5} nav>
-                                <HomeCard />
+                                <HomeCard data={data} />
                             </OwlCarousel>
 
                         </Col>
