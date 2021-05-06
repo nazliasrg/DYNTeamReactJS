@@ -4,8 +4,50 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom';
+import { ReactSession } from 'react-client-session';
+import axios from 'axios';
+
+const defaultState = {
+    fullname: null,
+    email: null,
+    phoneNumber: null
+
+}
 
 class ProfileDatauser extends Component {
+    constructor() {
+        super();
+        this.state = defaultState;
+    }
+    componentDidMount() {
+        this.getDataProfile();
+    }
+    componentDidUpdate() {
+
+    }
+
+    getDataProfile(){
+        var userId = ReactSession.get("userId");
+        console.log("tes "+userId);
+
+             axios
+             .get('http://localhost:7070/api/dynteam/auth/user/' + userId)
+             .then(res => {
+                var dataProfile = res.data.detailUserEntity;
+                this.setState ({
+                    fullname: dataProfile.fullname,
+                    email: dataProfile.email,
+                    phoneNumber: dataProfile.phoneNumber
+                })
+                
+             })
+             .catch(error => {
+                console.log(error)
+             })
+
+    }
+
+
 
     render() {
         return (
@@ -16,7 +58,7 @@ class ProfileDatauser extends Component {
                                                 <h6 className="mb-0">Full Name</h6>
                                             </div>
                                             <div className="col-sm-9 text-secondary">
-                                                Bernadetha Yona Astikasari
+                                            {this.state.fullname}
                                             </div>
                                         </div>
                                         <br />
@@ -25,7 +67,7 @@ class ProfileDatauser extends Component {
                                                 <h6 className="mb-0">Email</h6>
                                             </div>
                                             <div className="col-sm-9 text-secondary">
-                                                yonaastika1507@gmail.com
+                                            {this.state.email}
                                             </div>
                                         </div>
                                         <br />
@@ -34,26 +76,8 @@ class ProfileDatauser extends Component {
                                                 <h6 className="mb-0">Phone</h6>
                                             </div>
                                             <div className="col-sm-9 text-secondary">
-                                                024 7478783
+                                            {this.state.phoneNumber}
                                              </div>
-                                        </div>
-                                        <br />
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-0">Mobile</h6>
-                                            </div>
-                                            <div className="col-sm-9 text-secondary">
-                                                081 111 222 333
-                                        </div>
-                                        </div>
-                                        <br />
-                                        <div className="row">
-                                            <div className="col-sm-3">
-                                                <h6 className="mb-0">Address</h6>
-                                            </div>
-                                            <div className="col-sm-9 text-secondary">
-                                                Jatiluhur Barat V nomor 13, Semarang
-                                        </div>
                                         </div>
                                     </div>
 
