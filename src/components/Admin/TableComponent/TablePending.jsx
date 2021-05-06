@@ -46,7 +46,7 @@ const TablePending = (props) => {
             dangerMode: true,
         })
             .then((willAccept) => {
-                axios.put('http://localhost:7070/api/dynteam/request/confirm/' + id, {
+                axios.put('http://localhost:7070/api/dynteam/request/confirm/' + id, null, {
                     headers: admin
                 })
                     .then(function (res) {
@@ -81,7 +81,7 @@ const TablePending = (props) => {
             dangerMode: true,
         })
             .then((willDecline) => {
-                axios.put('http://localhost:7070/api/dynteam/request/decline/' + id, {
+                axios.put('http://localhost:7070/api/dynteam/request/decline/' + id, null, {
                     headers: admin
                 })
                     .then(function (res) {

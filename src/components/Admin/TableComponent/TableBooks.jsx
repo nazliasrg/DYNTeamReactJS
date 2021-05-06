@@ -12,7 +12,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 import axios from 'axios'
 
+
 const TableBooks = (props) => {
+
     const { SearchBar } = Search;
 
     const authHeader = () => {
@@ -114,12 +116,11 @@ const TableBooks = (props) => {
                 console.log("res.data.stock")
                 console.log(res.data.stock)
                 setStock(res.data.stock)
-                console.log("oldStock")
-                console.log(stock)
                 setBookId(res.data.bookId)
-                console.log("bookId")
-                console.log(bookId)
+
             })
+
+
     }
 
     const discrepancyButton = (id) => {
@@ -141,14 +142,15 @@ const TableBooks = (props) => {
         setAddStock(e.target.value)
     }
 
-    const submitAddStock = () => {
+    const submitAddStock = (e) => {
+        e.preventDefault();
 
-        axios.put('http://localhost:7070/api/dynteam/book/add/' + bookId + '/' + addStock, {
+        axios.put('http://localhost:7070/api/dynteam/book/add/' + bookId + '/' + addStock, null, {
             headers: admin
         })
             .then(res => {
-                // console.log(res)
                 alert('Stock was successfully added!')
+                window.location.reload(false);
             })
             .catch(function (error) {
                 console.log(error)
@@ -157,12 +159,12 @@ const TableBooks = (props) => {
 
     const submitDiscStock = () => {
 
-        axios.put('http://localhost:7070/api/dynteam/book/discrepancy/' + bookId + '/' + addStock, {
+        axios.put('http://localhost:7070/api/dynteam/book/discrepancy/' + bookId + '/' + addStock, null, {
             headers: admin
         })
             .then(res => {
-                // console.log(res)
                 alert('Stock has been reduced!')
+                window.location.reload(false);
             })
             .catch(function (error) {
                 console.log(error)
@@ -347,7 +349,7 @@ const TableBooks = (props) => {
                                                 <Modal.Title>Add Stock</Modal.Title>
                                             </Modal.Header>
                                             <Modal.Body>
-                                                <form onSubmit={submitAddStock}>
+                                                <form>
                                                     <div className="form-group">
                                                         <label htmlFor="oldStock">Old Saldo</label>
                                                         <input className="form-control" id="stock" value={stock} readOnly />
@@ -357,7 +359,7 @@ const TableBooks = (props) => {
                                                         <input className="form-control" id="addStock" value={addStock} onChange={stockChange} />
                                                     </div>
                                                     <div className="form-group">
-                                                        <button className="form-control btn btn-primary" type="submit">Add Stock</button>
+                                                        <button className="form-control btn btn-primary" type="button" onClick={submitAddStock}>Add Stock</button>
                                                     </div>
                                                 </form>
                                             </Modal.Body>
