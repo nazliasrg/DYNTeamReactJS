@@ -1,16 +1,16 @@
 .container-card{
-    height: 520px;
+    height: 590px;
     width: 250px;
     border-radius: 10px 10px 10px 10px;
     padding: 20px 0 0 18px;
     background-color:rgb(255, 255, 255);
     box-shadow: 5px 5px 14px 0 rgb(85, 85, 85);
-    margin: 1% 0 2% 2%;
+    margin: 2% 0 2% 2%;
 }
 
 .container-card:hover{
     /* cursor: pointer; */
-    transform: scale(1.10);
+    transform: scale(1.02);
 }
 
 .img-container{
@@ -46,7 +46,7 @@
     font-size: 17px;
 }
 
-/* .author-container{
+.author-container{
     width: 200px;
     height: 20px;
     text-align: center;
@@ -55,13 +55,14 @@
 .author-container p{
     font-size: 15px;
     color: rgb(63, 63, 63);
-} */
+}
 
 
 .tombol{
     width: 150px;
     border-radius: 10px 10px 10px 10px;
     cursor: pointer;
+    margin-top: 50px;
     margin-right: 20px;
     box-shadow: 2px 2px 7px rgb(51, 51, 51);
 }

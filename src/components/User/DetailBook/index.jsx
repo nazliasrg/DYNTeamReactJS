@@ -108,8 +108,6 @@ class BookDetail extends Component {
             NotificationManager.error("Your Saldo is right now is Rp.0 Please top up your saldo.");
         } else if (request.durationId == 1 && this.state.saldoUser < 3000 || request.durationId == 2 && this.state.saldoUser < 7000) {
             NotificationManager.error("Your saldo is not enough for this duration, please top up your saldo or change your duration.");
-        } else if (this.state.isAvailable == 0) {
-            NotificationManager.error("We are so sorry this book is not available.");
         }
         else {
             axios.post('http://localhost:7070/api/dynteam/request/requestbook', request, {
@@ -139,7 +137,6 @@ class BookDetail extends Component {
         })
     }
 
-
     // UNTUK MENUTUP MODAL PEMINJALAN BUKU
     closeModal = () => {
         this.setState({
@@ -150,9 +147,13 @@ class BookDetail extends Component {
 
     // UNTUK MEMBUKA MODAL PEMINJAMAN
     openModal = () => {
-        this.setState({
-            showModal: true
-        });
+        if(this.state.stock >= 1 ){
+            this.setState({
+                showModal: true
+            });
+        }else{
+            NotificationManager.error("We are so sorry this book is not available because we don't have any stock left.");
+        }
     }
 
 
@@ -208,11 +209,11 @@ class BookDetail extends Component {
                             </Row>
                             <Row className="d-flex justify-content-between mx-2 mt-3">
                                 <div>
-                                    <button className="btn btn-primary mt-3" onClick={this.openModal}>Rent Book</button>
+                                    <Button className="btn btn-info mt-3" onClick={this.openModal}>Rent Book</Button>
                                 </div>
                                 <div>
                                     <Link to={`/Genre`}>
-                                        <button className="btn btn-secondary mt-3">Back to Catalogue</button>
+                                        <Button className="btn btn-info mt-3">Back to Catalogue</Button>
                                     </Link>
                                 </div>
                             </Row>
