@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Fragment } from 'react';
 import { ModalTitle } from 'react-bootstrap';
+import { Button, Row, Col } from 'reactstrap';
 import { ReactSession } from 'react-client-session';
 import { Link } from 'react-router-dom';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
@@ -193,24 +194,28 @@ class BookDetail extends Component {
                                 </table>
                             </div>
                         </div>
-                        <div className="col-md-8 col-12">
-                            <div className="book-title text-center">
-                                <p>{title}</p>
-                            </div>
+                        <div className="col-md-8 col-12 p-4">
+                            <Row className="justify-content-center">
+                                <div className="book-title text-center mt-3">
+                                    <label className="pageTitle">{title}</label>
+                                </div>
+                            </Row>
                             <hr />
-                            <div className="book-synopsis">
-                                <p>{synopsis}</p>
-                            </div>
-                            <div className="d-flex justify-content-between">
+                            <Row className="mx-2 my-2">
+                                <div className="book-synopsis">
+                                    <p>{synopsis}</p>
+                                </div>
+                            </Row>
+                            <Row className="d-flex justify-content-between mx-2 mt-3">
                                 <div>
-                                    <button className="mt-3" onClick={this.openModal}>Rent Book</button>
+                                    <button className="btn btn-primary mt-3" onClick={this.openModal}>Rent Book</button>
                                 </div>
                                 <div>
                                     <Link to={`/Genre`}>
-                                        <button className="mt-3">Back to Catalogue</button>
+                                        <button className="btn btn-secondary mt-3">Back to Catalogue</button>
                                     </Link>
                                 </div>
-                            </div>
+                            </Row>
                         </div>
                     </div>
                 </div>
@@ -224,27 +229,52 @@ class BookDetail extends Component {
                     </ModalHeader>
 
                     <ModalBody>
-                        <p>
-                            Title book: {title} <br />
-                        Author: {authorName}
-                        </p>
+                        <Col md={12}>
+                            <Row>
+                                <Col md={3}>
+                                    Title book
+                                </Col>
+                                <Col md={1}>
+                                    :
+                                </Col>
+                                <Col md={8}>
+                                    <b>{title}</b>
+                                </Col>
+                            </Row>
+                            <Row className="mt-2">
+                                <Col md={3}>
+                                    Author
+                                </Col>
+                                <Col md={1}>
+                                    :
+                                </Col>
+                                <Col md={8}>
+                                    <b>{authorName}</b>
+                                </Col>
+                            </Row>
+                            <Row className="mt-4">
+                                <Col md={12}>
+                                    <small>Please input days you want to rent this book</small> <br />
+                                    <small>*Cost Rp. 1.000 per day</small>
+                                </Col>
+                            </Row>
+                            <Row className="mt-2">
+                                <Col md={6}></Col>
+                                <Col md={6}>
+                                    <select className="form-control" name="day" id="days" value={this.state.durationId} onChange={this.formChange}>
+                                        <option value="0">choose days</option>
+                                        <option value="1">3 days</option>
+                                        <option value="2">7 days</option>
+                                    </select>
+                                </Col>
 
-                        <p>
-                            Please input days you want to rent this book <br />
-                            <small>
-                                *Cost Rp. 1.000 per day
-                        </small>
-                        </p>
-                        <select name="day" id="days" value={this.state.durationId} onChange={this.formChange}>
-                            <option value="0">choose days</option>
-                            <option value="1">3 days</option>
-                            <option value="2">7 days</option>
-                        </select>
+                            </Row>
+                        </Col>
                     </ModalBody>
 
                     <ModalFooter>
-                        <button onClick={this.submitRequest}>Rent this Book</button>
-                        <button onClick={this.closeModal}>Close</button>
+                        <button className="btn btn-primary" onClick={this.submitRequest}>Rent this Book</button>
+                        <button className="btn btn-light" onClick={this.closeModal}>Close</button>
                     </ModalFooter>
                 </Modal>
                 <NotificationContainer />
