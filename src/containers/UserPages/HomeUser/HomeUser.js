@@ -34,7 +34,7 @@ export default class HomeUser extends Component {
             <Fragment>
                 <Header />
                 <CarouselHome />
-                <SearchBar />
+                {/* <SearchBar /> */}
                 <Recommended />
                 <Popular />
             </Fragment>
