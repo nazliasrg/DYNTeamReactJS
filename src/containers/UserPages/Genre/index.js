@@ -25,6 +25,7 @@ class GenrePage extends Component{
         }
     }
 
+    // MENDAPATKAN HEADER DI CATALOGUE PAGE
     authHeader = () => {
         const user = JSON.parse(localStorage.getItem('data_user'));
         console.log(user)

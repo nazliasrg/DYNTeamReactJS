@@ -9,9 +9,9 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 // import cover from '../../../assets/book/B001.jpg'
 import './DetailBook.css';
 import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
 
 // BUAT REACT SESSION UNTUK MENGGAMBIL DATA USER YANG SUDAH
-ReactSession.setStoreType("localStorage");
 
 class BookDetail extends Component{
     constructor(){
@@ -28,7 +28,8 @@ class BookDetail extends Component{
             showModal: false,
             durationId: "0",
             isAvailable:"",
-            userId:""
+            userId:"",
+            saldoUser:"",
         }
     }
 
@@ -38,7 +39,8 @@ class BookDetail extends Component{
         
         if (user && user.data.token) {
             return {
-                'authorization': `Bearer ${user.data.token}`
+                'authorization': `Bearer ${user.data.token}`,
+                'userId' : `${user.data.userId}`
             }
         }
         else {
@@ -48,24 +50,24 @@ class BookDetail extends Component{
 
     async componentDidMount(){
         await this.authHeader();
+        await console.log(this.authHeader().userId);
         const book_id=  await this.props.match.params.bookId
         await console.log(this.props);
         await this.getDetailBook(book_id);
-        await this.getUser();
-        // await this.submitRequest();
         await console.log("data_user");
         await console.log(JSON.parse(localStorage.getItem("data_user")));
+        await this.getuser();
     }
 
-
-    getUser(){
-        var userId = ReactSession.get("userId");
-        console.log(userId);
-        this.setState({
-            userId: userId
+    getuser(){
+        const userid= this.authHeader().userId;
+        axios.get('http://localhost:7070/api/dynteam/auth/user/' + userid).then(res =>{
+            console.log(res.data.saldoUser);
+            this.setState({
+                saldoUser: res.data.saldoUser
+            })
         })
     }
-
 
     getDetailBook(book_id){
         const user = this.authHeader();
@@ -89,29 +91,34 @@ class BookDetail extends Component{
 
     // INPUT KE DATABASAE DENGAN AXIOS.POST
     submitRequest = (e) => {
+        const user = this.authHeader();
         e.preventDefault();
         
         const request ={
-            userId: this.state.userId,
+            userId: user.userId,
             bookCode: this.state.bookCode,
             durationId: this.state.durationId
         }
         console.log(request);
-        
-        // if(this.state.isAvailable === 1 && this.state.stock === 0){
-            // NotificationManager.success("Sorry, this book is not available right now. Please check again later or call admin.");
-        // }else if(request.durationId === 0){
-        //     NotificationManager.success("Please choose duration.");
-        // }else if(request.userId === 0){
-        //     NotificationManager.success("Please login first.");
-        // }else{
-            const user = this.authHeader();
+
+        if(request.durationId == 0){
+            NotificationManager.error("Please choose duration");
+        }else if(this.state.saldoUser == 0){
+            NotificationManager.error("Your Saldo is right now is Rp.0 Please top up your saldo.");
+        }else if(request.durationId == 1 && this.state.saldoUser < 3000 || request.durationId == 2 && this.state.saldoUser < 7000){
+            NotificationManager.error("Your saldo is not enough for this duration, please top up your saldo or change your duration.");
+        }else if(this.state.isAvailable == 0){
+            NotificationManager.error("We are so sorry this book is not available.");
+        }
+        else{
             axios.post('http://localhost:7070/api/dynteam/request/requestbook', request, {
                 headers:user
             })
             .then(res => {
                 console.log(res);
-                NotificationManager.success("Thank you for rent this book. Please wait for confirmation from admin. We'll let you know if book is ready");
+                if(res.data == "peminjaman berhasil"){
+                    NotificationManager.success("Thank you for rent this book, we'll let you know if this book is ready.");
+                }
                 this.setState({
                     showModal: false
                 })                
@@ -119,7 +126,7 @@ class BookDetail extends Component{
             .catch(function (error){
                 console.log(error);
             })
-        // }
+        }
     }
 
 
@@ -156,6 +163,7 @@ class BookDetail extends Component{
         const {publisherName} = this.state.publisher;
         return(
             <Fragment>
+            <Header/>
             <div className="container detail-book-container">
                 <div className="row">
                     <div className="col-md-4 col-12 cover-container">
