@@ -48,13 +48,13 @@ class GenrePage extends Component{
 
     getBook = () =>{
         const user = this.authHeader();
-        axios.get('http://localhost:7070/api/dynteam/book/books', {
+        axios.get('http://localhost:7070/api/dynteam/book/active-books', {
             headers: user
         }).then(res =>{
             this.setState({
                 data: res.data,
             })
-            console.log(this.state.authorName);
+            console.log(this.state.data);
         })
     }
 
@@ -90,7 +90,7 @@ class GenrePage extends Component{
                         {
                             // diubah dari data.map jadi filterbooks supaya saat mencari buku dapat tertampil. map digunakan untuk memanggil data yang ada di dalam database
                             filterbooks.map((val) => { 
-                                console.log(val.title);
+                                console.log(val.authorEntity.authorName);
                                 return(
                                     <BookCard
                                         key = {val.bookId}
@@ -99,6 +99,7 @@ class GenrePage extends Component{
                                         cover = {val.cover}
                                         title = {val.title}
                                         isAvailable = {val.isAvailable}
+                                        author = {val.authorEntity.authorName}
                                         // author = {val.author}
                                     />
                                     
