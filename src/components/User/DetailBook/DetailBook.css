@@ -5,7 +5,7 @@
     border-radius: 5px 5px 5px 5px;
     margin-top: 100px;
     margin-bottom: 50px;
-    box-shadow: 10px 10px 35px #888888;
+    box-shadow: 10px 10px 35px #727272;
 }
 
 .cover-container .img-fluid{
@@ -24,9 +24,11 @@
 
 .book-synopsis{
     height: 370px;
+    padding: 0px 10px 0px 10px;
     font-family: 'Mitr', sans-serif;
     font-size: 15px;
     text-align: justify;
+    overflow-y: scroll;
 }
 
 @media(max-width: 600px){

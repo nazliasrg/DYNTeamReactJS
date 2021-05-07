@@ -5,7 +5,7 @@ import './BookCard.css';
 
 const BookCard = (props) =>{ // "props" DIGUNAKAN HANYA UNTUK MENGIRIM DATA. TIDAK BISA MENGUBAH DATA
 
-    const {title, book_id, cover} = props;
+    const {isAvailable, title, book_id, cover} = props;
     return(
         <div className="d-flex flex-column container-card">
             <div className="d-flex justify-content-center align-items-end img-container">
@@ -19,12 +19,12 @@ const BookCard = (props) =>{ // "props" DIGUNAKAN HANYA UNTUK MENGIRIM DATA. TID
             {/* <div className="author-container">
                 <p>{author}</p>
             </div> */}
-            <div className="d-flex button-bar">
-                <a className="tombol text-center" type="button">
+            <div className="d-inline-flex justify-content-center">
+                <button type="button" class="btn btn-info tombol">
                     <Link to={`detail/${book_id}`}>
-                        <p>Detail</p>
+                        Detail Book
                     </Link>
-                </a>
+                </button>
             </div>
         </div>
     );

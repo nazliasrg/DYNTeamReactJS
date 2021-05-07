@@ -10,8 +10,6 @@ import Header from '../../../components/User/Header/Header';
 import SearchBoxCatalogue from "../../../components/User/SearchBarCatalogue";
 import './Catalogue.css';
 
-ReactSession.setStoreType("localStorage");
-
 class GenrePage extends Component{
     constructor(){
         // MENGAMBIL SIFAT DARI PARENT. CLASS GENREPAGE INI MERUPAKAN CHILD DARI COMPONENT
@@ -21,6 +19,7 @@ class GenrePage extends Component{
         // MEMBUAT STATE DIDALAM CONTRUCTOR
         this.state = {
             data: [], // TEMPAT MENYIMPAN DATA BUKU YANG DIAMBIL DENGAN AXIOS.GET
+            // authorName:"",
             Searchbook: ""
         }
     }
@@ -43,17 +42,8 @@ class GenrePage extends Component{
     async componentDidMount(){
         await this.authHeader();
         await this.getBook();
-        await this.getUser();
         await console.log("data_user");
         await console.log(JSON.parse(localStorage.getItem("data_user")));
-    }
-
-    getUser(){
-        var userId = ReactSession.get("userId");
-        console.log(userId);
-        this.setState({
-            userId: userId
-        })
     }
 
     getBook = () =>{
@@ -62,9 +52,9 @@ class GenrePage extends Component{
             headers: user
         }).then(res =>{
             this.setState({
-                data: res.data
+                data: res.data,
             })
-            console.log(this.state.data);
+            console.log(this.state.authorName);
         })
     }
 
@@ -77,6 +67,7 @@ class GenrePage extends Component{
     render(){
         const {Searchbook, data} = this.state;
         // MENAMPILKAN BUKU YANG SESUAI DENGAN KALIMAT YANG KITA INPUTKAN
+        const titleToLowerCaseFilter = Searchbook.toLowerCase();
         let filterbooks = data.filter((buku) =>{ 
             return buku.title.toLowerCase().includes(Searchbook.toLowerCase()) 
         })
@@ -87,10 +78,11 @@ class GenrePage extends Component{
                     <div className="row justify-content-center">
                         <div className="col-auto catalogue-title">
                             <p>Book Catalogue</p>
+                            <p>Book Catalogue</p>
                         </div>
                     </div>
                     <div className="row justify-content-center">
-                        <div className="col-sm-8">
+                        <div className="col-sm-auto mb-4">
                             <SearchBoxCatalogue handleInput={this.handleInput} />
                         </div>
                     </div>
@@ -98,7 +90,7 @@ class GenrePage extends Component{
                         {
                             // diubah dari data.map jadi filterbooks supaya saat mencari buku dapat tertampil. map digunakan untuk memanggil data yang ada di dalam database
                             filterbooks.map((val) => { 
-                                // console.log(val.cover);
+                                console.log(val.title);
                                 return(
                                     <BookCard
                                         key = {val.bookId}
@@ -106,6 +98,7 @@ class GenrePage extends Component{
                                         book_code = {val.bookCode} 
                                         cover = {val.cover}
                                         title = {val.title}
+                                        isAvailable = {val.isAvailable}
                                         // author = {val.author}
                                     />
                                     
