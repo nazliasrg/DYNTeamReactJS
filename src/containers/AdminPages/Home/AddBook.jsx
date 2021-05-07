@@ -199,7 +199,7 @@ class AddBook extends Component {
             .then(res => {
                 console.log("hasil insert book : ")
                 console.log(res)
-                alert('Data buku \"' + res.data.data.title + '\" berhasil dimasukkan');
+                alert('Book \"' + res.data.data.title + '\" has been added!');
                 this.props.history.push({
                     pathname: '/home-admin'
                 })
