@@ -16,9 +16,6 @@ const BookCard = (props) =>{ // "props" DIGUNAKAN HANYA UNTUK MENGIRIM DATA. TID
             <div className="title-container">
                 <p>{title}</p>
             </div>
-            {/* <div className="author-container">
-                <p>{author}</p>
-            </div> */}
             <div className="d-inline-flex justify-content-center">
                 <button type="button" class="btn btn-info tombol">
                     <Link to={`detail/${book_id}`}>
