@@ -5,7 +5,7 @@ import logo from '../../../assets/Logouser.png';
 import { Link } from 'react-router-dom';
 import { ReactSession } from 'react-client-session';
 import axios from 'axios';
-import { NotificationContainer } from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 ReactSession.setStoreType("localStorage");
@@ -62,33 +62,46 @@ class Loginuser extends Component {
 
             axios.post('http://localhost:7070/api/dynteam/auth/user/login', user)
                 .then(res => {
-                    console.log("res");
-                    console.log(res.data.data.roles[0]);
-                    this.setState({
-                        roles: res.data.data.roles[0]
-                    })
+                    var status = res.data.status;
+                    var message = res.data.message;
 
-                    alert('Welcome ' + this.state.username + '!');
-                    this.props.history.push({
-                        pathname: '/Home',
-                        state: res.data.data,
-                    })
-
-                    console.log(this.props.history.location.state);
-                    console.log("res.data.data.token");
-                    console.log(res.data.data.token);
-
-                    if (res.data.data.token && (this.state.roles === 'USER')) {
-                        localStorage.setItem('data_user', JSON.stringify(res.data));
+                    if(status==200){
+                        console.log("res");
+                        console.log(res.data.data.roles[0]);
+                        this.setState({
+                            roles: res.data.data.roles[0]
+                        })
+    
+                        // alert('Welcome ' + this.state.username + '!');
+                        NotificationManager.success(message);
+    
+                        this.props.history.push({
+                            pathname: '/Home',
+                            state: res.data.data,
+                        })
+    
+                        console.log(this.props.history.location.state);
+                        console.log("res.data.data.token");
+                        console.log(res.data.data.token);
+    
+                        if (res.data.data.token && (this.state.roles === 'USER')) {
+                            localStorage.setItem('data_user', JSON.stringify(res.data));
+                        }
                     }
+                    else{
+                        NotificationManager.error(message);
+                    }
+
 
                 })
                 .catch(function (error) {
                     if (error == "Error: Request failed with status code 417") {
-                        alert("Account is not active!");
+                        // alert("Account is not active!");
+                        NotificationManager.error("Account is not active!");
                     }
                     else if (error == "Request failed with status code 500") {
-                        alert("Username and password don't match!");
+                        // alert("Username and password don't match!");
+                        NotificationManager.error("Username and password don't match!");
                     }
                     console.log(error.message)
                 });

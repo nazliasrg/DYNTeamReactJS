@@ -7,6 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { ReactSession } from 'react-client-session';
 import axios from 'axios';
 
+ReactSession.setStoreType("localStorage");
 const defaultState = {
     facebook: null,
     instagram: null,
@@ -14,22 +15,41 @@ const defaultState = {
 
 }
 class ProfileMedsos extends Component {
+    userId = '';
+
     constructor() {
         super();
         this.state = defaultState;
     }
+
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
+
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
     componentDidMount() {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        this.userId = user.data.userId;
+
         this.getDataMedsos();
     }
     componentDidUpdate() {
 
     }
     getDataMedsos(){
-        var userId = ReactSession.get("userId");
-        console.log("tes "+userId);
 
              axios
-             .get('http://localhost:7070/api/dynteam/auth/user/' + userId)
+             .get('http://localhost:7070/api/dynteam/auth/user/' + this.userId ,{
+                headers:this.authHeader()
+            })
              .then(res => {
                  console.log("tes"+res);
                 var dataMedsos = res.data.detailUserEntity.socialMediaEntity;

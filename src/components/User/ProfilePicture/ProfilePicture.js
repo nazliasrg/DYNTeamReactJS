@@ -9,29 +9,47 @@ import axios from 'axios';
 ReactSession.setStoreType("localStorage");
 
 class ProfilePicture extends Component {
+    userId = '';
 
     constructor(){
 
         super();
         this.state = {dataUser:''}
     }
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log("yona" +user)
+
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
 
     componentDidMount() {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        this.userId = user.data.userId;
+
         this.setState({
-            dataUser:(ReactSession.get("username"))
+            dataUser:user.data.username
         });
         this.getProfilPicture();
      }
 
     getProfilPicture = async () => {
-        var userId = ReactSession.get("userId");
-        console.log(userId);
+
         axios
-            .get('http://localhost:7070/api/dynteam/auth/user/' + userId)
+            .get('http://localhost:7070/api/dynteam/auth/user/' + this.userId ,{
+                headers:this.authHeader()
+            })
             .then(res => {
                 console.log(res.data);
                 this.setState({
-                    userPhoto : 'http://localhost:7070/api/dynteam/auth/user/download/' +res.data.detailUserEntity.userPhoto
+                    userPhoto : 'http://localhost:7070/api/dynteam/auth/user/download/' +res.data.detailUserEntity.userPhoto 
                 });
 
             })
@@ -50,7 +68,7 @@ class ProfilePicture extends Component {
                                     <div className="card-body">
                                         <div className="d-flex flex-column" style={{ alignItems: 'center' }}>
                                             <img src={this.state.userPhoto} style={{
-                                                height: 200,
+                                                height: 200, width:200
                                             }} />
                                             <div className="mt-3">
                                                 <h4>Hello, {this.state.dataUser}</h4>
