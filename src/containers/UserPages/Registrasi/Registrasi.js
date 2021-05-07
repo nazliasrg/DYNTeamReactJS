@@ -322,7 +322,7 @@ class Registrasi extends Component {
                                                 </div>
                                                 <div className="col-md-4">
                                                     <label className="mx-1">Choose profile picture : </label>
-                                                    <input className="btn btn-outline-primary" type="file" onChange={this.onFileChange} />
+                                                    <input className="btn btn-outline-primary" type="file" onChange={this.onFileChange} style={{ width: 300 }} />
                                                     {/* <button className="btn btn-outline-primary" onClick={this.onFileUpload}>
                                                         Choose File
                                                     </button> */}
@@ -332,7 +332,7 @@ class Registrasi extends Component {
 
 
                                             <button type="submit" class="btn btn-success mt-4" onClick={() => this.submit()}
-                                                style={{ width: '100%' }}>Regis</button>
+                                                style={{ width: '100%' }}>Registration</button>
                                         </div>
 
                                     </div>
