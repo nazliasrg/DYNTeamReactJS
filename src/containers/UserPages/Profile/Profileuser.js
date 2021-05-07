@@ -254,25 +254,6 @@ const Profileuser = () => {
                                                 </div>
                                             </div>
 
-                                            {/* <div className="container-topup">
-                                                <div className="row">
-                                                    <div className="col">
-                                                        <label style={{ textAlign: 'left' }}>Input payment method</label>
-                                                    </div>
-                                                    <div className="col">
-                                                        <input type="text" className="form-control" id="paymentmethodtopup" />
-                                                    </div>
-                                                </div>
-                                                <button type="button" className="collapsible" style={{ marginTop: 5 }}>Information Transfer ATM</button>
-                                                <div className="content-collapsible">
-                                                    <p> 1. Select Transfer Menu Virtual Account </p>
-                                                    <p> 2. Enter the virtual account number 112233 </p>
-                                                    <p> 3. Check the information on the screen and make sure your username is correct. </p>
-                                                    <p> 4. Click Yes </p>
-                                                    <p> 5. Enter your pin number, click OK </p>
-                                                </div>
-                                            </div> */}
-
                                         </Modal.Body>
                                         <Modal.Footer>
 
@@ -303,17 +284,6 @@ const Profileuser = () => {
                                                 </div>
                                             </div>
 
-                                            {/* <div className="container-topup">
-                                                <div className="row">
-                                                    <div className="col">
-                                                        <label style={{ textAlign: 'left' }}>Information</label>
-                                                    </div>
-                                                    <div className="col">
-                                                        <input type="text" className="form-control" id="nominaltopup" />
-                                                    </div>
-                                                </div>
-                                            </div> */}
-
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button variant="primary" onClick={donasiUser}>
@@ -321,6 +291,7 @@ const Profileuser = () => {
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>
+                                    <br></br>
 
                                 
                                     <Button variant="secondary" onClick={openProfile} >
@@ -442,21 +413,12 @@ const Profileuser = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="container-topup">
-                                                <div className="row">
-                                                    <div className="col">
-                                                        <label style={{ textAlign: 'left' }}>Profile Picture :</label>
-                                                    </div>
-                                                    <div className="col">
-                                                        <input type="text" className="form-control" id="profPic" />
-                                                    </div>
-                                                </div>
-                                            </div>
+                                           
 
 
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button variant="primary" onClick={editProfileUser}>
+                                            <Button variant="primary" onClick={editProfileUser} >
                                                 Edit Profile
                                             </Button>
                                         </Modal.Footer>
