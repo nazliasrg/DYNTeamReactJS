@@ -2,61 +2,76 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Badge, Row, Col } from 'reactstrap';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import swal from 'sweetalert';
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 
-
 const { SearchBar } = Search;
 
-const handleClickActive = (id) => {
-    console.log('data ke: ' + id)
+const TableUsers = () => {
 
-    const r = window.confirm('Are you sure to inactived account?')
-    if (r == true) {
-        axios.put('http://localhost:7070/api/dynteam/auth/user/delete/' + id)
-            .then(function (response) {
-                console.log(response);
+    const [data, setData] = useState([]);
+
+    const getUsers = () => {
+        axios.get('http://localhost:7070/api/dynteam/auth/users')
+            .then(res => {
+                setData(res.data)
+                console.log(data);
             })
             .catch(function (error) {
-                console.log(error);
-            });
-        window.alert('Data user has been inactived!')
-        window.location.reload(false);
-    }
-    else {
-        window.alert('Data user is safe!')
-    }
-
-}
-
-const handleClickInactive = (id) => {
-    console.log('data ke: ' + id)
-
-    const r = window.confirm('Are you sure to actived account?')
-    if (r == true) {
-        axios.put('http://localhost:7070/api/dynteam/auth/user/active/' + id)
-            .then(function (response) {
-                console.log(response);
+                console.log(error)
             })
-            .catch(function (error) {
-                console.log(error);
-            });
-        window.alert('Data user has been actived!')
-        window.location.reload(false);
-    }
-    else {
-        window.alert('Data user is safe!')
     }
 
-}
+    useEffect(async () => {
+        await getUsers();
+    })
 
-const TableUsers = (props) => {
+    const handleClickActive = (id) => {
+        console.log('data ke: ' + id)
+
+        const r = window.confirm('Are you sure to inactived account?')
+        if (r == true) {
+            axios.put('http://localhost:7070/api/dynteam/auth/user/delete/' + id)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Data user has been inactived!')
+            getUsers();
+        }
+        else {
+            window.alert('Data user is safe!')
+        }
+
+    }
+
+    const handleClickInactive = (id) => {
+        console.log('data ke: ' + id)
+
+        const r = window.confirm('Are you sure to actived account?')
+        if (r == true) {
+            axios.put('http://localhost:7070/api/dynteam/auth/user/active/' + id)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            window.alert('Data user has been actived!')
+            getUsers();
+        }
+        else {
+            window.alert('Data user is safe!')
+        }
+    }
+
     const columns = [{
         dataField: 'userId',
         text: 'No',
@@ -152,6 +167,7 @@ const TableUsers = (props) => {
         dataField: 'userId',
         order: 'asc'
     }];
+
     const [show, setShow] = useState(false);
 
     const handleShow = () => setShow(true);
@@ -198,7 +214,6 @@ const TableUsers = (props) => {
             });
     }
 
-    const { data } = props;
     return (
         <>
             <ToolkitProvider

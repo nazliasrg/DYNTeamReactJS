@@ -11,9 +11,10 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 
-const TableAuthor = (props) => {
+const { SearchBar } = Search;
 
-    const { SearchBar } = Search;
+const TableAuthor = (props) => {
+    const [data, setData] = useState([]);
 
     const authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
@@ -29,8 +30,23 @@ const TableAuthor = (props) => {
         }
     }
 
-    useEffect(() => {
-        authHeader();
+    const getAuthors = () => {
+        const admin = authHeader();
+        console.log(admin)
+
+        axios.get('http://localhost:7070/api/dynteam/book/author/all-authors', {
+            headers: admin
+        })
+            .then(res => {
+                setData(res.data)
+
+                console.log(data);
+            })
+    }
+
+    useEffect(async () => {
+        await authHeader();
+        await getAuthors();
     })
 
     const handleClickActive = (id) => {
@@ -51,7 +67,7 @@ const TableAuthor = (props) => {
                     console.log(error);
                 });
             window.alert('Data author has been inactived!')
-            window.location.reload(false);
+            getAuthors();
         }
         else {
             window.alert('Data author is safe!')
@@ -76,17 +92,15 @@ const TableAuthor = (props) => {
                     console.log(error);
                 });
             window.alert('Data author has been actived!')
-            window.location.reload(false);
+            getAuthors();
         }
         else {
             window.alert('Data author is safe!')
         }
-
     }
 
-
     const defaultSorted = [{
-        dataField: 'id',
+        dataField: 'authorId',
         order: 'asc'
     }];
 
@@ -165,8 +179,6 @@ const TableAuthor = (props) => {
         setAuthorName(event.target.value)
     }
 
-    const { data } = props;
-
     const columns = [{
         dataField: 'authorId',
         text: 'No',
@@ -220,16 +232,13 @@ const TableAuthor = (props) => {
         formatter: (rowContent, row) => {
             return (
                 <Row className='justify-content-center'>
-                    {/* <Link to={'edit-author/' + row.authorId}> */}
                     <Button color='warning' className="mr-2 btn-crud" onClick={() => getIdAuthor(row.authorId)}>
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
-                    {/* </Link> */}
                 </Row>
             )
         }
     }];
-
 
     return (
         <>

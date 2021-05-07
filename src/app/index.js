@@ -21,6 +21,8 @@ import Author from '../containers/AdminPages/Home/Author/Author';
 import Category from '../containers/AdminPages/Home/Category/Category';
 import Publisher from '../containers/AdminPages/Home/Publisher/Publisher';
 import BookDetail from '../components/User/DetailBook';
+import Waiting from '../containers/AdminPages/Users/Waiting';
+import HistoryTrans from '../containers/AdminPages/Users/HistoryTrans';
 
 const App = () => {
     return (
@@ -48,6 +50,10 @@ const App = () => {
                 <Route path="/book-author" component={Author} />
                 <Route path="/book-category" component={Category} />
                 <Route path="/book-publisher" component={Publisher} />
+
+                {/* user transactions */}
+                <Route path="/waiting-confirm" component={Waiting} />
+                <Route path="/history-transaction" component={HistoryTrans} />
             </Switch>
         </Router>
     )

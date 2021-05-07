@@ -4,51 +4,9 @@ import SidebarComponent from '../../../../components/Admin/SidebarComponent/Side
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavbarComponent from '../../../../components/Admin/NavbarComponent/NavbarComponent'
 import TablePublisher from '../../../../components/Admin/TableComponent/TablePublisher';
-import axios from 'axios'
 
 
 class Publisher extends Component {
-    constructor() {
-        super();
-        this.state = {
-            data: []
-        };
-    }
-
-    authHeader = () => {
-        const admin = JSON.parse(localStorage.getItem('data_admin'));
-        console.log(admin)
-
-        if (admin && admin.data.token) {
-            return {
-                'authorization': `Bearer ${admin.data.token}`
-            }
-        }
-        else {
-            return null;
-        }
-    }
-
-
-    async componentDidMount() {
-        await this.authHeader();
-        await this.getPublishers()
-    }
-
-    getPublishers = () => {
-        const admin = this.authHeader();
-        console.log(admin)
-
-        axios.get('http://localhost:7070/api/dynteam/book/publisher/all-publishers', {
-            headers: admin
-        })
-            .then(res => {
-                this.setState({
-                    data: res.data
-                })
-                console.log(this.state.data);
-            })
-    }
 
     render() {
         return (
@@ -64,7 +22,7 @@ class Publisher extends Component {
                                 </div>
                             </div>
                             <div className="card-body">
-                                <TablePublisher data={this.state.data} />
+                                <TablePublisher />
                             </div>
                         </div>
 

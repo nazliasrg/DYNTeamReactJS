@@ -1,24 +1,27 @@
 import React, { Component, Fragment } from 'react';
-import './Admin.css';
 import SidebarComponent from '../../../components/Admin/SidebarComponent/SidebarComponent';
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
-import TableAdmin from '../../../components/Admin/TableComponent/TableAdmin';
+import './Users.css';
+import TableHistoryTrans from '../../../components/Admin/TableComponent/TableHistoryTrans';
 
-class Admin extends Component {
+class HistoryTrans extends Component {
+
     render() {
+
         return (
             <Fragment>
                 <div className="wrapper">
                     <SidebarComponent />
                     <div id="content">
                         <NavbarComponent />
-
                         <div className="card shadow mb-4">
                             <div className="card-header py-3">
-                                <h6 className="m-0 font-weight-bold text-dark">Manage Role</h6>
+                                <h6 className="m-0 font-weight-bold text-dark">History Transactions</h6>
                             </div>
                             <div className="card-body">
-                                <TableAdmin />
+
+                                <TableHistoryTrans />
+
                             </div>
                         </div>
                     </div>
@@ -28,4 +31,4 @@ class Admin extends Component {
     }
 }
 
-export default Admin;
+export default HistoryTrans;
