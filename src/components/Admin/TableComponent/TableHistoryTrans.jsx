@@ -152,11 +152,33 @@ const TableHistoryTrans = (props) => {
     }, {
         dataField: 'requestDate',
         text: 'Request Date',
-        sort: true
+        sort: true,
+        formatter: (rowContent, row) => {
+            const formatter = new Intl.DateTimeFormat("en-GB", {
+                year: 'numeric', month: 'long', day: 'numeric',
+                hour: 'numeric', minute: 'numeric', second: 'numeric',
+                hour12: false
+            });
+            const date = formatter.format(Date.parse(row.requestDate));
+            return (
+                <label>{date}</label>
+            )
+        }
     }, {
         dataField: 'approvedDate',
         text: 'Approved Date',
-        sort: true
+        sort: true,
+        formatter: (rowContent, row) => {
+            const formatter = new Intl.DateTimeFormat("en-GB", {
+                year: 'numeric', month: 'long', day: 'numeric',
+                hour: 'numeric', minute: 'numeric', second: 'numeric',
+                hour12: false
+            });
+            const date = formatter.format(Date.parse(row.approvedDate));
+            return (
+                <label>{date}</label>
+            )
+        }
     }];
 
     const defaultSorted = [{
