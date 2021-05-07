@@ -7,49 +7,6 @@ import TableBooks from '../../../components/Admin/TableComponent/TableBooks';
 import axios from 'axios'
 
 class Home extends Component {
-
-    constructor() {
-        super();
-        this.state = {
-            data: []
-        };
-    }
-
-    authHeader = () => {
-        const admin = JSON.parse(localStorage.getItem('data_admin'));
-        console.log(admin)
-
-        if (admin && admin.data.token) {
-            return {
-                'authorization': `Bearer ${admin.data.token}`
-            }
-        }
-        else {
-            return null;
-        }
-    }
-
-    async componentDidMount() {
-        await this.authHeader();
-        await this.getBooks()
-    }
-
-    getBooks = () => {
-        const admin = this.authHeader();
-        console.log(admin);
-
-
-        axios.get('http://localhost:7070/api/dynteam/book/books', {
-            headers: admin
-        })
-            .then(res => {
-                this.setState({
-                    data: res.data
-                })
-                console.log(this.state.data);
-            })
-    }
-
     render() {
 
         return (
@@ -65,7 +22,7 @@ class Home extends Component {
                                 </div>
                             </div>
                             <div className="card-body">
-                                <TableBooks data={this.state.data} />
+                                <TableBooks />
                             </div>
                         </div>
 

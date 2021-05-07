@@ -1,18 +1,19 @@
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Row, Col, Spinner } from 'reactstrap';
-import React, { useEffect } from 'react'
+import { Button, Row, Col } from 'reactstrap';
+import React, { useEffect, useState } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import swal from 'sweetalert';
 import axios from 'axios'
 
 const { SearchBar } = Search;
 
 const TablePending = (props) => {
+
+    const [data, setData] = useState([]);
 
     const authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
@@ -28,8 +29,24 @@ const TablePending = (props) => {
         }
     }
 
-    useEffect(() => {
-        authHeader();
+    const getActivitiesPending = () => {
+        const admin = authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/1', {
+            headers: admin
+        })
+            .then(res => {
+                setData(res.data)
+                console.log(data);
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
+    useEffect(async () => {
+        await authHeader();
+        await getActivitiesPending();
     })
 
     const handleClickAccept = (id) => {
@@ -50,7 +67,7 @@ const TablePending = (props) => {
                     console.log(error);
                 });
             window.alert('Request has been accepted!')
-            window.location.reload(false);
+            getActivitiesPending();
         }
         else {
             window.alert('Request is not accepted!')
@@ -76,7 +93,7 @@ const TablePending = (props) => {
                     console.log(error);
                 });
             window.alert('Request has been declined!')
-            window.location.reload(false);
+            getActivitiesPending();
         }
         else {
             window.alert('Request is not declined!')
@@ -148,12 +165,11 @@ const TablePending = (props) => {
         order: 'asc'
     }];
 
-    const { data } = props;
     return (
         <>
             <ToolkitProvider
                 bootstrap4
-                keyField='id'
+                keyField='requestId'
                 data={data}
                 columns={columns}
                 defaultSorted={defaultSorted}

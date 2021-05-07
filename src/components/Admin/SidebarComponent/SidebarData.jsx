@@ -77,5 +77,24 @@ export const SidebarData = [
                 icon: <FaIcons.FaHistory />
             }
         ]
+    },
+    {
+        title: 'User Transaction',
+        path: '#',
+        icon: <FaIcons.FaMoneyCheck />,
+        iconClosed: <AiIcons.AiFillCaretDown />,
+        iconOpened: <AiIcons.AiFillCaretUp />,
+        subNav: [
+            {
+                title: 'Waiting Confirm',
+                path: '/waiting-confirm',
+                icon: <FaIcons.FaSpinner />
+            },
+            {
+                title: 'History',
+                path: '/history-transaction',
+                icon: <FaIcons.FaHistory />
+            }
+        ]
     }
 ]

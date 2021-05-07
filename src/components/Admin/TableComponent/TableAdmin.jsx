@@ -6,59 +6,76 @@ import { Button, Badge, Row, Col, Label } from 'reactstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import swal from 'sweetalert';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 
 const { SearchBar } = Search;
 
-const handleClickActive = (id) => {
-    console.log('data ke: ' + id)
 
-    const r = window.confirm('Are you sure to inactive this admin?')
-    if (r == true) {
-        axios.delete("http://localhost:7070/api/dynteam/auth/admin/delete/" + id)
-            .then(function (response) {
-                console.log(response);
+const TableAdmin = () => {
+
+    const [data, setData] = useState([]);
+
+    const getAdmins = () => {
+        axios.get('http://localhost:7070/api/dynteam/auth/admins')
+            .then(res => {
+                setData(res.data)
+
+                console.log(data);
             })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-        window.alert('Data admin has been inactived!')
-        window.location.reload(false);
-    }
-    else {
-        window.alert('Data admin is safe!')
     }
 
+    useEffect(async () => {
+        const uname = await JSON.parse(localStorage.getItem('data_admin'))
+        await console.log("role")
+        await role.push(uname.data.role)
+        await console.log(role)
+        await getAdmins();
+    });
 
-}
+    const handleClickActive = (id) => {
+        console.log('data ke: ' + id)
 
-const handleClickInactive = (id) => {
-    console.log('data ke: ' + id)
+        const r = window.confirm('Are you sure to inactive this admin?')
+        if (r == true) {
+            axios.delete("http://localhost:7070/api/dynteam/auth/admin/delete/" + id)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
 
-    const r = window.confirm('Are you sure to active this admin?')
-    if (r == true) {
-        axios.put("http://localhost:7070/api/dynteam/auth/admin/actived/" + id)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-        window.alert('Data admin has been actived!')
-        window.location.reload(false);
+            window.alert('Data admin has been inactived!')
+            getAdmins();
+        }
+        else {
+            window.alert('Data admin is safe!')
+        }
     }
-    else {
-        window.alert('Data admin is safe!')
+
+    const handleClickInactive = (id) => {
+        console.log('data ke: ' + id)
+
+        const r = window.confirm('Are you sure to active this admin?')
+        if (r == true) {
+            axios.put("http://localhost:7070/api/dynteam/auth/admin/actived/" + id)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            window.alert('Data admin has been actived!')
+            getAdmins();
+        }
+        else {
+            window.alert('Data admin is safe!')
+        }
+
     }
-
-}
-
-const TableAdmin = (props) => {
 
     const [show, setShow] = useState(false);
 
@@ -68,18 +85,9 @@ const TableAdmin = (props) => {
 
     const [username, setUsername] = useState("");
 
-    const [roles, setRoles] = useState([]);
+    const [roles, setRoles] = useState(["superadmin"]);
 
     const [role, setRole] = useState([]);
-
-    useEffect(() => {
-        const uname = JSON.parse(localStorage.getItem('data_admin'))
-        console.log("role")
-        role.push(uname.data.role)
-        console.log(role)
-        const roles = role[0]
-        console.log(roles == "SUPER_ADMIN")
-    });
 
     const onSubmit = () => {
 
@@ -96,6 +104,7 @@ const TableAdmin = (props) => {
             .then(function (response) {
                 window.alert(username + ' account successfully registered!')
                 setRoles([])
+                getAdmins();
             })
             .catch(function (error) {
                 console.log(error);
@@ -119,7 +128,7 @@ const TableAdmin = (props) => {
                 console.log(roles)
                 setRoles(roles)
             }
-            else if (e.target.value == "admin") {
+            if (e.target.value == "admin") {
                 roles.splice(0, 1);
                 roles.push(e.target.value)
                 console.log("roles2:")
@@ -128,6 +137,9 @@ const TableAdmin = (props) => {
             }
 
         }
+
+        console.log("role input")
+        console.log(roles)
     }
 
     const columns = [{
@@ -183,7 +195,7 @@ const TableAdmin = (props) => {
             }
         },
         formatter: (rowContent, row) => {
-            if (role == 'SUPER_ADMIN') {
+            if (role[0] == 'SUPER_ADMIN') {
                 if (row.statusAccount === 1) {
                     return (
                         <Row className='justify-content-center'>
@@ -228,29 +240,27 @@ const TableAdmin = (props) => {
 
     const defaultSorted = [{
         dataField: 'adminId',
-        order: 'asc'
+        order: 'desc'
     }];
-
-    const { data } = props;
 
     return (
         <>
-            {role[0] == 'SUPER_ADMIN' ?
-                <ToolkitProvider
-                    bootstrap4
-                    keyField='id'
-                    data={data}
-                    columns={columns}
-                    defaultSorted={defaultSorted}
-                    search
-                >
-                    {
-                        props => (
-                            <div>
-                                <Row>
-                                    <Col>
-                                        <SearchBar {...props.searchProps} placeholder="Search .." />
-                                    </Col>
+            <ToolkitProvider
+                bootstrap4
+                keyField='adminId'
+                data={data}
+                columns={columns}
+                defaultSorted={defaultSorted}
+                search
+            >
+                {
+                    props => (
+                        <div>
+                            <Row>
+                                <Col>
+                                    <SearchBar {...props.searchProps} placeholder="Search .." />
+                                </Col>
+                                {role[0] == 'SUPER_ADMIN' ?
                                     <Col>
                                         <div className="float-right">
                                             <Button color='dark' className="mr-2" onClick={handleShow}>
@@ -273,7 +283,7 @@ const TableAdmin = (props) => {
                                                             <div className="form-group">
                                                                 <label htmlFor="role">Role</label><br />
                                                                 <select class="form-control" name="role" id="role" onClick={roleChange} required>
-                                                                    <option value="superadmin">Super Admin</option>
+                                                                    <option value="superadmin" selected>Super Admin</option>
                                                                     <option value="admin">Admin</option>
                                                                 </select>
                                                             </div>
@@ -287,48 +297,21 @@ const TableAdmin = (props) => {
 
                                         </div>
                                     </Col>
-                                </Row>
+                                    :
+                                    null}
+                            </Row>
 
-                                <div className="float-center">
-                                    <BootstrapTable
-                                        {...props.baseProps}
-                                        pagination={paginationFactory()}
-                                    />
-                                </div>
+                            <div className="float-center">
+                                <BootstrapTable
+                                    {...props.baseProps}
+                                    pagination={paginationFactory()}
+                                />
                             </div>
-                        )
-                    }
-                </ToolkitProvider> :
-                <ToolkitProvider
-                    bootstrap4
-                    keyField='id'
-                    data={data}
-                    columns={columns}
-                    defaultSorted={defaultSorted}
-                    search
-                >
-                    {
-                        props => (
-                            <div>
-                                <Row>
-                                    <Col>
-                                        <SearchBar {...props.searchProps} placeholder="Search .." />
-                                    </Col>
-                                </Row>
+                        </div>
+                    )
+                }
+            </ToolkitProvider>
 
-                                <div className="float-center">
-                                    <BootstrapTable
-                                        {...props.baseProps}
-                                        pagination={paginationFactory()}
-                                    />
-                                </div>
-                            </div>
-                        )
-                    }
-                </ToolkitProvider>
-
-
-            }
         </>)
 }
 

@@ -1,18 +1,18 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Badge, Row, Col, Spinner, Label } from 'reactstrap';
-import React, { useEffect } from 'react'
+import { Badge, Row, Col } from 'reactstrap';
+import React, { useEffect, useState } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import swal from 'sweetalert';
 import axios from 'axios'
-// import Dialog from 'react-bootstrap-dialog'
 
 const { SearchBar } = Search;
 
 
-const TableActivity = (props) => {
+const TableActivity = () => {
+
+    const [data, setData] = useState([]);
 
     const authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
@@ -28,8 +28,24 @@ const TableActivity = (props) => {
         }
     }
 
-    useEffect(() => {
-        authHeader();
+    const getActivitiesCurrent = () => {
+        const admin = authHeader();
+
+        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/2', {
+            headers: admin
+        })
+            .then(res => {
+                setData(res.data)
+                console.log(data);
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
+    useEffect(async () => {
+        await authHeader();
+        await getActivitiesCurrent();
     })
 
     const handleClickExtend = (id) => {
@@ -49,7 +65,7 @@ const TableActivity = (props) => {
                     console.log(error)
                 })
             window.alert('Activity has been extended!')
-            window.location.reload(false);
+            getActivitiesCurrent();
         }
         else {
             window.alert('Activity is not extended!')
@@ -73,7 +89,7 @@ const TableActivity = (props) => {
                     console.log(error)
                 })
             window.alert('Activity has been return!')
-            window.location.reload(false);
+            getActivitiesCurrent();
         }
         else {
             window.alert('Activity is not return!')
@@ -181,8 +197,6 @@ const TableActivity = (props) => {
         order: 'asc'
     }];
 
-
-    const { data } = props;
     return (
         <>
             <ToolkitProvider

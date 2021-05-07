@@ -11,10 +11,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 import axios from 'axios'
 
+const { SearchBar } = Search;
 
 const TableBooks = (props) => {
-
-    const { SearchBar } = Search;
+    const [data, setData] = useState([]);
 
     const authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
@@ -30,8 +30,23 @@ const TableBooks = (props) => {
         }
     }
 
-    useEffect(() => {
-        authHeader();
+    const getBooks = () => {
+        const admin = authHeader();
+        console.log(admin);
+
+
+        axios.get('http://localhost:7070/api/dynteam/book/books', {
+            headers: admin
+        })
+            .then(res => {
+                setData(res.data)
+                console.log(data);
+            })
+    }
+
+    useEffect(async () => {
+        await authHeader();
+        await getBooks();
     })
 
     const admin = authHeader();
@@ -71,7 +86,7 @@ const TableBooks = (props) => {
                     console.log(error);
                 });
             window.alert('Data book has been not available!')
-            window.location.reload(false);
+            getBooks();
         }
         else {
             window.alert('Data book is safe!')
@@ -106,10 +121,7 @@ const TableBooks = (props) => {
                 console.log(res.data.stock)
                 setStock(res.data.stock)
                 setBookId(res.data.bookId)
-
             })
-
-
     }
 
     const discrepancyButton = (id) => {
@@ -139,7 +151,8 @@ const TableBooks = (props) => {
         })
             .then(res => {
                 window.alert('Stock was successfully added!')
-                window.location.reload(false);
+                closeModalAdd();
+                getBooks();
             })
             .catch(function (error) {
                 console.log(error)
@@ -153,14 +166,14 @@ const TableBooks = (props) => {
         })
             .then(res => {
                 window.alert('Stock was successfully reduced!')
-                window.location.reload(false);
+                closeModalDisc();
+                getBooks();
+
             })
             .catch(function (error) {
                 console.log(error)
             })
     }
-
-    const { data } = props;
 
     const columns = [{
         dataField: 'bookId',

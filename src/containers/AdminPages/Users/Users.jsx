@@ -3,35 +3,8 @@ import SidebarComponent from '../../../components/Admin/SidebarComponent/Sidebar
 import NavbarComponent from '../../../components/Admin/NavbarComponent/NavbarComponent';
 import './Users.css';
 import TableUsers from '../../../components/Admin/TableComponent/TableUsers';
-import axios from 'axios'
-
 
 class Users extends Component {
-
-    constructor() {
-        super();
-        this.state = {
-            data: []
-        }
-    }
-
-    componentDidMount() {
-        this.getUsers()
-    }
-
-    getUsers = () => {
-        axios.get('http://localhost:7070/api/dynteam/auth/users')
-            .then(res => {
-                this.setState({
-                    data: res.data
-                })
-                console.log(this.state.data);
-            })
-            .catch(function (error) {
-                console.log(error)
-            })
-    }
-
     render() {
 
         return (
@@ -45,9 +18,7 @@ class Users extends Component {
                                 <h6 className="m-0 font-weight-bold text-dark">Manage Users</h6>
                             </div>
                             <div className="card-body">
-
-                                <TableUsers data={this.state.data} />
-
+                                <TableUsers />
                             </div>
                         </div>
                     </div>

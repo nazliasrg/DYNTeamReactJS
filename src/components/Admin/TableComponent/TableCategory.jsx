@@ -10,9 +10,11 @@ import swal from 'sweetalert';
 import axios from 'axios'
 import { Modal } from 'react-bootstrap'
 
+const { SearchBar } = Search;
+
 const TableCategory = (props) => {
 
-    const { SearchBar } = Search;
+    const [data, setData] = useState([]);
 
     const authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
@@ -28,8 +30,22 @@ const TableCategory = (props) => {
         }
     }
 
-    useEffect(() => {
-        authHeader();
+    const getCategories = () => {
+        const admin = authHeader();
+        console.log(admin)
+
+        axios.get('http://localhost:7070/api/dynteam/book/category/all-categories', {
+            headers: admin
+        })
+            .then(res => {
+                setData(res.data)
+                console.log(data);
+            })
+    }
+
+    useEffect(async () => {
+        await authHeader();
+        await getCategories();
     })
 
     const handleClickActive = (id) => {
@@ -48,7 +64,7 @@ const TableCategory = (props) => {
                     console.log(error);
                 });
             window.alert('Data category has been inactived!')
-            window.location.reload(false);
+            getCategories();
         }
         else {
             window.alert('Data category is safe!')
@@ -73,12 +89,11 @@ const TableCategory = (props) => {
                     console.log(error);
                 });
             window.alert('Data category has been inactived!')
-            window.location.reload(false);
+            getCategories();
         }
         else {
             window.alert('Data category is safe!')
         }
-
     }
 
     const [show, setShow] = useState(false);
@@ -158,8 +173,6 @@ const TableCategory = (props) => {
     const categoryChange = (event) => {
         setCategoryName(event.target.value)
     }
-
-    const { data } = props;
 
     const columns = [{
         dataField: 'categoryId',

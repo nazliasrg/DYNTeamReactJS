@@ -10,9 +10,10 @@ import swal from 'sweetalert';
 import axios from 'axios';
 import { Modal } from 'react-bootstrap'
 
-const TablePublisher = (props) => {
+const { SearchBar } = Search;
 
-    const { SearchBar } = Search;
+const TablePublisher = (props) => {
+    const [data, setData] = useState([]);
 
     const authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
@@ -28,8 +29,22 @@ const TablePublisher = (props) => {
         }
     }
 
-    useEffect(() => {
-        authHeader();
+    const getPublishers = () => {
+        const admin = authHeader();
+        console.log(admin)
+
+        axios.get('http://localhost:7070/api/dynteam/book/publisher/all-publishers', {
+            headers: admin
+        })
+            .then(res => {
+                setData(res.data)
+                console.log(data);
+            })
+    }
+
+    useEffect(async () => {
+        await authHeader();
+        await getPublishers();
     })
 
     const handleClickActive = (id) => {
@@ -49,7 +64,7 @@ const TablePublisher = (props) => {
                     console.log(error);
                 });
             window.alert('Data publisher has been inactived!')
-            window.location.reload(false);
+            getPublishers();
         }
         else {
             window.alert('Data publisher is safe!')
@@ -74,7 +89,7 @@ const TablePublisher = (props) => {
                     console.log(error);
                 });
             window.alert('Data publisher has been actived!')
-            window.location.reload(false);
+            getPublishers();
         }
         else {
             window.alert('Data publisher is safe!')
@@ -156,11 +171,10 @@ const TablePublisher = (props) => {
             });
     }
 
+
     const publisherChange = (event) => {
         setPublisherName(event.target.value)
     }
-
-    const { data } = props;
 
     const columns = [{
         dataField: 'publisherId',
@@ -231,7 +245,7 @@ const TablePublisher = (props) => {
         <>
             <ToolkitProvider
                 bootstrap4
-                keyField="id"
+                keyField="publisherId"
                 data={data}
                 columns={columns}
                 defaultSorted={defaultSorted}

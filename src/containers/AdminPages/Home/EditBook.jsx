@@ -184,38 +184,47 @@ class EditBook extends Component {
             file: e.target.files[0],
             cover: e.target.files[0].name
         })
+        await this.uploadCover();
         await console.log(this.state.file);
+
+    }
+
+    uploadCover = () => {
+        const admin = this.authHeader();
+        const data = new FormData();
+        data.append('file', this.state.file);
+
+        console.log(data)
+
+        axios.post('http://localhost:7070/api/dynteam/book/cover/upload', data, {
+            headers: admin
+        })
+            .then(res => {
+                console.log("cover : ");
+                console.log(res.data);
+                this.setState({
+                    file: null,
+                    cover: res.data
+                })
+                // this.editBook(res.data, admin);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     onSubmitForm = (e) => {
         e.preventDefault();
-
         const admin = this.authHeader();
 
-        if (this.state.file == "http://localhost:7070/api/dynteam/book/cover/download/" + this.state.cover) {
-            this.editBook(this.state.cover, admin);
-        }
-        else {
-            const data = new FormData();
-            data.append('file', this.state.file);
+        // const admin = this.authHeader();
 
-            console.log(data)
-
-            axios.post('http://localhost:7070/api/dynteam/book/cover/upload', data, {
-                headers: admin
-            })
-                .then(res => {
-                    console.log("cover : ");
-                    console.log(res.data);
-                    this.setState({
-                        file: null
-                    })
-                    this.editBook(res.data, admin);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
+        // if (this.state.file == "http://localhost:7070/api/dynteam/book/cover/download/" + this.state.cover) {
+        this.editBook(this.state.cover, admin);
+        // }
+        // else {
+        //     this.uploadCover();
+        // }
 
     }
 

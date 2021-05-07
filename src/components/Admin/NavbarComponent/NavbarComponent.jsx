@@ -20,10 +20,10 @@ const NavbarComponent = () => {
 
     const handleShow = () => setShow(true);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
 
-        // localStorage.clear();
-        history.push({
+        await localStorage.clear();
+        await history.push({
             pathname: '/login-admin'
         });
     }

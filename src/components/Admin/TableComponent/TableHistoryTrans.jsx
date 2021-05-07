@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Badge, Row, Col } from 'reactstrap';
+import { Badge, Row, Col, Spinner } from 'reactstrap';
 import React, { useEffect, useState } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
@@ -8,8 +8,7 @@ import axios from 'axios'
 
 const { SearchBar } = Search;
 
-const TableHistory = () => {
-
+const TableHistoryTrans = (props) => {
     const [data, setData] = useState([]);
 
     const authHeader = () => {
@@ -26,49 +25,130 @@ const TableHistory = () => {
         }
     }
 
-    const getActivitiesHistory = () => {
-        const admin = authHeader();
-
-        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/3', {
-            headers: admin
-        })
+    const getTransactions = () => {
+        axios.get('http://localhost:7070/api/dynteam/auth/user/transactions/1')
             .then(res => {
                 setData(res.data)
                 console.log(data);
-            })
-            .catch(function (error) {
-                console.log(error)
             })
     }
 
     useEffect(async () => {
         await authHeader();
-        await getActivitiesHistory();
+        await getTransactions();
     })
 
     const columns = [{
-        dataField: 'requestId',
+        dataField: 'transactionId',
         text: 'No',
         sort: true,
         headerStyle: () => {
             return { width: '7%' }
         }
     }, {
+        dataField: 'description',
+        text: 'Type',
+        sort: true
+    }, {
+        dataField: 'cashIn',
+        text: 'Debit',
+        sort: true,
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            if (row.cashIn === 0) {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color="warning">
+                            Rp 0
+                    </Badge>
+                    </Row>
+                )
+            }
+            else {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color="success">
+                            Rp {row.cashIn}
+                        </Badge>
+                    </Row>
+                )
+            }
+        }
+    }, {
+        dataField: 'cashOut',
+        text: 'Kredit',
+        sort: true,
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            if (row.cashOut === 0) {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color="warning">
+                            Rp 0
+                    </Badge>
+                    </Row>
+                )
+            }
+            else {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color="success">
+                            Rp {row.cashOut}
+                        </Badge>
+                    </Row>
+                )
+            }
+        }
+    }, {
         dataField: 'userEntity.username',
         text: 'Username',
         sort: true
     }, {
-        dataField: 'requestCode',
-        text: 'Request Code',
-        sort: true
-    }, {
-        dataField: 'bookEntity.title',
-        text: 'Title',
-        sort: true
-    }, {
-        dataField: 'durationEntity.duration',
-        text: 'Duration',
-        sort: true
+        dataField: 'userEntity.saldoUser',
+        text: 'Saldo',
+        sort: true,
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            if (row.userEntity.saldoUser === 0) {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color="warning">
+                            Rp 0
+                    </Badge>
+                    </Row>
+                )
+            }
+            else if (row.userEntity.saldoUser < 0) {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color="danger">
+                            Rp {row.userEntity.saldoUser}
+                        </Badge>
+                    </Row>
+                )
+            }
+            else {
+                return (
+                    <Row className='justify-content-center'>
+                        <Badge color="success">
+                            Rp {row.userEntity.saldoUser}
+                        </Badge>
+                    </Row>
+                )
+            }
+        }
     }, {
         dataField: 'requestDate',
         text: 'Request Date',
@@ -77,113 +157,18 @@ const TableHistory = () => {
         dataField: 'approvedDate',
         text: 'Approved Date',
         sort: true
-    }, {
-        dataField: 'decisionDate',
-        text: 'Return Date',
-        sort: true
-    }, {
-        dataField: 'link',
-        text: 'Fine',
-        headerStyle: () => {
-            return {
-                textAlign: 'center'
-            }
-        },
-        formatter: (rowContent, row) => {
-            if (row.fine === 0 || row.fine === null) {
-                return (
-                    <>
-                        <Row className='justify-content-center'>
-                            <Badge color='primary' className="text-center">
-                                Rp 0
-                            </Badge>
-                        </Row>
-                    </>
-                )
-            }
-            else {
-                return (
-                    <>
-                        <Row className='justify-content-center'>
-                            <Badge color='danger' className="mr-2">
-                                Rp {row.fine * 1000}
-                            </Badge>
-                        </Row>
-                    </>
-                )
-            }
-        }
-    }, {
-        dataField: 'link',
-        text: 'Status',
-        headerStyle: () => {
-            return {
-                textAlign: 'center'
-            }
-        },
-        formatter: (rowContent, row) => {
-            if (row.fine === 0 || row.fine === null) {
-                return (
-                    <>
-                        <Row className='justify-content-center'>
-                            <Badge color='primary' className="text-center">
-                                In the Periode
-                            </Badge>
-                        </Row>
-                    </>
-                )
-            }
-            else {
-                return (
-                    <>
-                        <Row className='justify-content-center'>
-                            <Badge color='danger' className="mr-2">
-                                {row.fine} days late
-                            </Badge>
-                        </Row>
-                    </>
-                )
-            }
-        }
-    }, {
-        dataField: 'cost',
-        text: 'Cost',
-        sort: true,
-        headerStyle: () => {
-            return {
-                textAlign: 'center'
-            }
-        },
-        formatter: (rowContent, row) => {
-            if (row.cost === null || row.cost === 0) {
-                return (
-                    <label>
-                        Rp 0
-                    </label>
-                )
-            }
-            else {
-                return (
-                    <label>
-                        Rp {row.cost}
-                    </label>
-                )
-            }
-
-        }
-    }
-    ];
+    }];
 
     const defaultSorted = [{
-        dataField: 'requestId',
-        order: 'desc'
+        dataField: 'transactionId',
+        order: 'asc'
     }];
 
     return (
         <>
             <ToolkitProvider
                 bootstrap4
-                keyField='id'
+                keyField='transactionId'
                 data={data}
                 columns={columns}
                 defaultSorted={defaultSorted}
@@ -210,9 +195,8 @@ const TableHistory = () => {
                     )
                 }
             </ToolkitProvider>
-
         </>
     )
 }
 
-export default TableHistory;
+export default TableHistoryTrans;

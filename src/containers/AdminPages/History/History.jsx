@@ -7,51 +7,6 @@ import axios from 'axios'
 
 class History extends Component {
 
-    constructor() {
-        super();
-        this.state = {
-            data: []
-        }
-    }
-
-    authHeader = () => {
-        const admin = JSON.parse(localStorage.getItem('data_admin'));
-        console.log(admin)
-
-        if (admin && admin.data.token) {
-            return {
-                'authorization': `Bearer ${admin.data.token}`
-            }
-        }
-        else {
-            return null;
-        }
-    }
-
-    async componentDidMount() {
-        await this.authHeader();
-        await this.getActivitiesHistory()
-    }
-
-    getActivitiesHistory = () => {
-        const admin = this.authHeader();
-
-        axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/3', {
-            headers: admin
-        })
-            .then(res => {
-                this.setState({
-                    data: res.data
-                })
-                console.log(this.state.data);
-            })
-            .catch(function (error) {
-                console.log(error)
-            })
-    }
-
-
-
     render() {
         return (
             <Fragment>
@@ -64,7 +19,7 @@ class History extends Component {
                                 <h6 className="m-0 font-weight-bold text-dark">History</h6>
                             </div>
                             <div className="card-body">
-                                <TableHistory data={this.state.data} />
+                                <TableHistory />
                             </div>
                         </div>
                     </div>
