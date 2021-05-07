@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Card } from 'react-bootstrap'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 class HomeCard extends Component {
 
@@ -66,11 +67,13 @@ class HomeCard extends Component {
                         return (
                             <div className='item'>
                                 <Card style={cardStyle}>
-                                    <Card.Img variant="top" src={`http://localhost:7070/api/dynteam/book/cover/download/${val.bookEntity.cover}`} />
-                                    <Card.Body style={{ textAlign: "center" }}>
-                                        <Card.Title className="cardTitle" style={titleStyle}>{val.bookEntity.title}</Card.Title>
-                                        <small className="text-muted">{val.bookEntity.authorEntity.authorName}</small>
-                                    </Card.Body>
+                                    <Link to={`/detail/${val.bookEntity.bookId}`}>
+                                        <Card.Img variant="top" src={`http://localhost:7070/api/dynteam/book/cover/download/${val.bookEntity.cover}`} />
+                                        <Card.Body style={{ textAlign: "center" }}>
+                                            <Card.Title className="cardTitle" style={titleStyle}>{val.bookEntity.title}</Card.Title>
+                                            <small className="text-muted">{val.bookEntity.authorEntity.authorName}</small>
+                                        </Card.Body>
+                                    </Link>
                                 </Card>
                             </div>
                         )

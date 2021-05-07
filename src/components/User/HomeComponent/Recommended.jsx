@@ -67,8 +67,8 @@ export default class Recommended extends Component {
                             {
                                 recommended.map(filteredVal => {
                                     return (
-                                        <Card className="cardRecomm mx-2">
-                                            <Link to={`/detail-book/${filteredVal.bookId}`}>
+                                        <Card className="cardRecomm mx-2 my-3">
+                                            <Link to={`/detail/${filteredVal.bookId}`}>
                                                 <Card.Img variant="top" src={`http://localhost:7070/api/dynteam/book/cover/download/${filteredVal.cover}`} />
                                                 <Card.Body style={{ textAlign: "center" }}>
                                                     <Card.Title className="cardTitle" style={titleStyle}>{filteredVal.title}</Card.Title>
