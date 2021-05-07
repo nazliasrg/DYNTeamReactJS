@@ -206,7 +206,6 @@ class EditBook extends Component {
                     file: null,
                     cover: res.data
                 })
-                // this.editBook(res.data, admin);
             })
             .catch(function (error) {
                 console.log(error);
@@ -216,16 +215,7 @@ class EditBook extends Component {
     onSubmitForm = (e) => {
         e.preventDefault();
         const admin = this.authHeader();
-
-        // const admin = this.authHeader();
-
-        // if (this.state.file == "http://localhost:7070/api/dynteam/book/cover/download/" + this.state.cover) {
         this.editBook(this.state.cover, admin);
-        // }
-        // else {
-        //     this.uploadCover();
-        // }
-
     }
 
     editBook = (res, admin) => {
@@ -251,7 +241,7 @@ class EditBook extends Component {
             .then(res => {
                 console.log("hasil update book : ")
                 console.log(res)
-                alert('Data buku \"' + res.data.data.title + '\" berhasil diperbaharui');
+                alert('Book \"' + res.data.data.title + '\" has been updated!');
                 this.props.history.push({
                     pathname: '/home-admin'
                 })
