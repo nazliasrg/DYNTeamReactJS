@@ -18,6 +18,9 @@ import { ReactSession } from 'react-client-session';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
+ReactSession.setStoreType("localStorage");
+
+var userId = '';
 const Profileuser = () => {
 
     const [show, setShow] = useState(false);
@@ -52,19 +55,26 @@ const Profileuser = () => {
     const [province, setProvince] = useState('');
     const [country, setCountry] = useState('');
     const [street, setStreet] = useState('');
+   
 
     useEffect(() => {
         // Update the document title using the browser API
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        userId = user.data.userId;
+        console.log(userId);
+
         getSaldoUser();
+
 
     }, []);
 
     //Untuk bikin const saldoUsernya
     const getSaldoUser = async () => {
-        var userId = ReactSession.get("userId");
-        console.log(userId);
+        
         axios
-            .get('http://localhost:7070/api/dynteam/auth/user/' + userId)
+            .get('http://localhost:7070/api/dynteam/auth/user/' + userId,{
+                headers:authHeader()
+            })
             .then(res => {
                 console.log(res.data);
                 setSaldoUser(res.data.saldoUser);
@@ -88,14 +98,17 @@ const Profileuser = () => {
 
     //Untuk bikin const topupUsernya
     const topupUser = async () => {
+        console.log("tes " +userId);
         const topup = {
-            userId: ReactSession.get("userId"),
+            userId: userId,
             type: 1,
             value: valueTopup
 
         }
         axios
-            .post('http://localhost:7070/api/dynteam/auth/user/transaction', topup)
+            .post('http://localhost:7070/api/dynteam/auth/user/transaction', topup,{
+                headers:authHeader()
+            })
             .then(res => {
                 var status = res.data.status;
                 var message = res.data.message;
@@ -118,12 +131,14 @@ const Profileuser = () => {
     //Untuk bikin const donasiUsernya
     const donasiUser = async () => {
         const donasi = {
-            userId: ReactSession.get("userId"),
+            userId: userId,
             type: 2,
             value: valueDonasi
         }
         axios
-            .post('http://localhost:7070/api/dynteam/auth/user/transaction', donasi)
+            .post('http://localhost:7070/api/dynteam/auth/user/transaction', donasi ,{
+                headers:authHeader()
+            })
             .then(res => {
                 var status = res.data.status;
                 var message = res.data.message;
@@ -143,7 +158,7 @@ const Profileuser = () => {
     }
     //untuk bikin edit ProfileUsernya
     const editProfileUser = async() => {
-        var userId = ReactSession.get("userId");
+
         const addressUser = {
             street:street, 
             city:city,        
@@ -168,7 +183,9 @@ const Profileuser = () => {
 
         }
         axios
-        .put('http://localhost:7070/api/dynteam/auth/user/updateProfile/' + userId, editProfile)
+        .put('http://localhost:7070/api/dynteam/auth/user/updateProfile/' + userId, editProfile ,{
+            headers:authHeader()
+        })
         .then(res => {
             var status = res.data.status;
             var message = res.data.message;
@@ -186,6 +203,19 @@ const Profileuser = () => {
         .catch(error => {
             console.log(error)
         })
+    }
+    const authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
+
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     return (

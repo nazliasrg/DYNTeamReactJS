@@ -8,19 +8,39 @@ import coverbook from '../../../assets/B001.jpeg';
 import { ReactSession } from 'react-client-session';
 import axios from 'axios';
 
+ReactSession.setStoreType("localStorage");
+
 var self = this;
 class ProfileCurrent extends Component {
+    userId = '';
+
     constructor(){
         super();
         //3. Bikin variabel kosong list booknya pakai state
         this.state={listbook:[]}
         self = this;
     }
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
+
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
     componentDidMount() {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        this.userId = user.data.userId;
         
         //5. panggil web servicenya
-        var userId = ReactSession.get("userId");
-        axios.get('http://localhost:7070/api/dynteam/auth/user/getBook/2/' +userId)
+        axios.get('http://localhost:7070/api/dynteam/auth/user/getBook/2/' + this.userId, {
+            headers:this.authHeader()
+        })
         .then(res => {
 
             var message = res.data.message;

@@ -11,21 +11,42 @@ import { ReactSession } from 'react-client-session';
 import axios from 'axios';
 import { RiDatabaseFill } from 'react-icons/ri';
 
+ReactSession.setStoreType("localStorage");
 //2. untuk menampung class spy bisa dipanggil setelah respon axios
 var self = this;
 class ProfileOnProgress extends Component {
+    userId = '';
+
     constructor(){
         super();
         //3. Bikin variabel kosong list booknya pakai state
         this.state={listbook:[]}
         self = this;
     }
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
+
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+
     //4. Dia harus didalam fungsi, ini kaya setelah load halaman, trs ini dimasukin ke sebuah fungsi
     componentDidMount() {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        this.userId = user.data.userId;
         
         //5. panggil web servicenya
-        var userId = ReactSession.get("userId");
-        axios.get('http://localhost:7070/api/dynteam/auth/user/getBook/1/' +userId)
+        axios.get('http://localhost:7070/api/dynteam/auth/user/getBook/1/' +this.userId ,{
+            headers:this.authHeader()
+        })
         .then(res => {
 
             var message = res.data.message;
