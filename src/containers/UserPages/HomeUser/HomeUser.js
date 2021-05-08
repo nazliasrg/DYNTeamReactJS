@@ -24,9 +24,13 @@ export default class HomeUser extends Component {
 
 
     async componentDidMount() {
-        await this.authHeader();
+        if (this.authHeader()==null){
+            this.props.history.push('/')
+        }
+        // await this.authHeader();
         await console.log("user")
         await console.log(localStorage.getItem('data_user'))
+        
     }
 
     render() {

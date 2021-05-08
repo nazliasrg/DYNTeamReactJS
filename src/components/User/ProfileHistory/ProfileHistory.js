@@ -34,7 +34,10 @@ class ProfileHistory extends Component {
         }
     }
     componentDidMount() {
-        const user = JSON.parse(localStorage.getItem('data_user'));
+        var dataUser = localStorage.getItem('data_user');
+
+        if(dataUser != null){
+            const user = JSON.parse(localStorage.getItem('data_user'));
         this.userId = user.data.userId;
         
         //5. panggil web servicenya
@@ -85,6 +88,9 @@ class ProfileHistory extends Component {
           
         })
 
+
+        }
+        
      }
 
     render() {

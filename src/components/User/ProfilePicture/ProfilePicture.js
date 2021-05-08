@@ -17,6 +17,7 @@ class ProfilePicture extends Component {
         this.state = {dataUser:''}
     }
     authHeader = () => {
+        
         const user = JSON.parse(localStorage.getItem('data_user'));
         console.log("yona" +user)
 
@@ -31,13 +32,19 @@ class ProfilePicture extends Component {
     }
 
     componentDidMount() {
-        const user = JSON.parse(localStorage.getItem('data_user'));
-        this.userId = user.data.userId;
+        var dataUser = localStorage.getItem('data_user');
 
-        this.setState({
+        if(dataUser != null){
+            const user = JSON.parse(localStorage.getItem('data_user'));
+            this.userId = user.data.userId;
+
+            this.setState({
             dataUser:user.data.username
-        });
-        this.getProfilPicture();
+            });
+            this.getProfilPicture();
+
+        }
+        
      }
 
     getProfilPicture = async () => {

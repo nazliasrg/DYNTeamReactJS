@@ -17,6 +17,7 @@ import axios from 'axios';
 import { ReactSession } from 'react-client-session';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import { useHistory } from "react-router-dom";
 
 ReactSession.setStoreType("localStorage");
 
@@ -56,15 +57,19 @@ const Profileuser = () => {
     const [country, setCountry] = useState('');
     const [street, setStreet] = useState('');
    
+    const history = useHistory()
 
     useEffect(() => {
         // Update the document title using the browser API
-        const user = JSON.parse(localStorage.getItem('data_user'));
-        userId = user.data.userId;
-        console.log(userId);
+        if (authHeader()==null){
+            history.push('/')
+        }else{
+            const user = JSON.parse(localStorage.getItem('data_user'));
+            userId = user.data.userId;
+            console.log(userId);
 
         getSaldoUser();
-
+        }
 
     }, []);
 
