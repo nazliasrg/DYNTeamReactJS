@@ -1,26 +1,51 @@
 import React, { Component, Fragment } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Header.css';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
+import { ReactSession } from 'react-client-session';
+// import { useHistory } from "react-router-dom";
+
+ReactSession.setStoreType("localStorage");
 
 class Header extends Component {
+    authHeader = () => {
+        const user = JSON.parse(localStorage.getItem('data_user'));
+        console.log(user)
 
-    constructor() {
-        super();
+        if (user && user.data.token) {
+            return {
+                'authorization': `Bearer ${user.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    constructor(props) {
+        super(props);
+
+        
+
         this.state = {
             widthStyle: '0%',
             user: ""
         }
     }
+    // history = useHistory()
 
     async componentDidMount() {
+        
         const width = await this.state.widthStyle
         await console.log(width)
         const dataUser = await JSON.parse(localStorage.getItem('data_user'))
-        await this.setState({
-            user: dataUser.data.username
-        })
+        if(dataUser!=null){
+            await this.setState({
+                user: dataUser.data.username
+            })
+        }
+        
     }
 
     handleCloseNav = () => {
@@ -35,6 +60,10 @@ class Header extends Component {
         })
     }
 
+    logout=() => {
+        localStorage.clear();
+    }
+    
 
     render() {
         const styles = {
@@ -57,7 +86,7 @@ class Header extends Component {
                             <Link to={'/Genre'}>Catalogue</Link>
                             <Link to={'/location'}>Location</Link>
                             <Link to={'/Profileuser'} id="profileLogin">Profile</Link>
-                            <Link to={'/'}>Logout</Link>
+                            <Link to={'/'} onClick={this.logout} >Logout</Link>
                         </div>
                     </div>
 

@@ -75,11 +75,6 @@ class Loginuser extends Component {
                         // alert('Welcome ' + this.state.username + '!');
                         NotificationManager.success(message);
     
-                        this.props.history.push({
-                            pathname: '/Home',
-                            state: res.data.data,
-                        })
-    
                         console.log(this.props.history.location.state);
                         console.log("res.data.data.token");
                         console.log(res.data.data.token);
@@ -87,6 +82,10 @@ class Loginuser extends Component {
                         if (res.data.data.token && (this.state.roles === 'USER')) {
                             localStorage.setItem('data_user', JSON.stringify(res.data));
                         }
+                        this.props.history.push({
+                            pathname: '/Home',
+                            state: res.data.data,
+                        })
                     }
                     else{
                         NotificationManager.error(message);

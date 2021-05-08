@@ -23,11 +23,13 @@ import Publisher from '../containers/AdminPages/Home/Publisher/Publisher';
 import BookDetail from '../components/User/DetailBook';
 import Waiting from '../containers/AdminPages/Users/Waiting';
 import HistoryTrans from '../containers/AdminPages/Users/HistoryTrans';
+import Header from '../components/User/Header/Header';
 
 const App = () => {
     return (
         <Router>
             <Switch>
+                <Route path="/header" exact component={Header} />
                 <Route path="/" exact component={Loginuser} />
                 <Route path="/home" exact component={HomeUser} />
                 <Route path="/Registrasi" exact component={Registrasi} />
