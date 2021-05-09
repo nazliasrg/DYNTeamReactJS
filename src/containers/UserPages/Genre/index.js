@@ -8,7 +8,10 @@ import DropDown from "../../../components/User/DropDownFilter";
 import Footer from '../../../components/User/Footer/Footer';
 import Header from '../../../components/User/Header/Header';
 import SearchBoxCatalogue from "../../../components/User/SearchBarCatalogue";
+// import { useHistory } from "react-router-dom";
 import './Catalogue.css';
+
+ReactSession.setStoreType("localStorage");
 
 class GenrePage extends Component{
     constructor(){
@@ -40,7 +43,11 @@ class GenrePage extends Component{
     }
 
     async componentDidMount(){
-        await this.authHeader();
+        // MENGGUNAKAN PENGKONDISIAN SUPAYA TIDAK DAPAT KEMBALI KEHALAMAN YANG SEBELUMNYA JIKA TIDAK LOGIN TERLEBIH DAHULU
+        if (this.authHeader()==null){
+            this.props.history.push('/')
+        }
+        // await this.authHeader();
         await this.getBook();
         await console.log("data_user");
         await console.log(JSON.parse(localStorage.getItem("data_user")));

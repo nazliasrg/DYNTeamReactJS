@@ -7,12 +7,13 @@ import { ReactSession } from 'react-client-session';
 import { Link } from 'react-router-dom';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-// import cover from '../../../assets/book/B001.jpg'
+import { useHistory } from "react-router-dom";
 import './DetailBook.css';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 
 // BUAT REACT SESSION UNTUK MENGGAMBIL DATA USER YANG SUDAH
+ReactSession.setStoreType("localStorage");
 
 class BookDetail extends Component {
     constructor() {
@@ -50,7 +51,10 @@ class BookDetail extends Component {
     }
 
     async componentDidMount() {
-        await this.authHeader();
+        if (this.authHeader()==null){
+            this.props.history.push('/')
+        }
+        // await this.authHeader();
         await console.log(this.authHeader().userId);
         const book_id = await this.props.match.params.bookId
         await console.log(this.props);
@@ -108,6 +112,8 @@ class BookDetail extends Component {
             NotificationManager.error("Your Saldo is right now is Rp.0 Please top up your saldo.");
         } else if (request.durationId == 1 && this.state.saldoUser < 3000 || request.durationId == 2 && this.state.saldoUser < 7000) {
             NotificationManager.error("Your saldo is not enough for this duration, please top up your saldo or change your duration.");
+        } else if(this.authHeader == null){
+            this.props.history.push('/')
         }
         else {
             axios.post('http://localhost:7070/api/dynteam/request/requestbook', request, {
