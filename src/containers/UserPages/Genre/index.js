@@ -1,8 +1,11 @@
 import axios from "axios";
 import { Button } from "bootstrap";
+import { data } from "jquery";
 import React, { Component, Fragment } from "react";
+import { FormGroup } from "react-bootstrap";
 import { ReactSession } from "react-client-session";
-import NotificationContainer from "react-notifications/lib/NotificationContainer";
+import ReactPaginate from 'react-paginate';
+import { Input, Label } from "reactstrap";
 import BookCard from '../../../components/User/BookCard';
 import DropDown from "../../../components/User/DropDownFilter";
 import Footer from '../../../components/User/Footer/Footer';
@@ -22,9 +25,14 @@ class GenrePage extends Component{
         // MEMBUAT STATE DIDALAM CONTRUCTOR
         this.state = {
             data: [], // TEMPAT MENYIMPAN DATA BUKU YANG DIAMBIL DENGAN AXIOS.GET
-            // authorName:"",
-            Searchbook: ""
+            Searchbook: "",
+            offset: 0,
+            perPage: 8,
+            currentPage: 0,
         }
+        this.handlePageClick = this
+        .handlePageClick
+        .bind(this);
     }
 
     // MENDAPATKAN HEADER DI CATALOGUE PAGE
@@ -53,31 +61,62 @@ class GenrePage extends Component{
         await console.log(JSON.parse(localStorage.getItem("data_user")));
     }
 
+    handleInput = (e) =>{
+        // MENGETAHUI APAKAH DATA YANG KITA MASUKAN DITERIMA ATAU TIDAK
+        // console.log(e.target.value); 
+        // const update = this.state.data;
+        // update = update.filter()
+        this.setState({Searchbook: e.target.value})
+    }
+
     getBook = () =>{
         const user = this.authHeader();
         axios.get('http://localhost:7070/api/dynteam/book/active-books', {
             headers: user
         }).then(res =>{
+            
+            // const data = res.data;
+            // const slice = data.slice(this.state.offset, this.state.offset+this.state.perPage)
+            // const postData = slice.map(val =>
+            //     <BookCard
+            //         key = {val.bookId}
+            //         book_id = {val.bookId}
+            //         book_code = {val.bookCode} 
+            //         cover = {val.cover}
+            //         title = {val.title}
+            //         isAvailable = {val.isAvailable}
+            //         author = {val.authorEntity.authorName}
+            //     />)
+            
             this.setState({
                 data: res.data,
+                pageCount: Math.ceil(res.data.length / this.state.perPage),
             })
             console.log(this.state.data);
         })
     }
 
-    handleInput = (e) =>{
-        // MENGETAHUI APAKAH DATA YANG KITA MASUKAN DITERIMA ATAU TIDAK
-        // console.log(e.target.value); 
-        this.setState({Searchbook: e.target.value})
-    }
+    handlePageClick = (e) =>{
+        const selectedPage = e.selected;
+        const offset = selectedPage * this.state.perPage;
+
+        this.setState({
+            currentPage: selectedPage,
+            offset: offset
+        }, () =>{
+            this.getBook()
+        });
+    };
+
+    
     
     render(){
-        const {Searchbook, data} = this.state;
+        const {Searchbook, postData ,data} = this.state;
         // MENAMPILKAN BUKU YANG SESUAI DENGAN KALIMAT YANG KITA INPUTKAN
         const titleToLowerCaseFilter = Searchbook.toLowerCase();
-        let filterbooks = data.filter((buku) =>{ 
+        const filterbooks = data.filter((buku) =>{ 
             return buku.title.toLowerCase().includes(Searchbook.toLowerCase()) 
-        })
+        }).slice(this.state.offset, this.state.offset+this.state.perPage)
         return(
             <Fragment>
                 <Header/>
@@ -107,12 +146,27 @@ class GenrePage extends Component{
                                         title = {val.title}
                                         isAvailable = {val.isAvailable}
                                         author = {val.authorEntity.authorName}
-                                        // author = {val.author}
                                     />
                                     
                                 )
                             })
                         }
+                        {/* {this.state.postData} */}
+                    </div>
+                    <div>
+                        <ReactPaginate
+                                previousLabel={"prev"}
+                                nextLabel={"next"}
+                                breakLabel={"..."}
+                                breakClassName={"break-me"}
+                                pageCount={this.state.pageCount}
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={this.handlePageClick}
+                                containerClassName={"pagination"}
+                                subContainerClassName={"pages pagination"}
+                                activeClassName={"active"}
+                        />
                     </div>
                 </div>
                 <Footer />

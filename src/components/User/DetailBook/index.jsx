@@ -213,6 +213,7 @@ class BookDetail extends Component {
                                     <p>{synopsis}</p>
                                 </div>
                             </Row>
+                            <hr />
                             <Row className="d-flex justify-content-between mx-2 mt-3">
                                 <div>
                                     <Button className="btn btn-info mt-3" onClick={this.openModal}>Rent Book</Button>
