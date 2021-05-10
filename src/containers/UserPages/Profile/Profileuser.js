@@ -56,29 +56,29 @@ const Profileuser = () => {
     const [province, setProvince] = useState('');
     const [country, setCountry] = useState('');
     const [street, setStreet] = useState('');
-   
+
     const history = useHistory()
 
     useEffect(() => {
         // Update the document title using the browser API
-        if (authHeader()==null){
+        if (authHeader() == null) {
             history.push('/')
-        }else{
+        } else {
             const user = JSON.parse(localStorage.getItem('data_user'));
             userId = user.data.userId;
             console.log(userId);
 
-        getSaldoUser();
+            getSaldoUser();
         }
 
     }, []);
 
     //Untuk bikin const saldoUsernya
     const getSaldoUser = async () => {
-        
+
         axios
-            .get('http://localhost:7070/api/dynteam/auth/user/' + userId,{
-                headers:authHeader()
+            .get('http://localhost:7070/api/dynteam/auth/user/' + userId, {
+                headers: authHeader()
             })
             .then(res => {
                 console.log(res.data);
@@ -103,7 +103,7 @@ const Profileuser = () => {
 
     //Untuk bikin const topupUsernya
     const topupUser = async () => {
-        console.log("tes " +userId);
+        console.log("tes " + userId);
         const topup = {
             userId: userId,
             type: 1,
@@ -111,8 +111,8 @@ const Profileuser = () => {
 
         }
         axios
-            .post('http://localhost:7070/api/dynteam/auth/user/transaction', topup,{
-                headers:authHeader()
+            .post('http://localhost:7070/api/dynteam/auth/user/transaction', topup, {
+                headers: authHeader()
             })
             .then(res => {
                 var status = res.data.status;
@@ -141,8 +141,8 @@ const Profileuser = () => {
             value: valueDonasi
         }
         axios
-            .post('http://localhost:7070/api/dynteam/auth/user/transaction', donasi ,{
-                headers:authHeader()
+            .post('http://localhost:7070/api/dynteam/auth/user/transaction', donasi, {
+                headers: authHeader()
             })
             .then(res => {
                 var status = res.data.status;
@@ -162,52 +162,52 @@ const Profileuser = () => {
             })
     }
     //untuk bikin edit ProfileUsernya
-    const editProfileUser = async() => {
+    const editProfileUser = async () => {
 
         const addressUser = {
-            street:street, 
-            city:city,        
-            province:province,
-            country:country
+            street: street,
+            city: city,
+            province: province,
+            country: country
         }
         const socialMedia = {
-            facebook:facebook,
-            instagram:instagram,
-            twitter:twitter
+            facebook: facebook,
+            instagram: instagram,
+            twitter: twitter
         }
-        const detailUser ={
-            email:email,
-            fullname:fullname,
-            phoneNumber:phoneNumber,
+        const detailUser = {
+            email: email,
+            fullname: fullname,
+            phoneNumber: phoneNumber,
         }
-        
+
         const editProfile = {
-            addressUserDto:addressUser,
-            socialMediaDto:socialMedia,
-            detailUserDto:detailUser
+            addressUserDto: addressUser,
+            socialMediaDto: socialMedia,
+            detailUserDto: detailUser
 
         }
         axios
-        .put('http://localhost:7070/api/dynteam/auth/user/updateProfile/' + userId, editProfile ,{
-            headers:authHeader()
-        })
-        .then(res => {
-            var status = res.data.status;
-            var message = res.data.message;
-            if (status == 200) {
-                console.log(res.data);
-                getSaldoUser();
-                setShowEditProfil(false);
-                NotificationManager.success(message);
+            .put('http://localhost:7070/api/dynteam/auth/user/updateProfile/' + userId, editProfile, {
+                headers: authHeader()
+            })
+            .then(res => {
+                var status = res.data.status;
+                var message = res.data.message;
+                if (status == 200) {
+                    console.log(res.data);
+                    getSaldoUser();
+                    setShowEditProfil(false);
+                    NotificationManager.success(message);
 
-            } else {
-                NotificationManager.error(message);
+                } else {
+                    NotificationManager.error(message);
 
-            }
-        })
-        .catch(error => {
-            console.log(error)
-        })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
     const authHeader = () => {
         const user = JSON.parse(localStorage.getItem('data_user'));
@@ -226,7 +226,7 @@ const Profileuser = () => {
     return (
         <Fragment>
             <Header />
-            <div className="container-fluid" >
+            <div className="container-fluid" style={{ marginTop: "70px" }} >
                 <div className="container">
                     <div className="main-body">
                         <div className="row gutters-sm">
@@ -298,7 +298,7 @@ const Profileuser = () => {
                                     </Modal>
                                     <br></br>
 
-                                
+
                                     <Button variant="secondary" onClick={openProfile} >
                                         Edit Profile
                                     </Button>
@@ -325,10 +325,10 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Email :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="email"  value={email} onChange={e => { setEmail(e.target.value) }} />
+                                                        <input type="text" className="form-control" id="email" value={email} onChange={e => { setEmail(e.target.value) }} />
                                                     </div>
                                                 </div>
-                                            </div>                                          
+                                            </div>
 
                                             <div className="container-topup">
                                                 <div className="row">
@@ -336,7 +336,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Phone Number :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="phoneNumber" value={phoneNumber} onChange={e => { setPhoneNumber(e.target.value) }}/>
+                                                        <input type="text" className="form-control" id="phoneNumber" value={phoneNumber} onChange={e => { setPhoneNumber(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -391,7 +391,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Province :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="province" value={province} onChange={e => { setProvince(e.target.value) }}  />
+                                                        <input type="text" className="form-control" id="province" value={province} onChange={e => { setProvince(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -402,7 +402,7 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Country :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="country"  value={country} onChange={e => { setCountry(e.target.value) }}/>
+                                                        <input type="text" className="form-control" id="country" value={country} onChange={e => { setCountry(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -413,12 +413,12 @@ const Profileuser = () => {
                                                         <label style={{ textAlign: 'left' }}>Street :</label>
                                                     </div>
                                                     <div className="col">
-                                                        <input type="text" className="form-control" id="street" value={street} onChange={e => { setStreet(e.target.value) }}/>
+                                                        <input type="text" className="form-control" id="street" value={street} onChange={e => { setStreet(e.target.value) }} />
                                                     </div>
                                                 </div>
                                             </div>
 
-                                           
+
 
 
                                         </Modal.Body>
