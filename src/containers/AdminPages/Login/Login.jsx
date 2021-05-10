@@ -28,49 +28,60 @@ class Login extends Component {
     submitAction = (e) => {
         e.preventDefault();
 
-        const admin = {
-            username: this.state.username,
-            password: this.state.password
+        console.log("this.state.username")
+        console.log(this.state.username)
+        console.log(this.state.password)
+
+        if ((this.state.username === "") && (this.state.password === "")) {
+            alert("Username & Password are empty!");
         }
+        else if (this.state.password === "") {
+            alert("Password is empty!");
+        }
+        else if (this.state.username === "") {
+            alert("Username is empty!");
+        }
+        else {
+            const admin = {
+                username: this.state.username,
+                password: this.state.password
+            }
 
-        console.log(admin)
+            console.log(admin)
 
-        axios.post('http://localhost:7070/api/dynteam/auth/admin/login', admin)
-            .then(res => {
-                console.log(res);
-                this.setState({
-                    roles: res.data.data.role
+            axios.post('http://localhost:7070/api/dynteam/auth/admin/login', admin)
+                .then(res => {
+                    console.log(res);
+                    this.setState({
+                        roles: res.data.data.role
+                    })
+                    alert('Welcome ' + this.state.username + '!');
+                    this.props.history.push({
+                        pathname: '/home-admin',
+                        state: res.data.data,
+                    })
+
+                    window.location.reload();
+
+                    console.log(this.props.history.location.state);
+                    this.state.roles.forEach(role => {
+                        if (res.data.data.token && (role === 'SUPER_ADMIN' || role === 'ADMIN')) {
+                            localStorage.setItem('data_admin', JSON.stringify(res.data));
+                        }
+                    })
+
                 })
-                alert('Welcome ' + this.state.username + '!');
-                this.props.history.push({
-                    pathname: '/home-admin',
-                    state: res.data.data,
-                })
-
-                window.location.reload();
-
-
-
-                console.log(this.props.history.location.state);
-                this.state.roles.forEach(role => {
-                    if (res.data.data.token && (role === 'SUPER_ADMIN' || role === 'ADMIN')) {
-                        localStorage.setItem('data_admin', JSON.stringify(res.data));
+                .catch(function (error) {
+                    if (error.message === "Request failed with status code 417") {
+                        alert("Account is not active!");
                     }
-                })
-
-            })
-            .catch(function (error) {
-                if (error == "Error: Request failed with status code 417") {
-                    alert("Account is not active!");
-                }
-                else if (error == "Request failed with status code 500") {
-                    alert("Username and password don't match!");
-                }
-                console.log(error.message)
-            });
+                    else if (error.message == "Request failed with status code 500") {
+                        alert("Username and password not match!");
+                    }
+                    console.log(error.message)
+                });
+        }
     }
-
-
 
     render() {
         return (
@@ -87,12 +98,14 @@ class Login extends Component {
                                     </div>
                                     <div className="card">
                                         <div className="card-body">
-                                            <label>Username</label>
-                                            <input type="text" className="form-control" id="username" onChange={this.handleUsernameChange} required />
-                                            <label>Password</label>
-                                            <input type="password" className="form-control" id="password" onChange={this.handlePasswordChange} required />
-                                            <br />
-                                            <button type="submit" className="btn btn-login" onClick={this.submitAction}>LOGIN</button>
+                                            <form>
+                                                <label>Username</label>
+                                                <input type="text" className="form-control" id="username" onChange={this.handleUsernameChange} required />
+                                                <label>Password</label>
+                                                <input type="password" className="form-control" id="password" onChange={this.handlePasswordChange} required />
+                                                <br />
+                                                <button type="submit" className="btn btn-login" onClick={this.submitAction}>LOGIN</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </form>
