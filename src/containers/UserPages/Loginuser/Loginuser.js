@@ -11,6 +11,7 @@ import 'react-notifications/lib/notifications.css';
 ReactSession.setStoreType("localStorage");
 
 class Loginuser extends Component {
+    
 
     constructor() {
         super();
@@ -61,7 +62,7 @@ class Loginuser extends Component {
             }
 
             axios.post('http://localhost:7070/api/dynteam/auth/user/login', user)
-                .then(res => {
+                .then(async (res) => {
                     var status = res.data.status;
                     var message = res.data.message;
 
@@ -74,6 +75,7 @@ class Loginuser extends Component {
     
                         // alert('Welcome ' + this.state.username + '!');
                         NotificationManager.success(message);
+                        
     
                         console.log(this.props.history.location.state);
                         console.log("res.data.data.token");
@@ -82,10 +84,13 @@ class Loginuser extends Component {
                         if (res.data.data.token && (this.state.roles === 'USER')) {
                             localStorage.setItem('data_user', JSON.stringify(res.data));
                         }
-                        this.props.history.push({
-                            pathname: '/Home',
-                            state: res.data.data,
-                        })
+                        setTimeout(() => {
+                            this.props.history.push({
+                                pathname: '/Home',
+                                state: res.data.data,
+                            })
+                          }, 1000);
+                        
                     }
                     else{
                         NotificationManager.error(message);

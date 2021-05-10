@@ -1,0 +1,15 @@
+.cardRecomm{
+    width: 15%;
+    padding: 3px;
+}
+
+@media screen and (max-width:768px){
+    .pageTitle{
+        font-size: 8px;
+    }
+    .cardTitle{
+        font-size: 6px !important;
+    }
+
+    /* navbar */
+}

@@ -7,6 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 import coverbook from '../../../assets/B001.jpeg';
 import { ReactSession } from 'react-client-session';
 import axios from 'axios';
+import { Card, Container, Row } from 'react-bootstrap'
 
 ReactSession.setStoreType("localStorage");
 
@@ -58,15 +59,22 @@ class ProfileHistory extends Component {
                         //6. untuk nambahin kompponen ke arraynya.  
                         var bookCover = 'http://localhost:7070/api/dynteam/book/cover/download/' + dataCover.cover;
                         console.log(bookCover);
+                        var bookTitle = dataCover.title;
+                        const titleStyle = {
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            textAlign: "center"
+                        }
                         data.push(
     
                             <div className="col-sm-3 mb-2">
                                 <div className="card coverBook">
                                     <img src={bookCover} className="img-thumbnail" />
                                     
-                                    <Button variant="primary">
-                                        Information
-                                    </Button>
+                                    <Card.Body style={{ textAlign: "center" }}>
+                                        <Card.Title className="cardTitle" style={titleStyle}>{bookTitle}</Card.Title>
+                                        <Card.Title className="cardTitle" style={titleStyle}>{dataCover.authorEntity.authorName}</Card.Title>
+                                    </Card.Body>
                                 </div>
                             </div>
                           )
