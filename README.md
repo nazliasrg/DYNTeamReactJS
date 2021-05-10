@@ -11,31 +11,24 @@
 - owl Carousel
 - Axios
 
-### `Back End`
+## Tools
 
-- Spring boot
-- Spring Security
-- Lombok
-- JWT (JSON Web Token)
+### Text Editor
 
-## Software Version
+- VS Code 
+Download VS Code disini: https://code.visualstudio.com/download
 
-### `Back End`
+## Cara Menjalankan aplikasi
 
-#### java Version
+- Pertama download dan install npm js terlebih dahulu (download disini: https://nodejs.org/en/download/)
+- setelah itu install npm js
 
-Java version - 8
-Download here: https://www.java.com/en/download/
+- Clone Repository ini ke local storage kalian.
+- Setelah melakukan clone, buka folder dengan nama "DYNTeamReactJs" dengan VS Code.
+- Lalu, buka terminal di VS Code (atau cmd) lalu ketikan "Npm Install" supaya dependecies yang digunakan dapat berjalan.
+- setelah selesai menjalankan npm install, jalankan aplikasi dengan mengetikan "Npm start" di terminal.
+- jika server sudah berjalan maka secara otomatis akan terbuka di browser anda.
 
-#### Maven
 
-Maven Version - 3.8.1 
 
-#### Spring Boot
-
-- Spring Boot version 2.4.5
-
-#### JWT (JSON Web Token)
-
-- JWT Version - 0.9.1
 
