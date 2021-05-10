@@ -73,11 +73,32 @@ const NavbarComponent = () => {
         window.alert("Password has been changed!");
     }
 
+    const authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
     useEffect(async () => {
-        const uname = await JSON.parse(localStorage.getItem('data_admin'))
-        await console.log("username")
-        await console.log(uname.data.username)
-        await setUsername(uname.data.username)
+        await authHeader();
+
+        if (authHeader() == null) {
+            await history.push('/login-admin')
+        }
+        else {
+            const uname = await JSON.parse(localStorage.getItem('data_admin'))
+            await console.log("username")
+            await console.log(uname.data.username)
+            await setUsername(uname.data.username)
+        }
     });
 
     return (
