@@ -9,6 +9,7 @@ import { ReactSession } from 'react-client-session';
 import axios from 'axios';
 import { Card, Container, Row } from 'react-bootstrap'
 
+
 ReactSession.setStoreType("localStorage");
 
 var self = this;

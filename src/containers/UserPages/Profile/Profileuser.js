@@ -46,6 +46,10 @@ const Profileuser = () => {
     const [valueTopup, setValueTopup] = useState();
     const [valueDonasi, setValueDonasi] = useState();
 
+    const [passwordUser, setShowPasswordUser] = useState(false);
+    const closeChange = () => setShowPasswordUser(false);
+    const openChange = () => setShowPasswordUser(true);
+
     const [fullname, setFullname] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -58,6 +62,12 @@ const Profileuser = () => {
     const [street, setStreet] = useState('');
 
     const history = useHistory()
+
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [newConfirmPassword, setConfirmPassword] = useState('');
+
+    const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
         // Update the document title using the browser API
@@ -161,6 +171,38 @@ const Profileuser = () => {
                 console.log(error)
             })
     }
+
+    const changePasswordUser = async() => {
+        const changePassword ={
+            //utk isi new sama old passwordnya (sbg parameter)
+            //parameter : value
+            oldPassword : oldPassword,
+            newPassword : newPassword,
+            newConfirmPassword : newConfirmPassword
+        }
+        axios
+        .put('http://localhost:7070/api/dynteam/auth/user/updateProfile/changePassword/' + userId, changePassword,{
+            headers:authHeader()
+        })
+        .then(res => {
+            var status = res.data.status;
+            var message = res.data.message;
+            if (status == 200) {
+                closeChange();
+                console.log(res.data);
+                NotificationManager.success(message);
+
+            } else {
+                NotificationManager.error(message);
+            }
+        })
+
+        .catch(error => {
+            console.log(error)
+        })
+
+
+    }
     //untuk bikin edit ProfileUsernya
     const editProfileUser = async () => {
 
@@ -209,6 +251,8 @@ const Profileuser = () => {
                 console.log(error)
             })
     }
+
+    
     const authHeader = () => {
         const user = JSON.parse(localStorage.getItem('data_user'));
         console.log(user)
@@ -425,6 +469,59 @@ const Profileuser = () => {
                                         <Modal.Footer>
                                             <Button variant="primary" onClick={editProfileUser} >
                                                 Edit Profile
+                                            </Button>
+                                        </Modal.Footer>
+                                    </Modal>
+                                    <br></br>
+
+                                    <Button variant="secondary" onClick={openChange}>
+                                        Change Password
+                                    </Button>
+
+                                    <Modal show={passwordUser} onHide={closeChange}>
+                                        <Modal.Header closeButton>
+                                            <Modal.Title>Change Password User</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <div className="container-topup">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Input old password :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="password" className="form-control" id="oldPassword" value={oldPassword} onChange={e => { setOldPassword(e.target.value) }} />
+                                                    </div>           
+                                                    
+                                                </div>
+                                                <br></br>
+
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Input new password :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="password" className="form-control" id="newPassword" value={newPassword} onChange={e => { setNewPassword(e.target.value) }} />
+                                                    </div>           
+                                                    
+                                                </div>
+                                                <br></br>
+
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <label style={{ textAlign: 'left' }}>Input confirmation password :</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input type="password" className="form-control" id="newConfirmPassword" value={newConfirmPassword} onChange={e => { setConfirmPassword(e.target.value) }} />
+                                                    </div>           
+                                                    
+                                                </div>
+                                            </div>
+
+                                        </Modal.Body>
+                                        <Modal.Footer>
+
+                                            <Button variant="primary" onClick={changePasswordUser}>
+                                                Change Password
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>
