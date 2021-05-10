@@ -1,5 +1,7 @@
 # Onlie Library Website
 
+Online Library Website By DYN Team
+
 ## Framework dan Library
 
 ### `Front End`
@@ -13,8 +15,7 @@
 
 ## Tools
 
-### Text Editor
-
+### `Text Editor`
 - VS Code 
 Download VS Code disini: https://code.visualstudio.com/download
 
@@ -22,7 +23,6 @@ Download VS Code disini: https://code.visualstudio.com/download
 
 - Pertama download dan install npm js terlebih dahulu (download disini: https://nodejs.org/en/download/)
 - setelah itu install npm js
-
 - Clone Repository ini ke local storage kalian.
 - Setelah melakukan clone, buka folder dengan nama "DYNTeamReactJs" dengan VS Code.
 - Lalu, buka terminal di VS Code (atau cmd) lalu ketikan "Npm Install" supaya dependecies yang digunakan dapat berjalan.
