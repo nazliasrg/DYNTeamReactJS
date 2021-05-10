@@ -236,7 +236,7 @@ const Profileuser = () => {
                                 <div className="card mt-3">
                                     <ul className="list-group list-group-flush" style={{ marginBottom: '10' }} ></ul>
                                     <button className="btn btn-light" data-bs-toggle="modal" data-bs-target="#modalsaldo1">
-                                        Saldo : <br /> {saldoUser}
+                                        Saldo : <br /> Rp. {saldoUser} ,00
                                     </button> <br />
 
                                     <Button variant="primary" onClick={handleShow}>
