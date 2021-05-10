@@ -1,16 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Registrasi.css';
-import logo from '../../../assets/Logouser.png';
-import { Link, withRouter } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
+import logo from '../../../assets/logo.png';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import { Col, Row } from 'react-bootstrap';
 
 const defaultState = {
     fullname: null,
@@ -26,23 +22,23 @@ const defaultState = {
     country: null,
     street: null,
     profPic: null,
-    
+
 
     selectedFile: null,
     //SELECT DATA PROVINSI
     provinceList: [],
-    selectedProvince:'Select',
-    selectedProvinceId:'0',
+    selectedProvince: 'Select',
+    selectedProvinceId: 1,
 
     //SELECT DATA KABUPATEN
-    cityList : [],
-    selectedCity : 'Select',
-    selectedCityId : '0',
+    cityList: [],
+    selectedCity: 'Select',
+    selectedCityId: 1,
 
     //SELECT DATA KECAMATAN
-    districtsList : [],
-    selectedDistricts : 'Select',
-    selectedDistrictsId : '0'
+    districtsList: [],
+    selectedDistricts: 'Select',
+    selectedDistrictsId: 1
 
 
 }
@@ -231,276 +227,267 @@ class Registrasi extends Component {
 
         }
     }
-    provinsi(){
+
+
+    provinsi() {
         axios
-        .get('http://localhost:7070/api/dynteam/auth/user/provinsi-all')
-        .then(res => {
-            var status = res.data.status;
-            var message = res.data.message;
+            .get('http://localhost:7070/api/dynteam/auth/user/provinsi-all')
+            .then(res => {
 
-            var dataProvince = [];
-            if (status == 200) {
-                
-                res.data.data.map((item) => {
-                    
-                    dataProvince.push(
-                        <Dropdown.Item onClick={()=>{
-                            this.setState({ 
-                                selectedProvince:item.nama,
-                                province: item.nama,
-                                selectedProvinceId: item.id
-                            })
-                            this.city(item.id);
-                        }}>{item.nama}</Dropdown.Item>
-                        
-                    );
-                });
-                
+                var status = res.data.status;
+                var message = res.data.message;
 
-            } else {
-                NotificationManager.error(message);
-
-            }
-            console.log(dataProvince)
-            this.setState({
-                provinceList:dataProvince
-                
+                if (status == 200) {
+                    this.setState({
+                        provinceList: res.data.data
+                    })
+                }
+                else {
+                    NotificationManager.error(message);
+                }
             })
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .catch(error => {
+                console.log(error)
+            })
 
     }
 
-    city(provinceId){
+    provinceChange = async (event) => {
+        if (event.detail === 0) {
+            await console.log(event.target.value)
+            await this.setState({
+                selectedProvinceId: event.target.value,
+                province: event.target[event.target.selectedIndex].text
+            })
+        }
+        await this.city(this.state.selectedProvinceId);
+    }
+
+    city = (selectedProvinceId) => {
         axios
-        .get('http://localhost:7070/api/dynteam/auth/user/kabupaten-all/' + provinceId)
-        .then(res => {
-            var status = res.data.status;
-            var message = res.data.message;
+            .get('http://localhost:7070/api/dynteam/auth/user/kabupaten-all/' + selectedProvinceId)
+            .then(res => {
+                var status = res.data.status;
+                var message = res.data.message;
 
-            var dataCity= [];
-            if (status == 200) {
-                
-                res.data.data.map((item) => {
-                    
-                    dataCity.push(
-                        <Dropdown.Item onClick={()=>{
-                            this.setState({ 
-                                selectedCity:item.nama,
-                                city: item.nama,
-                                selectedCityId: item.id
-                            })
-                            this.districts(item.id);
-                        }}>{item.nama}</Dropdown.Item>
-                        
-                    );
-                });
-                
+                if (status == 200) {
 
-            } else {
-                NotificationManager.error(message);
-
-            }
-            console.log(dataCity)
-            this.setState({
-                cityList:dataCity
-                
+                    this.setState({
+                        cityList: res.data.data
+                    })
+                }
+                else {
+                    NotificationManager.error(message);
+                }
             })
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .catch(error => {
+                console.log(error)
+            })
 
     }
 
-    districts(cityId){
+    cityChange = async (event) => {
+        if (event.detail === 0) {
+            await console.log(event.target.value)
+            await this.setState({
+                selectedCityId: event.target.value,
+                city: event.target[event.target.selectedIndex].text
+            })
+        }
+        await this.districts(this.state.selectedCityId);
+    }
+
+    districts(cityId) {
         axios
-        .get('http://localhost:7070/api/dynteam/auth/user/kecamatan-all/' + cityId)
-        .then(res => {
-            var status = res.data.status;
-            var message = res.data.message;
+            .get('http://localhost:7070/api/dynteam/auth/user/kecamatan-all/' + cityId)
+            .then(res => {
+                var status = res.data.status;
+                var message = res.data.message;
 
-            var dataDistricts= [];
-            if (status == 200) {
-                
-                res.data.data.map((item) => {
-                    
-                    dataDistricts.push(
-                        <Dropdown.Item onClick={()=>{
-                            this.setState({ 
-                                selectedDistricts:item.nama,
-                                districts: item.nama,
-                                country:item.nama,
-                                selectedDistrictsId: item.id
-                            })
-                        }}>{item.nama}</Dropdown.Item>
-                        
-                    );
-                });
-                
+                if (status == 200) {
+                    this.setState({
+                        districtsList: res.data.data
+                    })
+                }
+                else {
+                    NotificationManager.error(message);
+                }
 
-            } else {
-                NotificationManager.error(message);
-
-            }
-            console.log(dataDistricts)
-            this.setState({
-                districtsList:dataDistricts
-                
             })
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .catch(error => {
+                console.log(error)
+            })
 
     }
 
+    districtsChange = async (event) => {
+        if (event.detail === 0) {
+            await console.log(event.target.value)
+            await this.setState({
+                selectedDistrictsId: event.target.value,
+                districts: event.target[event.target.selectedIndex].text,
+                country: event.target[event.target.selectedIndex].text
+            })
+        }
 
-    componentDidMount(){
-        this.provinsi();
-        // this.city();
-        // this.districts();
     }
+
+    componentDidMount = async () => {
+        await this.provinsi();
+    }
+
 
     render() {
+
+        const mystyle = {
+            height: "80px"
+        };
+
+        const { provinceList, cityList, districtsList } = this.state;
+
         return (
 
             <Fragment>
                 <div className="card shadow mx-5 my-5 containeruser ">
-                    <div className="container">
-                        <div className="row">
-
-                            <div className="col-md-4">
-                                <img src={logo} style={{
-                                    height: 250,
-                                }} />
+                    <Row className="ml-3">
+                        <Col md={4} className="justify-content-end ml-5 mt-5">
+                            <div className="ml-5 mt-5">
+                                <img className="ml-5 mt-5 mb-3" src={logo} style={mystyle} />
                                 <br />
-                                <label>Sudah Punya Akun?</label><br />
-                                <Link to='/'><a button type="button" className="btn btn-outline-success my-3"
-                                    style={{ width: 250 }}>Sign in</a></Link>
-
+                                <label className="ml-4">Sudah Punya Akun?</label>
                             </div>
+                            <br />
+                            <Link to='/'><a button type="button" className="btn btn-outline-info ml-4"
+                                style={{ width: 250 }}>Sign in</a></Link>
+                        </Col>
+                        <Col md={7}>
+                            <div className="card justify-content-center " >
+                                <div className="card-body">
+                                    <h2 className="card-title text-center">REGISTRATION</h2>
 
-                            <div className="col-md-8">
-                                <div className="card justify-content-center mb-5 col-regist" >
+                                    <div className="form-group">
 
-                                    <div className="card-body">
-                                        <h2 className="card-title text-center">REGISTER</h2>
-
-                                        <div className="form-group">
-
-                                            <div className="row">
-                                                <div className="col-md-6">
-                                                    <label>Full name</label>
-                                                    <input type="text" className="form-control" id="fullname" name="fullname" value={this.state.fullname} onChange={this.handleInputChange} />
-                                                    <span className="text-danger">{this.state.fullnameError}</span><br />
-                                                </div>
-
-                                                <div className="col-md-6">
-                                                    <label>Email</label>
-                                                    <input type="text" className="form-control" id="email" name="email" value={this.state.email} onChange={this.handleInputChange} />
-                                                    <span className="text-danger">{this.state.emailError}</span><br />
-                                                </div>
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <label>Full name</label>
+                                                <input type="text" className="form-control" id="fullname" name="fullname" value={this.state.fullname} onChange={this.handleInputChange} />
+                                                <span className="text-danger">{this.state.fullnameError}</span><br />
                                             </div>
 
-
-                                            <div className="row">
-                                                <div className="col-md-4">
-                                                    <label>Username</label>
-                                                    <input type="text" className="form-control" id="username" name="username" value={this.state.username} onChange={this.handleInputChange} />
-                                                    <span className="text-danger">{this.state.usernameError}</span><br />
-                                                </div>
-
-                                                <div className="col-md-4">
-                                                    <label>Password</label>
-                                                    <input type="password" className="form-control" id="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
-                                                    <span className="text-danger">{this.state.passwordError}</span><br />
-                                                </div>
-
-                                                <div className="col-md-4">
-                                                    <label>Phone Number</label>
-                                                    <input type="text" className="form-control" id="phoneNumber" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleInputChange} />
-                                                    <span className="text-danger">{this.state.phoneNumberError}</span><br />
-                                                </div>
+                                            <div className="col-md-6">
+                                                <label>Email</label>
+                                                <input type="text" className="form-control" id="email" name="email" value={this.state.email} onChange={this.handleInputChange} />
+                                                <span className="text-danger">{this.state.emailError}</span><br />
                                             </div>
-
-                                            <div className="row">
-                                                <div className="col-md-4">
-                                                    <label>Facebook</label>
-                                                    <input type="text" className="form-control" id="facebook" name="facebook" value={this.state.facebook} onChange={this.handleInputChange} />
-                                                    <span className="text-danger">{this.state.facebookError}</span><br />
-                                                </div>
-
-                                                <div className="col-md-4">
-                                                    <label>Instagram</label>
-                                                    <input type="text" className="form-control" id="instagram" name="instagram" value={this.state.instagram} onChange={this.handleInputChange} />
-                                                    <span className="text-danger">{this.state.instagramError}</span><br />
-                                                </div>
-
-                                                <div className="col-md-4">
-                                                    <label>Twitter</label>
-                                                    <input type="text" className="form-control" id="twitter" name="twitter" value={this.state.twitter} onChange={this.handleInputChange} />
-                                                    <span className="text-danger">{this.state.twitterError}</span><br />
-                                                </div>
-                                            </div>
-
-                                            <div className="row">
-                                            <div className="col-md-4">
-                                                    <label>Province</label>
-                                                    <DropdownButton id="dropdown-basic-buttonProvince" title={this.state.selectedProvince}>
-                                                        {this.state.provinceList}
-                                                    </DropdownButton>
-                                                    
-                                                    <span className="text-danger">{this.state.provinceError}</span><br />
-                                                </div>
-
-                                                <div className="col-md-4">
-                                                    <label>City</label>
-                                                    <DropdownButton id="dropdown-basic-buttonCity" title={this.state.selectedCity}>
-                                                        {this.state.cityList}
-                                                    </DropdownButton>
-                                                    <span className="text-danger">{this.state.cityError}</span><br />
-                                                </div>
-
-                                                <div className="col-md-4">
-                                                    <label>Districts</label>
-                                                    <DropdownButton id="dropdown-basic-buttonDistricts" title={this.state.selectedDistricts}>
-                                                        {this.state.districtsList}
-                                                    </DropdownButton>
-                                                    <span className="text-danger">{this.state.countryError}</span><br />
-                                                </div>
-                                            </div>
-
-                                            <div className="row">
-                                                <div className="col-md-6">
-                                                    <label>Street</label>
-                                                    <input type="text" className="form-control" id="street" name="street" value={this.state.street} onChange={this.handleInputChange} />
-                                                    <span className="text-danger">{this.state.streetError}</span><br />
-                                                </div>
-                                                <div className="col-md-4">
-                                                    <label className="mx-1">Choose profile picture : </label>
-                                                    <input className="btn btn-outline-primary" type="file" onChange={this.onFileChange} style={{ width: 300 }} />
-                                                    {/* <button className="btn btn-outline-primary" onClick={this.onFileUpload}>
-                                                        Choose File
-                                                    </button> */}
-                                                </div>
-                                            </div>
-
-
-
-                                            <button type="submit" class="btn btn-success mt-4" onClick={() => this.submit()}
-                                                style={{ width: '100%' }}>Registration</button>
                                         </div>
 
+
+                                        <div className="row">
+                                            <div className="col-md-4">
+                                                <label>Username</label>
+                                                <input type="text" className="form-control" id="username" name="username" value={this.state.username} onChange={this.handleInputChange} />
+                                                <span className="text-danger">{this.state.usernameError}</span><br />
+                                            </div>
+
+                                            <div className="col-md-4">
+                                                <label>Password</label>
+                                                <input type="password" className="form-control" id="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
+                                                <span className="text-danger">{this.state.passwordError}</span><br />
+                                            </div>
+
+                                            <div className="col-md-4">
+                                                <label>Phone Number</label>
+                                                <input type="text" className="form-control" id="phoneNumber" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleInputChange} />
+                                                <span className="text-danger">{this.state.phoneNumberError}</span><br />
+                                            </div>
+                                        </div>
+
+                                        <div className="row">
+                                            <div className="col-md-4">
+                                                <label>Facebook</label>
+                                                <input type="text" className="form-control" id="facebook" name="facebook" value={this.state.facebook} onChange={this.handleInputChange} />
+                                                <span className="text-danger">{this.state.facebookError}</span><br />
+                                            </div>
+
+                                            <div className="col-md-4">
+                                                <label>Instagram</label>
+                                                <input type="text" className="form-control" id="instagram" name="instagram" value={this.state.instagram} onChange={this.handleInputChange} />
+                                                <span className="text-danger">{this.state.instagramError}</span><br />
+                                            </div>
+
+                                            <div className="col-md-4">
+                                                <label>Twitter</label>
+                                                <input type="text" className="form-control" id="twitter" name="twitter" value={this.state.twitter} onChange={this.handleInputChange} />
+                                                <span className="text-danger">{this.state.twitterError}</span><br />
+                                            </div>
+                                        </div>
+
+                                        <div className="row">
+                                            <div className="col-md-4">
+                                                <label>Province</label>
+                                                <select class="form-control" name="provinceId" id="provinceIId" onClick={this.provinceChange} required>
+                                                    {
+                                                        provinceList.map(provinceVal => {
+                                                            return (
+                                                                <option value={provinceVal.id}>{provinceVal.nama}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
+
+                                                <span className="text-danger">{this.state.provinceError}</span><br />
+                                            </div>
+
+                                            <div className="col-md-4">
+                                                <label>City</label>
+                                                <select class="form-control" name="cityId" id="cityIId" onClick={this.cityChange} required>
+                                                    {
+                                                        cityList.map(cityVal => {
+                                                            return (
+                                                                <option value={cityVal.id}>{cityVal.nama}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
+                                                <span className="text-danger">{this.state.cityError}</span><br />
+                                            </div>
+
+                                            <div className="col-md-4">
+                                                <label>Districts</label>
+                                                <select class="form-control" name="districtsId" id="districtsIId" onClick={this.districtsChange} required>
+                                                    {
+                                                        districtsList.map(districsVal => {
+                                                            return (
+                                                                <option value={districsVal.id}>{districsVal.nama}</option>
+                                                            )
+                                                        })
+                                                    }
+                                                </select>
+                                                <span className="text-danger">{this.state.countryError}</span><br />
+                                            </div>
+                                        </div>
+
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <label>Street</label>
+                                                <input type="text" className="form-control" id="street" name="street" value={this.state.street} onChange={this.handleInputChange} />
+                                                <span className="text-danger">{this.state.streetError}</span><br />
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label className="mx-1">Choose profile picture : </label>
+                                                <input className="btn btn-light" type="file" onChange={this.onFileChange} style={{ width: 300 }} />
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-login mt-4" onClick={() => this.submit()}
+                                            style={{ width: '100%' }}>Registration</button>
                                     </div>
 
                                 </div>
+
                             </div>
-                        </div>
-                    </div>
-                    <NotificationContainer />
+                        </Col>
+                    </Row>
                 </div>
             </Fragment>
         )

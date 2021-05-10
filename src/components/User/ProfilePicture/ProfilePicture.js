@@ -15,6 +15,8 @@ class ProfilePicture extends Component {
 
         super();
         this.state = {dataUser:''}
+        this.fileUpload = React.createRef();
+        this.showFileUpload = this.showFileUpload.bind(this);
     }
     authHeader = () => {
         
@@ -65,6 +67,54 @@ class ProfilePicture extends Component {
             })
 
     }
+    onFileChange = event => {
+        // Update the state 
+     
+        this.setState({
+            selectedFile:event.target.files[0]
+        })
+
+        this.onFileUpload(this.userId, event.target.files[0])
+    };
+
+    showFileUpload() {
+        this.fileUpload.current.click();
+      }
+
+      //Untuk edit foto user
+    onFileUpload = (userId, file) => {
+        // Create an object of formData 
+        const formData = new FormData();
+
+        // Update the formData object 
+        formData.append(
+            "file",
+            file,
+            file.name
+        );
+
+        formData.append(
+            "userId",
+            userId
+
+        );
+
+        // Details of the uploaded file 
+        console.log(this.state.selectedFile);
+
+        // Request made to the backend api 
+        // Send formData object 
+
+        axios
+            .post('http://localhost:7070/api/dynteam/auth/user/uploadProfile', formData)
+            .then(res => {
+                window.location.reload();
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    };
 
 
     render() {
@@ -74,13 +124,20 @@ class ProfilePicture extends Component {
                 <div className="card">
                                     <div className="card-body">
                                         <div className="d-flex flex-column" style={{ alignItems: 'center' }}>
-                                            <img src={this.state.userPhoto} style={{
-                                                height: 200, width:200
-                                            }} />
+                                        <input type="file" id="my_file"
+                                            style={{ display: "none" }}
+                                            ref={this.fileUpload} onChange={this.onFileChange} >
+                                            
+                                        </input>
+
+                                        <img src={this.state.userPhoto} onClick={this.showFileUpload} style={{
+                                                    height: 200, width:200
+                                                }} />                                        
+                                        
                                             <div className="mt-3">
                                                 <h4>Hello, {this.state.dataUser}</h4>
                                                 <h6>Member DYNTeam</h6>
-                                                <p class="text-muted font-size-sm">Semarang, Indonesia</p>
+
                                             </div>
                                         </div>
                                     </div>

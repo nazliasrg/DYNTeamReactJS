@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Loginuser.css';
-import logo from '../../../assets/Logouser.png';
+import logo from '../../../assets/logo.png';
 import { Link } from 'react-router-dom';
 import { ReactSession } from 'react-client-session';
 import axios from 'axios';
@@ -11,7 +11,7 @@ import 'react-notifications/lib/notifications.css';
 ReactSession.setStoreType("localStorage");
 
 class Loginuser extends Component {
-    
+
 
     constructor() {
         super();
@@ -66,21 +66,21 @@ class Loginuser extends Component {
                     var status = res.data.status;
                     var message = res.data.message;
 
-                    if(status==200){
+                    if (status == 200) {
                         console.log("res");
                         console.log(res.data.data.roles[0]);
                         this.setState({
                             roles: res.data.data.roles[0]
                         })
-    
+
                         // alert('Welcome ' + this.state.username + '!');
                         NotificationManager.success(message);
-                        
-    
+
+
                         console.log(this.props.history.location.state);
                         console.log("res.data.data.token");
                         console.log(res.data.data.token);
-    
+
                         if (res.data.data.token && (this.state.roles === 'USER')) {
                             localStorage.setItem('data_user', JSON.stringify(res.data));
                         }
@@ -89,10 +89,10 @@ class Loginuser extends Component {
                                 pathname: '/Home',
                                 state: res.data.data,
                             })
-                          }, 1000);
-                        
+                        }, 1000);
+
                     }
-                    else{
+                    else {
                         NotificationManager.error(message);
                     }
 
@@ -119,13 +119,17 @@ class Loginuser extends Component {
                 <div className="card shadow mx-5 my-5 containeruser ">
                     <div className="container">
                         <div className="row">
-                            <div className="col-md-6">
-                                <img src={logo} style={{
-                                    height: 250,
-                                }} />
+                            <div className="col-md-6 justify-content-center">
+                                <div className="mt-4 ml-4">
+                                    <div className="ml-5">
+                                        <img src={logo} style={{
+                                            height: 80,
+                                        }} />
+                                    </div>
+                                </div>
                                 <br />
-                                <label>Belum Punya Akun?</label><br />
-                                <Link to='/Registrasi'><a button type="button" className="btn btn-outline-success my-3"
+                                <label className="ml-5">Belum Punya Akun?</label><br />
+                                <Link to='/Registrasi'><a button type="button" className="btn btn-outline-info my-3"
                                     style={{ width: 250 }}>Sign up</a></Link>
 
                             </div>
@@ -145,7 +149,7 @@ class Loginuser extends Component {
                                             <input type="password" className="form-control" id="passwordLogin" name="password" value={this.state.password} onChange={this.handleInputChange} />
                                             <span className="text-danger">{this.state.passwordError}</span>
 
-                                            <button type="submit" class="btn btn-success mt-4" onClick={() => this.submit()}
+                                            <button type="submit" class="btn btn-login mt-4" onClick={() => this.submit()}
                                                 style={{ width: '100%' }}>Login</button>
                                         </div>
                                     </div>

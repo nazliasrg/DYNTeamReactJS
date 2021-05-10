@@ -5,7 +5,6 @@ import { Dropdown, Button, ButtonGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 import axios from 'axios'
-import swal from 'sweetalert'
 import { useHistory } from 'react-router';
 
 const handleSidebar = () => {
@@ -22,10 +21,13 @@ const NavbarComponent = () => {
 
     const handleLogout = async () => {
 
-        await localStorage.clear();
-        await history.push({
-            pathname: '/login-admin'
-        });
+        const r = window.confirm('Are you sure to logout?');
+        if (r == true) {
+            await localStorage.clear();
+            await history.push({
+                pathname: '/login-admin'
+            });
+        }
     }
 
     const closeModal = () => setShow(false);
@@ -34,13 +36,14 @@ const NavbarComponent = () => {
 
     const [newPassword, setNewPassword] = useState("");
 
+    const [checkPassword, setCheckPassword] = useState(false);
+
     const newPasswordChange = (event) => {
         setNewPassword(event.target.value)
         console.log(newPassword)
     }
 
-    const onSubmit = () => {
-
+    const changePassword = () => {
         const adminData = {
             password: newPassword
         }
@@ -50,23 +53,52 @@ const NavbarComponent = () => {
 
         axios.put('http://localhost:7070/api/dynteam/auth/admin/changePassword/' + username, adminData)
             .then(res => {
-                swal({
-                    title: "Successfully!",
-                    text: "Password changed!",
-                    icon: "success",
-                    button: "Aww yiss!",
-                });
+                console.log(res)
             })
             .catch(function (error) {
                 console.log(error)
             })
     }
 
+    const onSubmit = async () => {
+        await changePassword();
+        await showAlert();
+        await localStorage.clear();
+        await history.push({
+            pathname: '/login-admin'
+        });
+    }
+
+    const showAlert = () => {
+        window.alert("Password has been changed!");
+    }
+
+    const authHeader = () => {
+        const admin = JSON.parse(localStorage.getItem('data_admin'));
+        console.log(admin)
+
+        if (admin && admin.data.token) {
+            return {
+                'authorization': `Bearer ${admin.data.token}`
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
     useEffect(async () => {
-        const uname = await JSON.parse(localStorage.getItem('data_admin'))
-        await console.log("username")
-        await console.log(uname.data.username)
-        await setUsername(uname.data.username)
+        await authHeader();
+
+        if (authHeader() == null) {
+            await history.push('/login-admin')
+        }
+        else {
+            const uname = await JSON.parse(localStorage.getItem('data_admin'))
+            await console.log("username")
+            await console.log(uname.data.username)
+            await setUsername(uname.data.username)
+        }
     });
 
     return (
