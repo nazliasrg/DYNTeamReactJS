@@ -1,10 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Registrasi.css';
-import logo from '../../../assets/Logouser.png';
-import { Link, withRouter } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
+import logo from '../../../assets/logo.png';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
@@ -26,23 +24,23 @@ const defaultState = {
     country: null,
     street: null,
     profPic: null,
-    
+
 
     selectedFile: null,
     //SELECT DATA PROVINSI
     provinceList: [],
-    selectedProvince:'Select',
-    selectedProvinceId:'0',
+    selectedProvince: 'Select',
+    selectedProvinceId: '0',
 
     //SELECT DATA KABUPATEN
-    cityList : [],
-    selectedCity : 'Select',
-    selectedCityId : '0',
+    cityList: [],
+    selectedCity: 'Select',
+    selectedCityId: '0',
 
     //SELECT DATA KECAMATAN
-    districtsList : [],
-    selectedDistricts : 'Select',
-    selectedDistrictsId : '0'
+    districtsList: [],
+    selectedDistricts: 'Select',
+    selectedDistrictsId: '0'
 
 
 }
@@ -231,134 +229,134 @@ class Registrasi extends Component {
 
         }
     }
-    provinsi(){
+    provinsi() {
         axios
-        .get('http://localhost:7070/api/dynteam/auth/user/provinsi-all')
-        .then(res => {
-            var status = res.data.status;
-            var message = res.data.message;
+            .get('http://localhost:7070/api/dynteam/auth/user/provinsi-all')
+            .then(res => {
+                var status = res.data.status;
+                var message = res.data.message;
 
-            var dataProvince = [];
-            if (status == 200) {
-                
-                res.data.data.map((item) => {
-                    
-                    dataProvince.push(
-                        <Dropdown.Item onClick={()=>{
-                            this.setState({ 
-                                selectedProvince:item.nama,
-                                province: item.nama,
-                                selectedProvinceId: item.id
-                            })
-                            this.city(item.id);
-                        }}>{item.nama}</Dropdown.Item>
-                        
-                    );
-                });
-                
+                var dataProvince = [];
+                if (status == 200) {
 
-            } else {
-                NotificationManager.error(message);
+                    res.data.data.map((item) => {
 
-            }
-            console.log(dataProvince)
-            this.setState({
-                provinceList:dataProvince
-                
+                        dataProvince.push(
+                            <Dropdown.Item onClick={() => {
+                                this.setState({
+                                    selectedProvince: item.nama,
+                                    province: item.nama,
+                                    selectedProvinceId: item.id
+                                })
+                                this.city(item.id);
+                            }}>{item.nama}</Dropdown.Item>
+
+                        );
+                    });
+
+
+                } else {
+                    NotificationManager.error(message);
+
+                }
+                console.log(dataProvince)
+                this.setState({
+                    provinceList: dataProvince
+
+                })
             })
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .catch(error => {
+                console.log(error)
+            })
 
     }
 
-    city(provinceId){
+    city(provinceId) {
         axios
-        .get('http://localhost:7070/api/dynteam/auth/user/kabupaten-all/' + provinceId)
-        .then(res => {
-            var status = res.data.status;
-            var message = res.data.message;
+            .get('http://localhost:7070/api/dynteam/auth/user/kabupaten-all/' + provinceId)
+            .then(res => {
+                var status = res.data.status;
+                var message = res.data.message;
 
-            var dataCity= [];
-            if (status == 200) {
-                
-                res.data.data.map((item) => {
-                    
-                    dataCity.push(
-                        <Dropdown.Item onClick={()=>{
-                            this.setState({ 
-                                selectedCity:item.nama,
-                                city: item.nama,
-                                selectedCityId: item.id
-                            })
-                            this.districts(item.id);
-                        }}>{item.nama}</Dropdown.Item>
-                        
-                    );
-                });
-                
+                var dataCity = [];
+                if (status == 200) {
 
-            } else {
-                NotificationManager.error(message);
+                    res.data.data.map((item) => {
 
-            }
-            console.log(dataCity)
-            this.setState({
-                cityList:dataCity
-                
+                        dataCity.push(
+                            <Dropdown.Item onClick={() => {
+                                this.setState({
+                                    selectedCity: item.nama,
+                                    city: item.nama,
+                                    selectedCityId: item.id
+                                })
+                                this.districts(item.id);
+                            }}>{item.nama}</Dropdown.Item>
+
+                        );
+                    });
+
+
+                } else {
+                    NotificationManager.error(message);
+
+                }
+                console.log(dataCity)
+                this.setState({
+                    cityList: dataCity
+
+                })
             })
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .catch(error => {
+                console.log(error)
+            })
 
     }
 
-    districts(cityId){
+    districts(cityId) {
         axios
-        .get('http://localhost:7070/api/dynteam/auth/user/kecamatan-all/' + cityId)
-        .then(res => {
-            var status = res.data.status;
-            var message = res.data.message;
+            .get('http://localhost:7070/api/dynteam/auth/user/kecamatan-all/' + cityId)
+            .then(res => {
+                var status = res.data.status;
+                var message = res.data.message;
 
-            var dataDistricts= [];
-            if (status == 200) {
-                
-                res.data.data.map((item) => {
-                    
-                    dataDistricts.push(
-                        <Dropdown.Item onClick={()=>{
-                            this.setState({ 
-                                selectedDistricts:item.nama,
-                                districts: item.nama,
-                                country:item.nama,
-                                selectedDistrictsId: item.id
-                            })
-                        }}>{item.nama}</Dropdown.Item>
-                        
-                    );
-                });
-                
+                var dataDistricts = [];
+                if (status == 200) {
 
-            } else {
-                NotificationManager.error(message);
+                    res.data.data.map((item) => {
 
-            }
-            console.log(dataDistricts)
-            this.setState({
-                districtsList:dataDistricts
-                
+                        dataDistricts.push(
+                            <Dropdown.Item onClick={() => {
+                                this.setState({
+                                    selectedDistricts: item.nama,
+                                    districts: item.nama,
+                                    country: item.nama,
+                                    selectedDistrictsId: item.id
+                                })
+                            }}>{item.nama}</Dropdown.Item>
+
+                        );
+                    });
+
+
+                } else {
+                    NotificationManager.error(message);
+
+                }
+                console.log(dataDistricts)
+                this.setState({
+                    districtsList: dataDistricts
+
+                })
             })
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .catch(error => {
+                console.log(error)
+            })
 
     }
 
 
-    componentDidMount(){
+    componentDidMount() {
         this.provinsi();
         // this.city();
         // this.districts();
@@ -373,18 +371,20 @@ class Registrasi extends Component {
                         <div className="row">
 
                             <div className="col-md-4">
-                                <img src={logo} style={{
-                                    height: 250,
-                                }} />
-                                <br />
-                                <label>Sudah Punya Akun?</label><br />
-                                <Link to='/'><a button type="button" className="btn btn-outline-success my-3"
-                                    style={{ width: 250 }}>Sign in</a></Link>
+                                <div className="mt-5">
+                                    <img src={logo} style={{
+                                        height: 100,
+                                    }} />
+                                    <br />
+                                    <label>Sudah Punya Akun?</label><br />
+                                    <Link to='/'><a button type="button" className="btn btn-outline-success my-3"
+                                        style={{ width: 250 }}>Sign in</a></Link>
+                                </div>
 
                             </div>
 
                             <div className="col-md-8">
-                                <div className="card justify-content-center mb-5 col-regist" >
+                                <div className="card justify-content-center " >
 
                                     <div className="card-body">
                                         <h2 className="card-title text-center">REGISTER</h2>
@@ -447,12 +447,12 @@ class Registrasi extends Component {
                                             </div>
 
                                             <div className="row">
-                                            <div className="col-md-4">
+                                                <div className="col-md-4">
                                                     <label>Province</label>
                                                     <DropdownButton id="dropdown-basic-buttonProvince" title={this.state.selectedProvince}>
                                                         {this.state.provinceList}
                                                     </DropdownButton>
-                                                    
+
                                                     <span className="text-danger">{this.state.provinceError}</span><br />
                                                 </div>
 

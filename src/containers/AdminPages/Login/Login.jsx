@@ -61,8 +61,6 @@ class Login extends Component {
                         state: res.data.data,
                     })
 
-                    window.location.reload();
-
                     console.log(this.props.history.location.state);
                     this.state.roles.forEach(role => {
                         if (res.data.data.token && (role === 'SUPER_ADMIN' || role === 'ADMIN')) {
