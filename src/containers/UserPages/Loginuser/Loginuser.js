@@ -120,13 +120,15 @@ class Loginuser extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-md-6 justify-content-center">
-                                <div className="ml-5">
-                                    <img src={logo} style={{
-                                        height: 100,
-                                    }} />
+                                <div className="mt-4 ml-4">
+                                    <div className="ml-5">
+                                        <img src={logo} style={{
+                                            height: 80,
+                                        }} />
+                                    </div>
                                 </div>
                                 <br />
-                                <label className="mt-4">Belum Punya Akun?</label><br />
+                                <label className="ml-5">Belum Punya Akun?</label><br />
                                 <Link to='/Registrasi'><a button type="button" className="btn btn-outline-info my-3"
                                     style={{ width: 250 }}>Sign up</a></Link>
 
@@ -147,7 +149,7 @@ class Loginuser extends Component {
                                             <input type="password" className="form-control" id="passwordLogin" name="password" value={this.state.password} onChange={this.handleInputChange} />
                                             <span className="text-danger">{this.state.passwordError}</span>
 
-                                            <button type="submit" class="btn btn-warning mt-4" onClick={() => this.submit()}
+                                            <button type="submit" class="btn btn-login mt-4" onClick={() => this.submit()}
                                                 style={{ width: '100%' }}>Login</button>
                                         </div>
                                     </div>
