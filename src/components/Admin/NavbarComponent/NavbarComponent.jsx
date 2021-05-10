@@ -34,17 +34,31 @@ const NavbarComponent = () => {
 
     const [username, setUsername] = useState("");
 
+    const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
+    const [rNewPassword, setRNewPassword] = useState("");
 
-    const [checkPassword, setCheckPassword] = useState(false);
+    const [checkPassword, setCheckPassword] = useState(true);
+
+    const oldPasswordChange = (event) => {
+        setOldPassword(event.target.value)
+        console.log(oldPassword)
+    }
 
     const newPasswordChange = (event) => {
         setNewPassword(event.target.value)
         console.log(newPassword)
     }
 
+    const rNewPasswordChange = (event) => {
+        setRNewPassword(event.target.value)
+        console.log(rNewPassword)
+
+    }
+
     const changePassword = () => {
         const adminData = {
+            oldPassword: oldPassword,
             password: newPassword
         }
 
@@ -56,17 +70,38 @@ const NavbarComponent = () => {
                 console.log(res)
             })
             .catch(function (error) {
-                console.log(error)
+                if (error.status === 500) {
+                    alert('Old password not match!')
+                }
             })
     }
 
     const onSubmit = async () => {
-        await changePassword();
-        await showAlert();
-        await localStorage.clear();
-        await history.push({
-            pathname: '/login-admin'
-        });
+        if (oldPassword === "") {
+            alert('Old password is required!')
+        }
+        if (newPassword === "") {
+            alert('New password is required!')
+        }
+        if (rNewPassword === "") {
+            alert('Repeat New password is required!')
+        }
+        else {
+            if (newPassword != rNewPassword) {
+                await alert('New Password & Repeat New Password don\'t match!')
+                await handleShow();
+            }
+            else if (newPassword === rNewPassword) {
+
+                await changePassword();
+                await showAlert();
+                await localStorage.clear();
+                await history.push({
+                    pathname: '/login-admin'
+                });
+            }
+        }
+
     }
 
     const showAlert = () => {
@@ -132,15 +167,22 @@ const NavbarComponent = () => {
                         </Modal.Header>
                         <Modal.Body>
                             <>
-                                <form onSubmit={onSubmit}>
-                                    <div className="form-group">
-                                        <label htmlFor="username">New Password</label>
-                                        <input className="form-control" id="newPassword" value={newPassword} onChange={newPasswordChange} required />
-                                    </div>
-                                    <div className="form-group">
-                                        <button className="form-control btn btn-primary" type="submit">Change Password</button>
-                                    </div>
-                                </form>
+
+                                <div className="form-group">
+                                    <label htmlFor="username">Old Password</label>
+                                    <input type="password" className="form-control" id="oldPassword" value={oldPassword} onChange={oldPasswordChange} required />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="username">New Password</label>
+                                    <input type="password" className="form-control" id="newPassword" value={newPassword} onChange={newPasswordChange} required />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="username">Repeat New Password</label>
+                                    <input type="password" className="form-control" id="rNewPassword" value={rNewPassword} onChange={rNewPasswordChange} required />
+                                </div>
+                                <div className="form-group">
+                                    <button className="form-control btn btn-primary" onClick={onSubmit}>Change Password</button>
+                                </div>
                             </>
                         </Modal.Body>
                     </Modal>
