@@ -55,7 +55,6 @@ class GenrePage extends Component{
         if (this.authHeader()==null){
             this.props.history.push('/')
         }
-        // await this.authHeader();
         await this.getBook();
         await console.log("data_user");
         await console.log(JSON.parse(localStorage.getItem("data_user")));
@@ -64,8 +63,6 @@ class GenrePage extends Component{
     handleInput = (e) =>{
         // MENGETAHUI APAKAH DATA YANG KITA MASUKAN DITERIMA ATAU TIDAK
         // console.log(e.target.value); 
-        // const update = this.state.data;
-        // update = update.filter()
         this.setState({Searchbook: e.target.value})
     }
 
@@ -74,20 +71,6 @@ class GenrePage extends Component{
         axios.get('http://localhost:7070/api/dynteam/book/active-books', {
             headers: user
         }).then(res =>{
-            
-            // const data = res.data;
-            // const slice = data.slice(this.state.offset, this.state.offset+this.state.perPage)
-            // const postData = slice.map(val =>
-            //     <BookCard
-            //         key = {val.bookId}
-            //         book_id = {val.bookId}
-            //         book_code = {val.bookCode} 
-            //         cover = {val.cover}
-            //         title = {val.title}
-            //         isAvailable = {val.isAvailable}
-            //         author = {val.authorEntity.authorName}
-            //     />)
-            
             this.setState({
                 data: res.data,
                 pageCount: Math.ceil(res.data.length / this.state.perPage),
@@ -151,9 +134,8 @@ class GenrePage extends Component{
                                 )
                             })
                         }
-                        {/* {this.state.postData} */}
                     </div>
-                    <div>
+                    <div className="row justify-content-center">
                         <ReactPaginate
                                 previousLabel={"prev"}
                                 nextLabel={"next"}
