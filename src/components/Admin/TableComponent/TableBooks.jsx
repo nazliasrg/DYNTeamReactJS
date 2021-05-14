@@ -11,9 +11,11 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 import axios from 'axios'
 
-const { SearchBar } = Search;
+
+
 
 const TableBooks = (props) => {
+
     const [data, setData] = useState([]);
 
     const authHeader = () => {
@@ -308,11 +310,13 @@ const TableBooks = (props) => {
         order: 'asc'
     }];
 
+    const { SearchBar } = Search;
+
     return (
         <>
             <ToolkitProvider
                 bootstrap4
-                keyField='id'
+                keyField='bookId'
                 data={data}
                 columns={columns}
                 defaultSorted={defaultSorted}
@@ -322,9 +326,9 @@ const TableBooks = (props) => {
                     props => (
                         <div>
                             <Row>
-                                <Col>
+                                {/* <Col>
                                     <SearchBar {...props.searchProps} placeholder="Search .." />
-                                </Col>
+                                </Col> */}
                                 <Col>
                                     <div className="float-right">
                                         <Link to={'/add-book'}>
@@ -393,7 +397,7 @@ const TableBooks = (props) => {
                                 </Col>
                             </Row>
 
-                            <div className="justify-content-center tableAdmin">
+                            <div className="justify-content-center tableAdmin mt-2">
                                 <BootstrapTable
                                     {...props.baseProps}
 

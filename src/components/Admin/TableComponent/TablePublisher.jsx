@@ -255,9 +255,9 @@ const TablePublisher = (props) => {
                     props => (
                         <div>
                             <Row>
-                                <Col>
+                                {/* <Col>
                                     <SearchBar {...props.searchProps} placeholder="Search .." />
-                                </Col>
+                                </Col> */}
                                 <Col>
                                     <div className="float-right">
                                         <Button color='dark' className="mr-2" onClick={handleShow}>
@@ -306,7 +306,7 @@ const TablePublisher = (props) => {
                                 </Col>
                             </Row>
 
-                            <div className="justify-content-center tableAdmin">
+                            <div className="justify-content-center tableAdmin mt-2">
                                 <BootstrapTable
                                     {...props.baseProps}
                                     pagination={paginationFactory()}

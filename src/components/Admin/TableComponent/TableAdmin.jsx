@@ -257,9 +257,9 @@ const TableAdmin = () => {
                     props => (
                         <div>
                             <Row>
-                                <Col>
+                                {/* <Col>
                                     <SearchBar {...props.searchProps} placeholder="Search .." />
-                                </Col>
+                                </Col> */}
                                 {role[0] == 'SUPER_ADMIN' ?
                                     <Col>
                                         <div className="float-right">
@@ -301,7 +301,7 @@ const TableAdmin = () => {
                                     null}
                             </Row>
 
-                            <div className="float-center">
+                            <div className="float-center mt-2">
                                 <BootstrapTable
                                     {...props.baseProps}
                                     pagination={paginationFactory()}

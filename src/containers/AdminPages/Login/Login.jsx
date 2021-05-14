@@ -74,7 +74,7 @@ class Login extends Component {
                         alert("Account is not active!");
                     }
                     else if (error.message == "Request failed with status code 500") {
-                        alert("Username and password not match!");
+                        alert("Username and password don't match!");
                     }
                     console.log(error.message)
                 });
