@@ -72,6 +72,28 @@ const TableUsers = () => {
         }
     }
 
+    const handleClickReset = (username) => {
+        const r = window.confirm('Are you sure to reset password this account?')
+        const user = {
+            password: "user123"
+        }
+
+        if (r == true) {
+            axios.put('http://localhost:7070/api/dynteam/auth/user/resetPassword/' + username, user)
+                .then(function (response) {
+                    console.log(response)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                });
+            window.alert('Password ' + username + ' has been reset!')
+            getUsers();
+        }
+        else {
+            window.alert('Data user is safe!')
+        }
+    }
+
     const columns = [{
         dataField: 'userId',
         text: 'No',
@@ -161,6 +183,23 @@ const TableUsers = () => {
                 )
             }
         }
+    }, {
+        text: 'Password',
+        sort: true,
+        headerStyle: () => {
+            return {
+                textAlign: 'center'
+            }
+        },
+        formatter: (rowContent, row) => {
+            return (
+                <Row className='justify-content-center'>
+                    <Button color="warning" onClick={() => handleClickReset(row.username)}>
+                        Reset
+                    </Button>
+                </Row>
+            )
+        }
     }];
 
     const defaultSorted = [{
@@ -228,9 +267,9 @@ const TableUsers = () => {
                     props => (
                         <div>
                             <Row>
-                                <Col>
+                                {/* <Col>
                                     <SearchBar {...props.searchProps} placeholder="Search .." />
-                                </Col>
+                                </Col> */}
                                 <Col>
                                     <div className="float-right">
 
@@ -262,7 +301,7 @@ const TableUsers = () => {
                                 </Col>
                             </Row>
 
-                            <div className="float-center">
+                            <div className="float-center mt-2">
                                 <BootstrapTable
                                     {...props.baseProps}
                                     pagination={paginationFactory()}

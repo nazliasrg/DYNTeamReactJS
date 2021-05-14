@@ -233,14 +233,14 @@ const TableWaiting = (props) => {
                     props => (
                         <div>
                             <Row>
-                                <Col>
+                                {/* <Col>
                                     <div className="float-right">
                                         <SearchBar {...props.searchProps} placeholder="Search .." />
                                     </div>
-                                </Col>
+                                </Col> */}
                             </Row>
 
-                            <div className="float-center">
+                            <div className="float-center mt-2">
                                 <BootstrapTable
                                     {...props.baseProps}
                                     pagination={paginationFactory()}

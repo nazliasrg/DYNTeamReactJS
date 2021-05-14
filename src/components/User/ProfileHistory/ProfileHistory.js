@@ -16,10 +16,10 @@ var self = this;
 class ProfileHistory extends Component {
     userId = '';
 
-    constructor(){
+    constructor() {
         super();
         //3. Bikin variabel kosong list booknya pakai state
-        this.state={listbook:[]}
+        this.state = { listbook: [] }
         self = this;
     }
     authHeader = () => {
@@ -38,69 +38,68 @@ class ProfileHistory extends Component {
     componentDidMount() {
         var dataUser = localStorage.getItem('data_user');
 
-        if(dataUser != null){
+        if (dataUser != null) {
             const user = JSON.parse(localStorage.getItem('data_user'));
-        this.userId = user.data.userId;
-        
-        //5. panggil web servicenya
-        axios.get('http://localhost:7070/api/dynteam/auth/user/getBook/3/' + this.userId ,{
-            headers:this.authHeader()
-        })
-        .then(res => {
+            this.userId = user.data.userId;
 
-            var message = res.data.message;
-            var status = res.data.status;
-            if(status==200){
-                var i = 0;
-                var data=[];
-                res.data.data.map((item) => {
-                    if(i<3)
-                    {
-                        var dataCover = item.bookEntity;
-                        //6. untuk nambahin kompponen ke arraynya.  
-                        var bookCover = 'http://localhost:7070/api/dynteam/book/cover/download/' + dataCover.cover;
-                        console.log(bookCover);
-                        var bookTitle = dataCover.title;
-                        const titleStyle = {
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            textAlign: "center"
-                        }
-                        data.push(
-    
-                            <div className="col-sm-3 mb-2">
-                                <div className="card coverBook">
-                                    <img src={bookCover} className="img-thumbnail" />
-                                    
-                                    <Card.Body style={{ textAlign: "center" }}>
-                                        <Card.Title className="cardTitle" style={titleStyle}>{bookTitle}</Card.Title>
-                                        <Card.Title className="cardTitle" style={titleStyle}>{dataCover.authorEntity.authorName}</Card.Title>
-                                    </Card.Body>
-                                </div>
-                            </div>
-                          )
+            //5. panggil web servicenya
+            axios.get('http://localhost:7070/api/dynteam/auth/user/getBook/3/' + this.userId, {
+                headers: this.authHeader()
+            })
+                .then(res => {
+
+                    var message = res.data.message;
+                    var status = res.data.status;
+                    if (status == 200) {
+                        var i = 0;
+                        var data = [];
+                        res.data.data.map((item) => {
+                            if (i < 6) {
+                                var dataCover = item.bookEntity;
+                                //6. untuk nambahin kompponen ke arraynya.  
+                                var bookCover = 'http://localhost:7070/api/dynteam/book/cover/download/' + dataCover.cover;
+                                console.log(bookCover);
+                                var bookTitle = dataCover.title;
+                                const titleStyle = {
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                    textAlign: "center"
+                                }
+                                data.push(
+
+                                    <div className="col-sm-3 mb-2">
+                                        <div className="card coverBook">
+                                            <img src={bookCover} className="img-thumbnail" />
+
+                                            <Card.Body style={{ textAlign: "center" }}>
+                                                <Card.Title className="cardTitle" style={titleStyle}>{bookTitle}</Card.Title>
+                                                <Card.Title className="cardTitle" style={titleStyle}>{dataCover.authorEntity.authorName}</Card.Title>
+                                            </Card.Body>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                            i++;
+                        });
+
                     }
-                    i++;
-                });
 
-            }
-           
-            //7.Supaya listbooknya bisa ngrender ulang, utk isi list booknya (mkaanya butuh setState)
-            self.setState({
-                listbook: data
-            });
-            console.log(data);
-            
-        })
-        .catch(error => {
-            console.log(error)
-          
-        })
+                    //7.Supaya listbooknya bisa ngrender ulang, utk isi list booknya (mkaanya butuh setState)
+                    self.setState({
+                        listbook: data
+                    });
+                    console.log(data);
+
+                })
+                .catch(error => {
+                    console.log(error)
+
+                })
 
 
         }
-        
-     }
+
+    }
 
     render() {
         return (

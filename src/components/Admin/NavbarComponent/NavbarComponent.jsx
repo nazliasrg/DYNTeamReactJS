@@ -11,7 +11,6 @@ const handleSidebar = () => {
     $('#sidebar').toggleClass('active');
 }
 
-
 const NavbarComponent = () => {
     const [show, setShow] = useState(false);
 
@@ -34,16 +33,10 @@ const NavbarComponent = () => {
 
     const [username, setUsername] = useState("");
 
-    const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [rNewPassword, setRNewPassword] = useState("");
 
     const [checkPassword, setCheckPassword] = useState(true);
-
-    const oldPasswordChange = (event) => {
-        setOldPassword(event.target.value)
-        console.log(oldPassword)
-    }
 
     const newPasswordChange = (event) => {
         setNewPassword(event.target.value)
@@ -58,7 +51,6 @@ const NavbarComponent = () => {
 
     const changePassword = () => {
         const adminData = {
-            oldPassword: oldPassword,
             password: newPassword
         }
 
@@ -70,16 +62,11 @@ const NavbarComponent = () => {
                 console.log(res)
             })
             .catch(function (error) {
-                if (error.status === 500) {
-                    alert('Old password not match!')
-                }
+                console.log(error)
             })
     }
 
     const onSubmit = async () => {
-        if (oldPassword === "") {
-            alert('Old password is required!')
-        }
         if (newPassword === "") {
             alert('New password is required!')
         }
@@ -167,11 +154,6 @@ const NavbarComponent = () => {
                         </Modal.Header>
                         <Modal.Body>
                             <>
-
-                                <div className="form-group">
-                                    <label htmlFor="username">Old Password</label>
-                                    <input type="password" className="form-control" id="oldPassword" value={oldPassword} onChange={oldPasswordChange} required />
-                                </div>
                                 <div className="form-group">
                                     <label htmlFor="username">New Password</label>
                                     <input type="password" className="form-control" id="newPassword" value={newPassword} onChange={newPasswordChange} required />

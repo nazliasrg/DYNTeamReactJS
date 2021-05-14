@@ -382,5 +382,29 @@
         "year" : 2021,
         "synopsis" : "Meneladani perilaku dan sikap Rasulullah Saw. merupakan salah satu langkah untuk menjalani kehidupan dengan sebaik-baiknya Rasulullah Saw.",
         "stock" : 6
+    },
+    {
+        "no" : 33,
+        "id_books" : "B033",
+        "cover" : "../assets/book/B033.jpg",
+        "category" : "Novel",
+        "title" : "The Good Sister: A Novel",
+        "author" : "Sally Hepworth",
+        "publisher" : "Best Mystery, Thriller & Suspense",
+        "year" : 2021,
+        "synopsis" : "\"A stunningly clever thriller made doubly suspenseful by not one, but two unreliable narrators.\" ― People \nSally Hepworth, the author of The Mother-In-Law delivers a knock-out of a novel about the lies that bind two sisters in The Good Sister. \nThere's only been one time that Rose couldn't stop me from doing the wrong thing and that was a mistake that will haunt me for the rest of my life.\nFern Castle works in her local library. She has dinner with her twin sister Rose three nights a week. And she avoids crowds, bright lights and loud noises as much as possible. Fern has a carefully structured life and disrupting her routine can be...dangerous.\nWhen Rose discovers that she cannot get pregnant, Fern sees her chance to pay her sister back for everything Rose has done for her. Fern can have a baby for Rose. She just needs to find a father. Simple.\nFern's mission will shake the foundations of the life she has carefully built for herself and stir up dark secrets from the past, in this quirky, rich and shocking story of what families keep hidden.",
+        "stock" : 8
+    },
+    {
+        "no" : 34,
+        "id_books" : "B034",
+        "cover" : "../assets/book/B034.jpg",
+        "category" : "Novel",
+        "title" : "The Last Thing He Told Me: A Novel",
+        "author" : "Laura Dave",
+        "publisher" : "Best Mystery, Thriller & Suspense",
+        "year" : 2021,
+        "synopsis" : "A gripping mystery about a woman who thinks she’s found the love of her life—until he disappears.Before Owen Michaels disappears, he smuggles a note to his beloved wife of one year: Protect her. Despite her confusion and fear, Hannah Hall knows exactly to whom the note refers—Owen’s sixteen-year-old daughter, Bailey. Bailey, who lost her mother tragically as a child. Bailey, who wants absolutely nothing to do with her new stepmother.As Hannah’s increasingly desperate calls to Owen go unanswered, as the FBI arrests Owen’s boss, as a US marshal and federal agents arrive at her Sausalito home unannounced, Hannah quickly realizes her husband isn’t who he said he was. And that Bailey just may hold the key to figuring out Owen’s true identity—and why he really disappeared.Hannah and Bailey set out to discover the truth. But as they start putting together the pieces of Owen’s past, they soon realize they’re also building a new future—one neither of them could have anticipated.With its breakneck pacing, dizzying plot twists, and evocative family drama, The Last Thing He Told Me is a riveting mystery, certain to shock you with its final, heartbreaking turn.",
+        "stock" : 3
     }
 ]
