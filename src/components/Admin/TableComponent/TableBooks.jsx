@@ -1,24 +1,39 @@
+import React, { Component } from 'react'
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import { Button, Row, Col } from 'reactstrap';
 import { faMinus, faPlus, faEdit, faPlusCircle, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Row, Col } from 'reactstrap';
-import { React, useState, useEffect } from 'react'
-import BootstrapTable from 'react-bootstrap-table-next';
-import { Link } from 'react-router-dom';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap'
-import axios from 'axios'
 
+const { SearchBar } = Search;
 
+class TableBooks extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            show: false,
+            addShow: false,
+            discShow: false,
+            stock: 0,
+            addStock: 0,
+            bookId: 0,
+            synopsis: "",
+        }
+    }
 
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getBooks();
+    }
 
-const TableBooks = (props) => {
-
-    const [data, setData] = useState([]);
-
-    const authHeader = () => {
+    authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
         console.log(admin)
 
@@ -32,8 +47,8 @@ const TableBooks = (props) => {
         }
     }
 
-    const getBooks = () => {
-        const admin = authHeader();
+    getBooks = () => {
+        const admin = this.authHeader();
         console.log(admin);
 
 
@@ -41,44 +56,21 @@ const TableBooks = (props) => {
             headers: admin
         })
             .then(res => {
-                setData(res.data)
-                console.log(data);
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
             })
     }
 
-    useEffect(async () => {
-        await authHeader();
-        await getBooks();
-    })
+    handleClick = async (id) => {
+        const admin = this.authHeader();
 
-    const admin = authHeader();
-
-    const [show, setShow] = useState(false);
-
-    const [addShow, setAddShow] = useState(false);
-
-    const [discShow, setDiscShow] = useState(false);
-
-    const [stock, setStock] = useState(0);
-
-    const [addStock, setAddStock] = useState(0);
-
-    const [bookId, setBookId] = useState(0);
-
-    const [synopsis, setSynopsis] = useState("");
-
-    const closeModal = () => setShow(false)
-
-    const closeModalAdd = () => setAddShow(false)
-
-    const closeModalDisc = () => setDiscShow(false)
-
-    const handleClick = (id) => {
         console.log('data ke: ' + id)
 
         const r = window.confirm('Are you sure to make this book not available?')
         if (r == true) {
-            axios.delete("http://localhost:7070/api/dynteam/book/delete/" + id, {
+            await axios.delete("http://localhost:7070/api/dynteam/book/delete/" + id, {
                 headers: admin
             })
                 .then(function (response) {
@@ -87,8 +79,8 @@ const TableBooks = (props) => {
                 .catch(function (error) {
                     console.log(error);
                 });
-            window.alert('Data book has been not available!')
-            getBooks();
+            await window.alert('Data book has been not available!')
+            await this.getBooks();
         }
         else {
             window.alert('Data book is safe!')
@@ -96,9 +88,14 @@ const TableBooks = (props) => {
 
     }
 
-    const handleClickView = (id) => {
+    handleClickView = (id) => {
 
-        setShow(true)
+        const admin = this.authHeader();
+
+        this.setState({
+            show: true
+        })
+
         console.log('data ke: ' + id)
 
         axios.get('http://localhost:7070/api/dynteam/book/' + id, {
@@ -106,14 +103,21 @@ const TableBooks = (props) => {
         })
             .then(res => {
                 console.log(res)
-                setSynopsis(res.data.synopsis)
+                this.setState({
+                    synopsis: res.data.synopsis
+                })
             })
 
     }
 
-    const addStockButton = (id) => {
+    addStockButton = (id) => {
 
-        setAddShow(true)
+        const admin = this.authHeader();
+
+        this.setState({
+            addShow: true
+        })
+
         console.log('data ke: ' + id)
         axios.get('http://localhost:7070/api/dynteam/book/' + id, {
             headers: admin
@@ -121,14 +125,20 @@ const TableBooks = (props) => {
             .then(res => {
                 console.log("res.data.stock")
                 console.log(res.data.stock)
-                setStock(res.data.stock)
-                setBookId(res.data.bookId)
+                this.setState({
+                    stock: res.data.stock,
+                    bookId: res.data.bookId
+                })
             })
     }
 
-    const discrepancyButton = (id) => {
+    discrepancyButton = (id) => {
+        const admin = this.authHeader();
 
-        setDiscShow(true)
+        this.setState({
+            discShow: true
+        })
+
         console.log('data ke: ' + id)
 
         axios.get('http://localhost:7070/api/dynteam/book/' + id, {
@@ -136,40 +146,48 @@ const TableBooks = (props) => {
         })
             .then(res => {
                 console.log(res)
-                setStock(res.data.stock)
-                setBookId(res.data.bookId)
+                this.setState({
+                    stock: res.data.stock,
+                    bookId: res.data.bookId
+                })
             })
     }
 
-    const stockChange = (e) => {
-        setAddStock(e.target.value)
+    stockChange = (e) => {
+        this.setState({
+            addStock: e.target.value
+        })
     }
 
-    const submitAddStock = (e) => {
+    submitAddStock = (e) => {
+
+        const admin = this.authHeader();
+
         e.preventDefault();
 
-        axios.put('http://localhost:7070/api/dynteam/book/add/' + bookId + '/' + addStock, null, {
+        axios.put('http://localhost:7070/api/dynteam/book/add/' + this.state.bookId + '/' + this.state.addStock, null, {
             headers: admin
         })
             .then(res => {
                 window.alert('Stock was successfully added!')
-                closeModalAdd();
-                getBooks();
+                this.closeModalAdd();
+                this.getBooks();
             })
             .catch(function (error) {
                 console.log(error)
             })
     }
 
-    const submitDiscStock = () => {
+    submitDiscStock = () => {
+        const admin = this.authHeader();
 
-        axios.put('http://localhost:7070/api/dynteam/book/discrepancy/' + bookId + '/' + addStock, null, {
+        axios.put('http://localhost:7070/api/dynteam/book/discrepancy/' + this.state.bookId + '/' + this.state.addStock, null, {
             headers: admin
         })
             .then(res => {
                 window.alert('Stock was successfully reduced!')
-                closeModalDisc();
-                getBooks();
+                this.closeModalDisc();
+                this.getBooks();
 
             })
             .catch(function (error) {
@@ -177,7 +195,7 @@ const TableBooks = (props) => {
             })
     }
 
-    const columns = [{
+    columns = [{
         dataField: 'bookId',
         text: 'No',
         sort: true,
@@ -242,7 +260,7 @@ const TableBooks = (props) => {
             return (
                 <>
                     <Row className='justify-content-center'>
-                        <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClickView(row.bookId)}>
+                        <Button color='danger' className="mr-2 btn-crud" onClick={() => this.handleClickView(row.bookId)}>
                             <FontAwesomeIcon icon={faEye} />
                         </Button>
                     </Row>
@@ -265,15 +283,15 @@ const TableBooks = (props) => {
                                     <FontAwesomeIcon icon={faEdit} />
                                 </Button>
                             </Link>
-                            <Button color='danger' className="mr-2 btn-crud" onClick={() => handleClick(row.bookId)}>
+                            <Button color='danger' className="mr-2 btn-crud" onClick={() => this.handleClick(row.bookId)}>
                                 <FontAwesomeIcon icon={faTrash} />
                             </Button>
                         </Row>
                         <Row className='justify-content-center mt-2'>
-                            <Button color='warning' className="mr-2 btn-crud" onClick={() => addStockButton(row.bookId)}>
+                            <Button color='warning' className="mr-2 btn-crud" onClick={() => this.addStockButton(row.bookId)}>
                                 <FontAwesomeIcon icon={faPlus} />
                             </Button>
-                            <Button color='warning' className="mr-2 btn-crud" onClick={() => discrepancyButton(row.bookId)}>
+                            <Button color='warning' className="mr-2 btn-crud" onClick={() => this.discrepancyButton(row.bookId)}>
                                 <FontAwesomeIcon icon={faMinus} />
                             </Button>
                         </Row>
@@ -291,10 +309,10 @@ const TableBooks = (props) => {
                             </Link>
                         </Row>
                         <Row className='justify-content-center mt-2'>
-                            <Button color='warning' className="mr-2 btn-crud" onClick={() => addStockButton(row.bookId)}>
+                            <Button color='warning' className="mr-2 btn-crud" onClick={() => this.addStockButton(row.bookId)}>
                                 <FontAwesomeIcon icon={faPlus} />
                             </Button>
-                            <Button color='warning' className="mr-2 btn-crud" onClick={() => discrepancyButton(row.bookId)}>
+                            <Button color='warning' className="mr-2 btn-crud" onClick={() => this.discrepancyButton(row.bookId)}>
                                 <FontAwesomeIcon icon={faMinus} />
                             </Button>
                         </Row>
@@ -305,112 +323,135 @@ const TableBooks = (props) => {
         }
     }];
 
-    const defaultSorted = [{
+    defaultSorted = [{
         dataField: 'bookId',
-        order: 'asc'
+        order: 'desc'
     }];
 
-    const { SearchBar } = Search;
+    closeModal = () => {
+        this.setState({
+            show: false
+        })
+    };
 
-    return (
-        <>
-            <ToolkitProvider
-                bootstrap4
-                keyField='bookId'
-                data={data}
-                columns={columns}
-                defaultSorted={defaultSorted}
-                search
-            >
-                {
-                    props => (
-                        <div>
-                            <Row>
-                                {/* <Col>
-                                    <SearchBar {...props.searchProps} placeholder="Search .." />
-                                </Col> */}
-                                <Col>
-                                    <div className="float-right">
-                                        <Link to={'/add-book'}>
-                                            <Button color='dark' className="mr-2">
-                                                <FontAwesomeIcon icon={faPlusCircle} />
+    closeModalAdd = () => {
+        this.setState({
+            addShow: false
+        })
+    };
+
+    closeModalDisc = () => this.setState({
+        discShow: false
+    })
+
+    closeEmodal = () => {
+        this.setState({
+            eShow: false
+        })
+    };
+
+    render() {
+        return (
+            <>
+                <ToolkitProvider
+                    bootstrap4
+                    keyField='bookId'
+                    data={this.state.data}
+                    columns={this.columns}
+                    defaultSorted={this.defaultSorted}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <SearchBar {...props.searchProps} placeholder="Search .." />
+                                    </Col>
+                                    <Col>
+                                        <div className="float-right">
+                                            <Link to={'/add-book'}>
+                                                <Button color='dark' className="mr-2">
+                                                    <FontAwesomeIcon icon={faPlusCircle} />
                                                 Add Book
                                         </Button>
-                                        </Link>
-                                        {/* modal view Synopsis */}
-                                        <Modal show={show}>
-                                            <Modal.Header closeButton onClick={closeModal}>
-                                                <Modal.Title>Synopsis</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <label>
-                                                    {synopsis}
-                                                </label>
-                                            </Modal.Body>
-                                        </Modal>
+                                            </Link>
+                                            {/* modal view Synopsis */}
+                                            <Modal show={this.state.show}>
+                                                <Modal.Header closeButton onClick={this.closeModal}>
+                                                    <Modal.Title>Synopsis</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <label>
+                                                        {this.state.synopsis}
+                                                    </label>
+                                                </Modal.Body>
+                                            </Modal>
 
-                                        {/* modal add stock */}
-                                        <Modal show={addShow}>
-                                            <Modal.Header closeButton onClick={closeModalAdd}>
-                                                <Modal.Title>Add Stock</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <form>
-                                                    <div className="form-group">
-                                                        <label htmlFor="oldStock">Old Saldo</label>
-                                                        <input className="form-control" id="stock" value={stock} readOnly />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label htmlFor="addStock">Add Stock</label>
-                                                        <input className="form-control" id="addStock" value={addStock} onChange={stockChange} />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <button className="form-control btn btn-primary" type="button" onClick={submitAddStock}>Add Stock</button>
-                                                    </div>
-                                                </form>
-                                            </Modal.Body>
-                                        </Modal>
+                                            {/* modal add stock */}
+                                            <Modal show={this.state.addShow}>
+                                                <Modal.Header closeButton onClick={this.closeModalAdd}>
+                                                    <Modal.Title>Add Stock</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <form>
+                                                        <div className="form-group">
+                                                            <label htmlFor="oldStock">Old Saldo</label>
+                                                            <input className="form-control" id="stock" value={this.state.stock} readOnly />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label htmlFor="addStock">Add Stock</label>
+                                                            <input className="form-control" id="addStock" value={this.state.addStock} onChange={this.stockChange} />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <button className="form-control btn btn-primary" type="button" onClick={this.submitAddStock}>Add Stock</button>
+                                                        </div>
+                                                    </form>
+                                                </Modal.Body>
+                                            </Modal>
 
-                                        {/* modal discrepancy */}
-                                        <Modal show={discShow}>
-                                            <Modal.Header closeButton onClick={closeModalDisc}>
-                                                <Modal.Title>Discrepancy Stock</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <form onSubmit={submitDiscStock}>
-                                                    <div className="form-group">
-                                                        <label htmlFor="oldStock">Old Saldo</label>
-                                                        <input className="form-control" id="stock" value={stock} readOnly />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <label htmlFor="addStock">Discrepancy</label>
-                                                        <input className="form-control" id="addStock" value={addStock} onChange={stockChange} />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <button className="form-control btn btn-primary" type="submit">Discrepancy</button>
-                                                    </div>
-                                                </form>
-                                            </Modal.Body>
-                                        </Modal>
+                                            {/* modal discrepancy */}
+                                            <Modal show={this.state.discShow}>
+                                                <Modal.Header closeButton onClick={this.closeModalDisc}>
+                                                    <Modal.Title>Discrepancy Stock</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <form onSubmit={this.submitDiscStock}>
+                                                        <div className="form-group">
+                                                            <label htmlFor="oldStock">Old Saldo</label>
+                                                            <input className="form-control" id="stock" value={this.state.stock} readOnly />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label htmlFor="addStock">Discrepancy</label>
+                                                            <input className="form-control" id="addStock" value={this.state.addStock} onChange={this.stockChange} />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <button className="form-control btn btn-primary" type="submit">Discrepancy</button>
+                                                        </div>
+                                                    </form>
+                                                </Modal.Body>
+                                            </Modal>
 
-                                    </div>
-                                </Col>
-                            </Row>
+                                        </div>
+                                    </Col>
+                                </Row>
 
-                            <div className="justify-content-center tableAdmin mt-2">
-                                <BootstrapTable
-                                    {...props.baseProps}
+                                <div className="justify-content-center tableAdmin mt-2">
+                                    <BootstrapTable
+                                        {...props.baseProps}
 
-                                    pagination={paginationFactory()}
-                                />
+                                        pagination={paginationFactory()}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                }
-            </ToolkitProvider>
+                        )
+                    }
+                </ToolkitProvider>
 
-        </>
-    )
+            </>
+        )
+    }
 }
+
 
 export default TableBooks;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { Component } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -6,17 +6,30 @@ import { Button, Row, Col } from 'reactstrap';
 import { faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import swal from 'sweetalert';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 
 const { SearchBar } = Search;
 
-const TableAuthor = (props) => {
-    const [data, setData] = useState([]);
+class TableAuthor extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            show: false,
+            eShow: false,
+            id: 0,
+            authorName: "",
+        }
+    }
 
-    const authHeader = () => {
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getAuthors();
+    }
+
+    authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
         console.log(admin)
 
@@ -30,30 +43,27 @@ const TableAuthor = (props) => {
         }
     }
 
-    const getAuthors = () => {
-        const admin = authHeader();
+    getAuthors = () => {
+        const admin = this.authHeader();
         console.log(admin)
 
         axios.get('http://localhost:7070/api/dynteam/book/author/all-authors', {
             headers: admin
         })
             .then(res => {
-                setData(res.data)
+                this.setState({
+                    data: res.data
+                })
 
-                console.log(data);
+                console.log(this.state.data);
             })
     }
 
-    useEffect(async () => {
-        await authHeader();
-        await getAuthors();
-    })
-
-    const handleClickActive = (id) => {
+    handleClickActive = (id) => {
 
         console.log('data ke: ' + id)
 
-        const admin = authHeader();
+        const admin = this.authHeader();
 
         const r = window.confirm('Are you sure to inactive this author?')
         if (r == true) {
@@ -67,18 +77,18 @@ const TableAuthor = (props) => {
                     console.log(error);
                 });
             window.alert('Data author has been inactived!')
-            getAuthors();
+            this.getAuthors();
         }
         else {
             window.alert('Data author is safe!')
         }
     }
 
-    const handleClickInactive = (id) => {
+    handleClickInactive = (id) => {
 
         console.log('data ke: ' + id)
 
-        const admin = authHeader();
+        const admin = this.authHeader();
 
         const r = window.confirm('Are you sure to active this author?')
         if (r == true) {
@@ -92,94 +102,105 @@ const TableAuthor = (props) => {
                     console.log(error);
                 });
             window.alert('Data author has been actived!')
-            getAuthors();
+            this.getAuthors();
         }
         else {
             window.alert('Data author is safe!')
         }
     }
 
-    const defaultSorted = [{
-        dataField: 'authorId',
-        order: 'asc'
-    }];
+    getIdAuthor = (id) => {
+        const admin = this.authHeader();
 
-    const admin = authHeader();
-
-    const [show, setShow] = useState(false);
-
-    const [eshow, setEshow] = useState(false);
-
-    const getIdAuthor = (id) => {
         axios.get('http://localhost:7070/api/dynteam/book/author/' + id, {
             headers: admin
         })
-            .then(function (response) {
+            .then(response => {
                 console.log(response);
-                setId(response.data.authorId)
-                setAuthorName(response.data.authorName)
+                this.setState({
+                    id: response.data.authorId,
+                    authorName: response.data.authorName
+                })
             })
             .catch(function (error) {
                 console.log(error);
             });
 
-        handleEshow();
+        this.handleEshow();
     }
 
-    const handleShow = () => setShow(true);
+    handleShow = () => {
+        this.setState({
+            show: true
+        })
+    };
 
-    const handleEshow = () => setEshow(true);
+    handleEshow = () => {
+        this.setState({
+            eShow: true
+        })
+    };
 
-    const closeModal = () => setShow(false);
+    closeModal = () => {
+        this.setState({
+            show: false
+        })
+    };
 
-    const closeEmodal = () => setEshow(false);
+    closeEmodal = () => {
+        this.setState({
+            eShow: false
+        })
+    };
 
-    const [authorName, setAuthorName] = useState("");
+    onSubmit = () => {
 
-    const [id, setId] = useState(0);
-
-    const onSubmit = () => {
+        const admin = this.authHeader();
 
         const author = {
-            authorName: authorName
+            authorName: this.state.authorName
         }
 
         axios.post("http://localhost:7070/api/dynteam/book/author/insert", author, {
             headers: admin
         })
             .then(function (response) {
-                window.alert(authorName + ' author data added successfully!')
+                window.alert(this.state.authorName + ' author data added successfully!')
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
-    const onSubmitE = () => {
+    onSubmitE = () => {
+
+        const admin = this.authHeader();
 
         const author = {
-            authorName: authorName
+            authorName: this.state.authorName
         }
 
-        console.log(id);
-        console.log(author);
+        console.log(this.state.id);
+        console.log(this.author);
 
-        axios.put("http://localhost:7070/api/dynteam/book/author/update/" + id, author, {
+        axios.put("http://localhost:7070/api/dynteam/book/author/update/" + this.state.id, author, {
             headers: admin
         })
             .then(function (response) {
-                window.alert(authorName + ' author data updated successfully!')
+                window.alert(this.state.authorName + ' author data updated successfully!')
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
-    const authorChange = (event) => {
-        setAuthorName(event.target.value)
+    authorChange = (event) => {
+        this.setState({
+            authorName: event.target.value
+        })
     }
 
-    const columns = [{
+    columns = [{
         dataField: 'authorId',
         text: 'No',
         sort: true,
@@ -207,7 +228,7 @@ const TableAuthor = (props) => {
             if (row.statusAuthor === 1) {
                 return (
                     <Row className='justify-content-center'>
-                        <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.authorId)}>
+                        <Button color='primary' className="mr-2" onClick={() => this.handleClickActive(row.authorId)}>
                             Active
                         </Button>
                     </Row>
@@ -216,7 +237,7 @@ const TableAuthor = (props) => {
             else {
                 return (
                     <Row className='justify-content-center'>
-                        <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.authorId)}>
+                        <Button color='danger' className="mr-2" onClick={() => this.handleClickInactive(row.authorId)}>
                             Inactive
                         </Button>
                     </Row>
@@ -232,7 +253,7 @@ const TableAuthor = (props) => {
         formatter: (rowContent, row) => {
             return (
                 <Row className='justify-content-center'>
-                    <Button color='warning' className="mr-2 btn-crud" onClick={() => getIdAuthor(row.authorId)}>
+                    <Button color='warning' className="mr-2 btn-crud" onClick={() => this.getIdAuthor(row.authorId)}>
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                 </Row>
@@ -240,85 +261,92 @@ const TableAuthor = (props) => {
         }
     }];
 
-    return (
-        <>
-            <ToolkitProvider
-                bootstrap4
-                keyField="id"
-                data={data}
-                columns={columns}
-                defaultSorted={defaultSorted}
-                search
-            >
-                {
-                    props => (
-                        <div>
-                            <Row>
-                                {/* <Col>
-                                    <SearchBar {...props.searchProps} placeholder="Search .." />
-                                </Col> */}
-                                <Col>
-                                    <div className="float-right">
-                                        <Button color='dark' className="mr-2" onClick={handleShow}>
-                                            <FontAwesomeIcon icon={faPlusCircle} />
+    defaultSorted = [{
+        dataField: 'authorId',
+        order: 'asc'
+    }];
+
+    render() {
+        return (
+            <>
+                <ToolkitProvider
+                    bootstrap4
+                    keyField="id"
+                    data={this.state.data}
+                    columns={this.columns}
+                    defaultSorted={this.defaultSorted}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <SearchBar {...props.searchProps} placeholder="Search .." />
+                                    </Col>
+                                    <Col>
+                                        <div className="float-right">
+                                            <Button color='dark' className="mr-2" onClick={this.handleShow}>
+                                                <FontAwesomeIcon icon={faPlusCircle} />
                                                 Add Author
                                         </Button>
 
-                                        {/* modal add */}
-                                        <Modal show={show}>
-                                            <Modal.Header closeButton onClick={closeModal}>
-                                                <Modal.Title>Add Author</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <>
-                                                    <form onSubmit={onSubmit}>
-                                                        <div className="form-group">
-                                                            <label htmlFor="authorName">Author Name</label>
-                                                            <input className="form-control" id="authorName" value={authorName} onChange={authorChange} required />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <button className="form-control btn btn-primary" type="submit">Add</button>
-                                                        </div>
-                                                    </form>
-                                                </>
-                                            </Modal.Body>
-                                        </Modal>
+                                            {/* modal add */}
+                                            <Modal show={this.state.show}>
+                                                <Modal.Header closeButton onClick={this.closeModal}>
+                                                    <Modal.Title>Add Author</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <>
+                                                        <form onSubmit={this.onSubmit}>
+                                                            <div className="form-group">
+                                                                <label htmlFor="authorName">Author Name</label>
+                                                                <input className="form-control" id="authorName" value={this.state.authorName} onChange={this.authorChange} required />
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <button className="form-control btn btn-primary" type="submit">Add</button>
+                                                            </div>
+                                                        </form>
+                                                    </>
+                                                </Modal.Body>
+                                            </Modal>
 
-                                        {/* modal edit */}
-                                        <Modal show={eshow}>
-                                            <Modal.Header closeButton onClick={closeEmodal}>
-                                                <Modal.Title>Edit Author</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <>
-                                                    <form onSubmit={onSubmitE}>
-                                                        <div className="form-group">
-                                                            <label htmlFor="authorName">Author Name</label>
-                                                            <input className="form-control" id="authorName" value={authorName} onChange={authorChange} required />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <button className="form-control btn btn-primary" type="submit">Edit</button>
-                                                        </div>
-                                                    </form>
-                                                </>
-                                            </Modal.Body>
-                                        </Modal>
-                                    </div>
-                                </Col>
-                            </Row>
+                                            {/* modal edit */}
+                                            <Modal show={this.state.eShow}>
+                                                <Modal.Header closeButton onClick={this.closeEmodal}>
+                                                    <Modal.Title>Edit Author</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <>
+                                                        <form onSubmit={this.onSubmitE}>
+                                                            <div className="form-group">
+                                                                <label htmlFor="authorName">Author Name</label>
+                                                                <input className="form-control" id="authorName" value={this.state.authorName} onChange={this.authorChange} required />
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <button className="form-control btn btn-primary" type="submit">Edit</button>
+                                                            </div>
+                                                        </form>
+                                                    </>
+                                                </Modal.Body>
+                                            </Modal>
+                                        </div>
+                                    </Col>
+                                </Row>
 
-                            <div className="justify-content-center tableAdmin mt-2">
-                                <BootstrapTable
-                                    {...props.baseProps}
-                                    pagination={paginationFactory()}
-                                />
+                                <div className="justify-content-center tableAdmin mt-2">
+                                    <BootstrapTable
+                                        {...props.baseProps}
+                                        pagination={paginationFactory()}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                }
-            </ToolkitProvider>
-        </>
-    )
+                        )
+                    }
+                </ToolkitProvider>
+            </>
+        )
+    }
 }
 
 

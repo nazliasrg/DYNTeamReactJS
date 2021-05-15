@@ -1,20 +1,29 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Badge, Row, Col } from 'reactstrap';
-import React, { useEffect, useState } from 'react'
-import BootstrapTable from 'react-bootstrap-table-next';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import axios from 'axios'
+import { Badge, Row, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const { SearchBar } = Search;
 
+class TableActivity extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: []
+        }
+    }
 
-const TableActivity = () => {
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getActivitiesCurrent();
+    }
 
-    const [data, setData] = useState([]);
-
-    const authHeader = () => {
+    authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
         console.log(admin)
 
@@ -28,34 +37,31 @@ const TableActivity = () => {
         }
     }
 
-    const getActivitiesCurrent = () => {
-        const admin = authHeader();
+    getActivitiesCurrent = () => {
+        const admin = this.authHeader();
 
         axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/2', {
             headers: admin
         })
             .then(res => {
-                setData(res.data)
-                console.log(data);
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
             })
             .catch(function (error) {
                 console.log(error)
             })
     }
 
-    useEffect(async () => {
-        await authHeader();
-        await getActivitiesCurrent();
-    })
-
-    const handleClickExtend = (id) => {
-        const admin = authHeader();
+    handleClickExtend = async (id) => {
+        const admin = this.authHeader();
 
         console.log('data ke: ' + id)
 
         const r = window.confirm('Are you sure to extends activity?')
         if (r == true) {
-            axios.put('http://localhost:7070/api/dynteam/request/extend/' + id, null, {
+            await axios.put('http://localhost:7070/api/dynteam/request/extend/' + id, null, {
                 headers: admin
             })
                 .then(function (res) {
@@ -64,22 +70,22 @@ const TableActivity = () => {
                 .catch(function (error) {
                     console.log(error)
                 })
-            window.alert('Activity has been extended!')
-            getActivitiesCurrent();
+            await window.alert('Activity has been extended!')
+            await this.getActivitiesCurrent();
         }
         else {
             window.alert('Activity is not extended!')
         }
     }
 
-    const handleClickReturn = (id) => {
-        const admin = authHeader();
+    handleClickReturn = async (id) => {
+        const admin = this.authHeader();
 
         console.log('data ke: ' + id)
 
         const r = window.confirm('Are you sure to return activity?')
         if (r == true) {
-            axios.put('http://localhost:7070/api/dynteam/request/return/' + id, null, {
+            await axios.put('http://localhost:7070/api/dynteam/request/return/' + id, null, {
                 headers: admin
             })
                 .then(function (res) {
@@ -88,8 +94,8 @@ const TableActivity = () => {
                 .catch(function (error) {
                     console.log(error)
                 })
-            window.alert('Activity has been return!')
-            getActivitiesCurrent();
+            await window.alert('Activity has been return!')
+            await this.getActivitiesCurrent();
         }
         else {
             window.alert('Activity is not return!')
@@ -97,7 +103,7 @@ const TableActivity = () => {
 
     }
 
-    const columns = [{
+    columns = [{
         dataField: 'requestId',
         text: 'No',
         sort: true,
@@ -209,13 +215,13 @@ const TableActivity = () => {
             return (
                 <Row className='justify-content-center'>
                     <Link to={'#'}>
-                        <Badge color='success' className="mr-2" onClick={() => handleClickExtend(row.requestId)}>
+                        <Badge color='success' className="mr-2" onClick={() => this.handleClickExtend(row.requestId)}>
                             Extend
                         </Badge>
                     </Link>
 
                     <Link to={'#'}>
-                        <Badge color='danger' className="mr-2" onClick={() => handleClickReturn(row.requestId)}>
+                        <Badge color='danger' className="mr-2" onClick={() => this.handleClickReturn(row.requestId)}>
                             Return
                         </Badge>
                     </Link>
@@ -225,45 +231,48 @@ const TableActivity = () => {
         }
     }];
 
-    const defaultSorted = [{
+    defaultSorted = [{
         dataField: 'requestId',
         order: 'asc'
     }];
 
-    return (
-        <>
-            <ToolkitProvider
-                bootstrap4
-                keyField='id'
-                data={data}
-                columns={columns}
-                defaultSorted={defaultSorted}
-                search
-            >
-                {
-                    props => (
-                        <div>
-                            <Row>
-                                {/* <Col>
-                                    <div className="float-right">
-                                        <SearchBar {...props.searchProps} placeholder="Search .." />
-                                    </div>
-                                </Col> */}
-                            </Row>
+    render() {
+        return (
+            <>
+                <ToolkitProvider
+                    bootstrap4
+                    keyField='id'
+                    data={this.state.data}
+                    columns={this.columns}
+                    defaultSorted={this.defaultSorted}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <div className="float-right">
+                                            <SearchBar {...props.searchProps} placeholder="Search .." />
+                                        </div>
+                                    </Col>
+                                </Row>
 
-                            <div className="float-center mt-2">
-                                <BootstrapTable
-                                    {...props.baseProps}
-                                    pagination={paginationFactory()}
-                                />
+                                <div className="float-center mt-2">
+                                    <BootstrapTable
+                                        {...props.baseProps}
+                                        pagination={paginationFactory()}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                }
-            </ToolkitProvider>
+                        )
+                    }
+                </ToolkitProvider>
 
-        </>
-    )
+            </>
+        )
+    }
 }
+
 
 export default TableActivity;

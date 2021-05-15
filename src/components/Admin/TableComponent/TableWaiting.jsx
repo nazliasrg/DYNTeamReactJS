@@ -1,20 +1,31 @@
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Row, Col, Badge } from 'reactstrap';
-import React, { useEffect, useState } from 'react'
-import BootstrapTable from 'react-bootstrap-table-next';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import axios from 'axios'
+import { Button, Badge, Row, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const { SearchBar } = Search;
 
-const TableWaiting = (props) => {
-    const [data, setData] = useState([]);
+class TableWaiting extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: []
+        }
+    }
 
-    const authHeader = () => {
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getTransactions();
+    }
+
+    authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
         console.log(admin)
 
@@ -28,28 +39,25 @@ const TableWaiting = (props) => {
         }
     }
 
-    const getTransactions = () => {
+    getTransactions = () => {
         axios.get('http://localhost:7070/api/dynteam/auth/user/transactions/0')
             .then(res => {
-                setData(res.data)
-                console.log(data);
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
             })
     }
 
-    useEffect(async () => {
-        await authHeader();
-        await getTransactions();
-    })
+    handleClickAccept = async (id) => {
 
-    const handleClickAccept = (id) => {
-
-        const admin = authHeader();
+        const admin = this.authHeader();
 
         console.log('data ke: ' + id)
 
         const r = window.confirm('Are you sure to confirm request?')
         if (r == true) {
-            axios.put('http://localhost:7070/api/dynteam/auth/user/transaction/confirm/' + id, null, {
+            await axios.put('http://localhost:7070/api/dynteam/auth/user/transaction/confirm/' + id, null, {
                 headers: admin
             })
                 .then(function (res) {
@@ -58,8 +66,8 @@ const TableWaiting = (props) => {
                 .catch(function (error) {
                     console.log(error);
                 });
-            window.alert('Request has been confirm!')
-            getTransactions();
+            await window.alert('Request has been confirm!')
+            await this.getTransactions();
         }
         else {
             window.alert('Request is not confirm!')
@@ -67,7 +75,7 @@ const TableWaiting = (props) => {
 
     }
 
-    const columns = [{
+    columns = [{
         dataField: 'transactionId',
         text: 'No',
         sort: true,
@@ -205,7 +213,7 @@ const TableWaiting = (props) => {
             return (
                 <Row className='justify-content-center'>
                     <Link to={'#'}>
-                        <Button color='success' className="mr-2 btn-crud" onClick={() => handleClickAccept(row.transactionId)}>
+                        <Button color='success' className="mr-2 btn-crud" onClick={() => this.handleClickAccept(row.transactionId)}>
                             <FontAwesomeIcon icon={faCheck} />
                         </Button>
                     </Link>
@@ -214,44 +222,48 @@ const TableWaiting = (props) => {
         }
     }];
 
-    const defaultSorted = [{
+    defaultSorted = [{
         dataField: 'transactionId',
         order: 'asc'
     }];
 
-    return (
-        <>
-            <ToolkitProvider
-                bootstrap4
-                keyField='transactionId'
-                data={data}
-                columns={columns}
-                defaultSorted={defaultSorted}
-                search
-            >
-                {
-                    props => (
-                        <div>
-                            <Row>
-                                {/* <Col>
-                                    <div className="float-right">
-                                        <SearchBar {...props.searchProps} placeholder="Search .." />
-                                    </div>
-                                </Col> */}
-                            </Row>
 
-                            <div className="float-center mt-2">
-                                <BootstrapTable
-                                    {...props.baseProps}
-                                    pagination={paginationFactory()}
-                                />
+    render() {
+        return (
+            <>
+                <ToolkitProvider
+                    bootstrap4
+                    keyField='transactionId'
+                    data={this.state.data}
+                    columns={this.columns}
+                    defaultSorted={this.defaultSorted}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <div className="float-left">
+                                            <SearchBar {...props.searchProps} placeholder="Search .." />
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                                <div className="float-center mt-2">
+                                    <BootstrapTable
+                                        {...props.baseProps}
+                                        pagination={paginationFactory()}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                }
-            </ToolkitProvider>
-        </>
-    )
+                        )
+                    }
+                </ToolkitProvider>
+            </>
+        )
+    }
 }
+
 
 export default TableWaiting;

@@ -1,18 +1,32 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Badge, Row, Col } from 'reactstrap';
-import React, { useEffect, useState } from 'react'
-import BootstrapTable from 'react-bootstrap-table-next';
+import React, { Component } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import axios from 'axios'
+import { Badge, Row, Col } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const { SearchBar } = Search;
 
-const TableHistory = () => {
+class TableHistory extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            show: false,
+            eShow: false,
+            id: 0,
+            authorName: "",
+        }
+    }
 
-    const [data, setData] = useState([]);
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getActivitiesHistory();
+    }
 
-    const authHeader = () => {
+    authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
         console.log(admin)
 
@@ -26,27 +40,24 @@ const TableHistory = () => {
         }
     }
 
-    const getActivitiesHistory = () => {
-        const admin = authHeader();
+    getActivitiesHistory = () => {
+        const admin = this.authHeader();
 
         axios.get('http://localhost:7070/api/dynteam/request/getByStatusRent/3', {
             headers: admin
         })
             .then(res => {
-                setData(res.data)
-                console.log(data);
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
             })
             .catch(function (error) {
                 console.log(error)
             })
     }
 
-    useEffect(async () => {
-        await authHeader();
-        await getActivitiesHistory();
-    })
-
-    const columns = [{
+    columns = [{
         dataField: 'requestId',
         text: 'No',
         sort: true,
@@ -207,45 +218,48 @@ const TableHistory = () => {
     }
     ];
 
-    const defaultSorted = [{
+    defaultSorted = [{
         dataField: 'requestId',
         order: 'desc'
     }];
 
-    return (
-        <>
-            <ToolkitProvider
-                bootstrap4
-                keyField='id'
-                data={data}
-                columns={columns}
-                defaultSorted={defaultSorted}
-                search
-            >
-                {
-                    props => (
-                        <div>
-                            <Row>
-                                {/* <Col>
-                                    <div className="float-right">
-                                        <SearchBar {...props.searchProps} placeholder="Search .." />
-                                    </div>
-                                </Col> */}
-                            </Row>
+    render() {
+        return (
+            <>
+                <ToolkitProvider
+                    bootstrap4
+                    keyField='id'
+                    data={this.state.data}
+                    columns={this.columns}
+                    defaultSorted={this.defaultSorted}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <div className="float-left">
+                                            <SearchBar {...props.searchProps} placeholder="Search .." />
+                                        </div>
+                                    </Col>
+                                </Row>
 
-                            <div className="float-center mt-2">
-                                <BootstrapTable
-                                    {...props.baseProps}
-                                    pagination={paginationFactory()}
-                                />
+                                <div className="float-center mt-2">
+                                    <BootstrapTable
+                                        {...props.baseProps}
+                                        pagination={paginationFactory()}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                }
-            </ToolkitProvider>
+                        )
+                    }
+                </ToolkitProvider>
 
-        </>
-    )
+            </>
+        )
+    }
 }
+
 
 export default TableHistory;

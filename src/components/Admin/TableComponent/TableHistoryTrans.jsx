@@ -1,17 +1,30 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Badge, Row, Col, Spinner } from 'reactstrap';
-import React, { useEffect, useState } from 'react'
-import BootstrapTable from 'react-bootstrap-table-next';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Component } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import axios from 'axios'
+import { Badge, Row, Col } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const { SearchBar } = Search;
 
-const TableHistoryTrans = (props) => {
-    const [data, setData] = useState([]);
+class TableHistoryTrans extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: []
+        }
+    }
 
-    const authHeader = () => {
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getTransactions();
+    }
+
+    authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
         console.log(admin)
 
@@ -25,20 +38,17 @@ const TableHistoryTrans = (props) => {
         }
     }
 
-    const getTransactions = () => {
+    getTransactions = () => {
         axios.get('http://localhost:7070/api/dynteam/auth/user/transactions/1')
             .then(res => {
-                setData(res.data)
-                console.log(data);
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
             })
     }
 
-    useEffect(async () => {
-        await authHeader();
-        await getTransactions();
-    })
-
-    const columns = [{
+    columns = [{
         dataField: 'transactionId',
         text: 'No',
         sort: true,
@@ -181,44 +191,47 @@ const TableHistoryTrans = (props) => {
         }
     }];
 
-    const defaultSorted = [{
+    defaultSorted = [{
         dataField: 'transactionId',
         order: 'asc'
     }];
 
-    return (
-        <>
-            <ToolkitProvider
-                bootstrap4
-                keyField='transactionId'
-                data={data}
-                columns={columns}
-                defaultSorted={defaultSorted}
-                search
-            >
-                {
-                    props => (
-                        <div>
-                            <Row>
-                                {/* <Col>
-                                    <div className="float-right">
-                                        <SearchBar {...props.searchProps} placeholder="Search .." />
-                                    </div>
-                                </Col> */}
-                            </Row>
+    render() {
+        return (
+            <>
+                <ToolkitProvider
+                    bootstrap4
+                    keyField='transactionId'
+                    data={this.state.data}
+                    columns={this.columns}
+                    defaultSorted={this.defaultSorted}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <div className="float-left">
+                                            <SearchBar {...props.searchProps} placeholder="Search .." />
+                                        </div>
+                                    </Col>
+                                </Row>
 
-                            <div className="float-center mt-2">
-                                <BootstrapTable
-                                    {...props.baseProps}
-                                    pagination={paginationFactory()}
-                                />
+                                <div className="float-center mt-2">
+                                    <BootstrapTable
+                                        {...props.baseProps}
+                                        pagination={paginationFactory()}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                }
-            </ToolkitProvider>
-        </>
-    )
+                        )
+                    }
+                </ToolkitProvider>
+            </>
+        )
+    }
 }
+
 
 export default TableHistoryTrans;
