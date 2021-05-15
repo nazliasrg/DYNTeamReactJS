@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { Component } from 'react'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -6,16 +6,31 @@ import { Button, Row, Col } from 'reactstrap';
 import { faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import swal from 'sweetalert';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { Modal } from 'react-bootstrap'
 
 const { SearchBar } = Search;
 
-const TablePublisher = (props) => {
-    const [data, setData] = useState([]);
+class TablePublisher extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            show: false,
+            eShow: false,
+            publisherId: 0,
+            publisherName: "",
+        }
 
-    const authHeader = () => {
+    }
+
+    async componentDidMount() {
+        await this.authHeader();
+        await this.getPublishers();
+    }
+
+    authHeader = () => {
         const admin = JSON.parse(localStorage.getItem('data_admin'));
         console.log(admin)
 
@@ -29,32 +44,29 @@ const TablePublisher = (props) => {
         }
     }
 
-    const getPublishers = () => {
-        const admin = authHeader();
+    getPublishers = () => {
+        const admin = this.authHeader();
         console.log(admin)
 
         axios.get('http://localhost:7070/api/dynteam/book/publisher/all-publishers', {
             headers: admin
         })
             .then(res => {
-                setData(res.data)
-                console.log(data);
+                this.setState({
+                    data: res.data
+                })
+                console.log(this.state.data);
             })
     }
 
-    useEffect(async () => {
-        await authHeader();
-        await getPublishers();
-    })
-
-    const handleClickActive = (id) => {
+    handleClickActive = async (id) => {
         console.log('data ke: ' + id)
 
-        const admin = authHeader();
+        const admin = this.authHeader();
 
         const r = window.confirm('Are you sure to inactive this publisher?')
         if (r == true) {
-            axios.delete("http://localhost:7070/api/dynteam/book/publisher/delete/" + id, {
+            await axios.delete("http://localhost:7070/api/dynteam/book/publisher/delete/" + id, {
                 headers: admin
             })
                 .then(function (response) {
@@ -63,8 +75,8 @@ const TablePublisher = (props) => {
                 .catch(function (error) {
                     console.log(error);
                 });
-            window.alert('Data publisher has been inactived!')
-            getPublishers();
+            await window.alert('Data publisher has been inactived!')
+            await this.getPublishers();
         }
         else {
             window.alert('Data publisher is safe!')
@@ -72,14 +84,14 @@ const TablePublisher = (props) => {
 
     }
 
-    const handleClickInactive = (id) => {
+    handleClickInactive = async (id) => {
         console.log('data ke: ' + id)
 
-        const admin = authHeader();
+        const admin = this.authHeader();
 
         const r = window.confirm('Are you sure to active this publisher?')
         if (r == true) {
-            axios.delete("http://localhost:7070/api/dynteam/book/publisher/actived/" + id, {
+            await axios.delete("http://localhost:7070/api/dynteam/book/publisher/actived/" + id, {
                 headers: admin
             })
                 .then(function (response) {
@@ -88,8 +100,8 @@ const TablePublisher = (props) => {
                 .catch(function (error) {
                     console.log(error);
                 });
-            window.alert('Data publisher has been actived!')
-            getPublishers();
+            await window.alert('Data publisher has been actived!')
+            await this.getPublishers();
         }
         else {
             window.alert('Data publisher is safe!')
@@ -97,86 +109,97 @@ const TablePublisher = (props) => {
 
     }
 
-    const [show, setShow] = useState(false);
-
-    const [eshow, setEshow] = useState(false);
-
-    const getIdPublisher = (id) => {
-        const admin = authHeader();
+    getIdPublisher = (id) => {
+        const admin = this.authHeader();
 
         axios.get('http://localhost:7070/api/dynteam/book/publisher/' + id, {
             headers: admin
         })
-            .then(function (response) {
-                console.log(response);
-                setId(response.data.publisherId)
-                setPublisherName(response.data.publisherName)
+            .then(res => {
+                console.log(res);
+                this.setState({
+                    publisherId: res.data.publisherId,
+                    publisherName: res.data.publisherName
+                })
             })
             .catch(function (error) {
                 console.log(error);
             });
 
-        handleEshow();
+        this.handleEshow();
     }
 
-    const handleShow = () => setShow(true);
+    handleShow = () => {
+        this.setState({
+            show: true
+        })
+    };
 
-    const handleEshow = () => setEshow(true);
+    handleEshow = () => {
+        this.setState({
+            eShow: true
+        })
+    };
 
-    const closeModal = () => setShow(false);
+    closeModal = () => {
+        this.setState({
+            show: false
+        })
+    };
 
-    const closeEmodal = () => setEshow(false);
+    closeEmodal = () => {
+        this.setState({
+            eShow: false
+        })
+    };
 
-    const [publisherName, setPublisherName] = useState("");
-
-    const [id, setId] = useState(0);
-
-
-    const onSubmit = () => {
-        const admin = authHeader();
+    onSubmit = () => {
+        const admin = this.authHeader();
 
         const publisher = {
-            publisherName: publisherName
+            publisherName: this.state.publisherName
         }
 
         axios.post("http://localhost:7070/api/dynteam/book/publisher/insert", publisher, {
             headers: admin
         })
             .then(function (response) {
-                window.alert(publisherName + ' data added successfully!')
+                window.alert(this.state.publisherName + ' data added successfully!')
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
-    const onSubmitE = () => {
-        const admin = authHeader();
+
+    onSubmitE = () => {
+        const admin = this.authHeader();
 
         const publisher = {
-            publisherName: publisherName
+            publisherName: this.state.publisherName
         }
 
-        console.log(id);
-        console.log(publisher);
+        console.log(this.state.publisherId);
+        console.log(this.state.publisher);
 
-        axios.put("http://localhost:7070/api/dynteam/book/publisher/update/" + id, publisher, {
+        axios.put("http://localhost:7070/api/dynteam/book/publisher/update/" + this.state.publisherId, publisher, {
             headers: admin
         })
             .then(function (response) {
-                window.alert(publisherName + ' data updated successfully!')
+                window.alert(this.state.publisherName + ' data updated successfully!')
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
-
-    const publisherChange = (event) => {
-        setPublisherName(event.target.value)
+    publisherChange = (event) => {
+        this.setState({
+            publisherName: event.target.value
+        })
     }
 
-    const columns = [{
+    columns = [{
         dataField: 'publisherId',
         text: 'No',
         sort: true,
@@ -203,7 +226,7 @@ const TablePublisher = (props) => {
             if (row.publisherStatus === 1) {
                 return (
                     <Row className='justify-content-center'>
-                        <Button color='primary' className="mr-2" onClick={() => handleClickActive(row.publisherId)}>
+                        <Button color='primary' className="mr-2" onClick={() => this.handleClickActive(row.publisherId)}>
                             Active
                         </Button>
                     </Row>
@@ -212,7 +235,7 @@ const TablePublisher = (props) => {
             else {
                 return (
                     <Row className='justify-content-center'>
-                        <Button color='danger' className="mr-2" onClick={() => handleClickInactive(row.publisherId)}>
+                        <Button color='danger' className="mr-2" onClick={() => this.handleClickInactive(row.publisherId)}>
                             Inactive
                         </Button>
                     </Row>
@@ -228,7 +251,7 @@ const TablePublisher = (props) => {
         formatter: (rowContent, row) => {
             return (
                 <Row className='justify-content-center'>
-                    <Button color='warning' className="mr-2 btn-crud" onClick={() => getIdPublisher(row.publisherId)}>
+                    <Button color='warning' className="mr-2 btn-crud" onClick={() => this.getIdPublisher(row.publisherId)}>
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                 </Row>
@@ -236,88 +259,92 @@ const TablePublisher = (props) => {
         }
     }];
 
-    const defaultSorted = [{
+    defaultSorted = [{
         dataField: 'publisherId',
         order: 'asc'
     }];
 
-    return (
-        <>
-            <ToolkitProvider
-                bootstrap4
-                keyField="publisherId"
-                data={data}
-                columns={columns}
-                defaultSorted={defaultSorted}
-                search
-            >
-                {
-                    props => (
-                        <div>
-                            <Row>
-                                {/* <Col>
-                                    <SearchBar {...props.searchProps} placeholder="Search .." />
-                                </Col> */}
-                                <Col>
-                                    <div className="float-right">
-                                        <Button color='dark' className="mr-2" onClick={handleShow}>
-                                            <FontAwesomeIcon icon={faPlusCircle} />Add Publisher</Button>
 
-                                        {/* modal add */}
-                                        <Modal show={show}>
-                                            <Modal.Header closeButton onClick={closeModal}>
-                                                <Modal.Title>Add Publisher</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <>
-                                                    <form onSubmit={onSubmit}>
-                                                        <div className="form-group">
-                                                            <label htmlFor="publisherName">Publisher Name</label>
-                                                            <input className="form-control" id="publisherName" value={publisherName} onChange={publisherChange} required />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <button className="form-control btn btn-primary" type="submit">Add</button>
-                                                        </div>
-                                                    </form>
-                                                </>
-                                            </Modal.Body>
-                                        </Modal>
+    render() {
+        return (
+            <>
+                <ToolkitProvider
+                    bootstrap4
+                    keyField="publisherId"
+                    data={this.state.data}
+                    columns={this.columns}
+                    defaultSorted={this.defaultSorted}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <SearchBar {...props.searchProps} placeholder="Search .." />
+                                    </Col>
+                                    <Col>
+                                        <div className="float-right">
+                                            <Button color='dark' className="mr-2" onClick={this.handleShow}>
+                                                <FontAwesomeIcon icon={faPlusCircle} />Add Publisher</Button>
 
-                                        {/* modal edit */}
-                                        <Modal show={eshow}>
-                                            <Modal.Header closeButton onClick={closeEmodal}>
-                                                <Modal.Title>Edit Publisher</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <>
-                                                    <form onSubmit={onSubmitE}>
-                                                        <div className="form-group">
-                                                            <label htmlFor="publisherName">Publisher Name</label>
-                                                            <input className="form-control" id="publisherName" value={publisherName} onChange={publisherChange} required />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <button className="form-control btn btn-primary" type="submit">Edit</button>
-                                                        </div>
-                                                    </form>
-                                                </>
-                                            </Modal.Body>
-                                        </Modal>
-                                    </div>
-                                </Col>
-                            </Row>
+                                            {/* modal add */}
+                                            <Modal show={this.state.show}>
+                                                <Modal.Header closeButton onClick={this.closeModal}>
+                                                    <Modal.Title>Add Publisher</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <>
+                                                        <form onSubmit={this.onSubmit}>
+                                                            <div className="form-group">
+                                                                <label htmlFor="publisherName">Publisher Name</label>
+                                                                <input className="form-control" id="publisherName" value={this.state.publisherName} onChange={this.publisherChange} required />
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <button className="form-control btn btn-primary" type="submit">Add</button>
+                                                            </div>
+                                                        </form>
+                                                    </>
+                                                </Modal.Body>
+                                            </Modal>
 
-                            <div className="justify-content-center tableAdmin mt-2">
-                                <BootstrapTable
-                                    {...props.baseProps}
-                                    pagination={paginationFactory()}
-                                />
+                                            {/* modal edit */}
+                                            <Modal show={this.state.eShow}>
+                                                <Modal.Header closeButton onClick={this.closeEmodal}>
+                                                    <Modal.Title>Edit Publisher</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <>
+                                                        <form onSubmit={this.onSubmitE}>
+                                                            <div className="form-group">
+                                                                <label htmlFor="publisherName">Publisher Name</label>
+                                                                <input className="form-control" id="publisherName" value={this.state.publisherName} onChange={this.publisherChange} required />
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <button className="form-control btn btn-primary" type="submit">Edit</button>
+                                                            </div>
+                                                        </form>
+                                                    </>
+                                                </Modal.Body>
+                                            </Modal>
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                                <div className="justify-content-center tableAdmin mt-2">
+                                    <BootstrapTable
+                                        {...props.baseProps}
+                                        pagination={paginationFactory()}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                }
-            </ToolkitProvider>
-        </>
-    )
+                        )
+                    }
+                </ToolkitProvider>
+            </>
+        )
+    }
 }
+
 
 export default TablePublisher;
